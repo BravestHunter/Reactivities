@@ -32,7 +32,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-        dbContext.Database.Migrate();
+        await dbContext.Database.MigrateAsync();
+        await Seed.SeedData(dbContext);
     }
     catch (Exception ex)
     {
