@@ -5,6 +5,7 @@ import { Button, Card, Icon, Image } from "semantic-ui-react";
 interface Props {
   activity: Activity;
   cancelSelectedActivity: () => void;
+  openForm: (id: string) => void;
 }
 
 export default function ActivityDetails(props: Props) {
@@ -24,7 +25,12 @@ export default function ActivityDetails(props: Props) {
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths="2">
-          <Button basic color="blue" content="Edit" />
+          <Button
+            onClick={() => props.openForm(props.activity.id)}
+            basic
+            color="blue"
+            content="Edit"
+          />
           <Button
             onClick={props.cancelSelectedActivity}
             basic
