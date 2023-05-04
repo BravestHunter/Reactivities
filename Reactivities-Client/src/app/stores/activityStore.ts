@@ -8,11 +8,20 @@ export default class ActivityStore {
   selectedActivity: Activity | undefined = undefined;
   editMode: boolean = false;
   loading: boolean = false;
-  loadingInitial: boolean = true;
+  loadingInitial: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  private getActivity = (id: string) => {
+    return this.activityRegistry.get(id);
+  };
+
+  private setActivity = (activity: Activity) => {
+    activity.date = activity.date.split("T")[0];
+    this.activityRegistry.set(activity.id, activity);
+  };
 
   get activitiesByDate() {
     return Array.from(this.activityRegistry.values()).sort(
@@ -35,8 +44,7 @@ export default class ActivityStore {
       const activities = await agent.Activities.list();
 
       activities.forEach((a) => {
-        a.date = a.date.split("T")[0];
-        this.activityRegistry.set(a.id, a);
+        this.setActivity(a);
       });
     } catch (error) {
       console.log(error);
@@ -45,21 +53,23 @@ export default class ActivityStore {
     }
   };
 
-  selectActivity = (id: string) => {
-    this.selectedActivity = this.activityRegistry.get(id);
-  };
+  loadActivity = async (id: string) => {
+    let activity = this.getActivity(id);
 
-  unselectActivity = () => {
-    this.selectedActivity = undefined;
-  };
+    if (!activity) {
+      this.setLoadingInitial(true);
 
-  openActivityForm = (id?: string) => {
-    id ? this.selectActivity(id) : this.unselectActivity();
-    this.editMode = true;
-  };
+      try {
+        activity = await agent.Activities.details(id);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setLoadingInitial(false);
+      }
+    }
 
-  closeActivityForm = () => {
-    this.editMode = false;
+    runInAction(() => (this.selectedActivity = activity));
+    return activity;
   };
 
   createActivity = async (activity: Activity) => {
@@ -107,10 +117,6 @@ export default class ActivityStore {
 
       runInAction(() => {
         this.activityRegistry.delete(id);
-
-        if (this.selectedActivity?.id === id) {
-          this.unselectActivity();
-        }
       });
     } catch (error) {
       console.log(error);
