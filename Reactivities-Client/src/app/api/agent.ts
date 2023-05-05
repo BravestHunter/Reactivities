@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Activity } from "../models/activity";
 import { toast } from "react-toastify";
+import { router } from "../router/Routes";
+import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -13,11 +15,20 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    const { data, status } = error.response!;
+    const { data, status, config } = error.response as AxiosResponse;
 
     switch (status) {
       case 400:
-        toast.error("Bad request");
+        if (config.method == "get" && data.errors.hasOwnProperty("id")) {
+          router.navigate("/notfound");
+        }
+        if (data.errors) {
+          const modalStateErrors = Object.values(data.errors);
+
+          throw modalStateErrors.flat();
+        } else {
+          toast.error(data);
+        }
         break;
 
       case 401:
@@ -29,11 +40,12 @@ axios.interceptors.response.use(
         break;
 
       case 404:
-        toast.error("NotFound");
+        router.navigate("/notfound");
         break;
 
       case 500:
-        toast.error("Server error");
+        store.commonStore.setServerError(data);
+        router.navigate("/servererror");
         break;
     }
 
