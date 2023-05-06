@@ -1,4 +1,4 @@
-export interface Activity {
+export default interface Activity {
   id: string;
   title: string;
   date: Date | null;
