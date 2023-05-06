@@ -31,6 +31,22 @@ export default class UserStore {
     }
   };
 
+  register = async (creds: UserFormValues) => {
+    try {
+      const user = await agent.Account.register(creds);
+
+      store.commonStore.setToken(user.token);
+
+      runInAction(() => (this.user = user));
+
+      store.modalStore.closeModal();
+
+      router.navigate("/activities");
+    } catch (error) {
+      throw error;
+    }
+  };
+
   logout = () => {
     store.commonStore.setToken(null);
 
