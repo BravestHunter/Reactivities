@@ -7,6 +7,7 @@ import HomePage from "../../features/home/HomePage";
 import { ToastContainer } from "react-toastify";
 import { useStore } from "../stores/store";
 import LoadingComponent from "./LoadingComponent";
+import ModalContainer from "../common/modals/ModalContainer";
 
 function App() {
   const location = useLocation();
@@ -24,17 +25,21 @@ function App() {
     return <LoadingComponent content="Loading app..." />;
   }
 
-  if (location.pathname === "/") {
-    return <HomePage />;
-  }
-
   return (
     <Fragment>
+      <ModalContainer />
       <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
-      <NavBar />
-      <Container style={{ marginTop: "7rem" }}>
-        <Outlet />
-      </Container>
+
+      {location.pathname === "/" ? (
+        <HomePage />
+      ) : (
+        <>
+          <NavBar />
+          <Container style={{ marginTop: "7rem" }}>
+            <Outlet />
+          </Container>
+        </>
+      )}
     </Fragment>
   );
 }
