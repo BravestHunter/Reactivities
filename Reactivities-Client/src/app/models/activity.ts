@@ -1,4 +1,4 @@
-import Profile from "./profile";
+import { Profile } from "./profile";
 
 export default interface Activity {
   id: string;
@@ -10,5 +10,8 @@ export default interface Activity {
   venue: string;
   hostUsername?: string;
   isCancelled?: boolean;
+  isGoing?: boolean;
+  isHost?: boolean;
+  host?: Profile;
   attendees?: Profile[];
 }

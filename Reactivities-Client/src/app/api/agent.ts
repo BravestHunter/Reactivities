@@ -90,6 +90,7 @@ const Activities = {
   update: (activity: Activity) =>
     requests.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.delete<void>(`/activities/${id}`),
+  attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
 };
 
 const agent = {
