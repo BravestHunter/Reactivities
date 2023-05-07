@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 import { Item, Label, List, Segment, Image } from "semantic-ui-react";
-import Activity from "../../../app/models/activity";
+import { Activity } from "../../../app/models/activity";
 
 interface Props {
   activity: Activity;
