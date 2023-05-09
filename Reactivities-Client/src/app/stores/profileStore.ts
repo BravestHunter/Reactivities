@@ -6,6 +6,7 @@ import { store } from "./store";
 export default class ProfileStore {
   profile: Profile | null = null;
   loadingProfile: boolean = false;
+  uploadingFile: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -23,6 +24,10 @@ export default class ProfileStore {
     this.loadingProfile = value;
   };
 
+  setUploadingFile = (value: boolean) => {
+    this.uploadingFile = value;
+  };
+
   loadProfile = async (username: string) => {
     this.setLoadingProfile(true);
 
@@ -36,6 +41,30 @@ export default class ProfileStore {
       console.log(error);
     } finally {
       this.setLoadingProfile(false);
+    }
+  };
+
+  uploadPhoto = async (file: Blob) => {
+    this.setUploadingFile(true);
+
+    try {
+      const response = await agent.Profiles.uploadPhoto(file);
+      const photo = response.data;
+
+      runInAction(() => {
+        if (this.profile) {
+          this.profile.photos?.push(photo);
+
+          if (photo.isMain && store.userStore.user) {
+            store.userStore.setImage(photo.url);
+            this.profile.image = photo.url;
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.setUploadingFile(false);
     }
   };
 }
