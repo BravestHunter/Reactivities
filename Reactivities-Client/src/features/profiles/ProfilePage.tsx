@@ -1,4 +1,4 @@
-import { Grid, GridColumn } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import { observer } from "mobx-react-lite";
@@ -27,8 +27,12 @@ export default observer(function ProfilePage() {
   return (
     <Grid>
       <Grid.Column width={16}>
-        {profile && <ProfileHeader profile={profile!} />}
-        <ProfileContent />
+        {profile && (
+          <>
+            <ProfileHeader profile={profile!} />
+            <ProfileContent profile={profile} />
+          </>
+        )}
       </Grid.Column>
     </Grid>
   );

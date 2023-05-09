@@ -1,10 +1,19 @@
 import React from "react";
 import { Tab } from "semantic-ui-react";
+import ProfilePhotos from "./ProfilePhotos";
+import { Profile } from "../../app/models/profile";
+import { observer } from "mobx-react-lite";
 
-export default function ProfileContent() {
+interface Props {
+  profile: Profile;
+}
+
+export default observer(function ProfileContent(props: Props) {
+  const { profile } = props;
+
   const panes = [
     { menuItem: "About", render: () => <Tab.Pane>About Content</Tab.Pane> },
-    { menuItem: "Photos", render: () => <Tab.Pane>Photos Content</Tab.Pane> },
+    { menuItem: "Photos", render: () => <ProfilePhotos profile={profile} /> },
     { menuItem: "Events", render: () => <Tab.Pane>Events Content</Tab.Pane> },
     {
       menuItem: "Followers",
@@ -23,4 +32,4 @@ export default function ProfileContent() {
       panes={panes}
     />
   );
-}
+});
