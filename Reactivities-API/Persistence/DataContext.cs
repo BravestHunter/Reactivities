@@ -10,6 +10,7 @@ namespace Persistence
         public DbSet<ActivityAttendee> ActivityAtendees { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<UserFollowing> UserFollowings { get; set; }
 
         public DataContext(DbContextOptions options) : base(options)
         {
@@ -35,6 +36,19 @@ namespace Persistence
                 .HasOne(c => c.Activity)
                 .WithMany(a => a.Comments)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<UserFollowing>(builder =>
+            {
+                builder.HasKey(k => new { k.ObserverId, k.TargetId });
+                builder.HasOne(uf => uf.Observer)
+                    .WithMany(o => o.Followings)
+                    .HasForeignKey(uf => uf.ObserverId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                builder.HasOne(uf => uf.Target)
+                    .WithMany(o => o.Followers)
+                    .HasForeignKey(uf => uf.TargetId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }
