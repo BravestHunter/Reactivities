@@ -13,7 +13,7 @@ namespace API.SignalR
             _mediator = mediator;
         }
 
-        public async Task SendCommand(Create.Command command)
+        public async Task SendComment(Create.Command command)
         {
             var comment = await _mediator.Send(command);
 
