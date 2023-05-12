@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -19,16 +20,20 @@ namespace Application.Followers
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext dataContext, IMapper mapper)
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor)
             {
                 _dataContext = dataContext;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<List<Profiles.Profile>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var profiles = new List<Profiles.Profile>();
+
+                var username = _userAccessor.GetUsername();
 
                 switch (request.Predicate)
                 {
@@ -36,7 +41,8 @@ namespace Application.Followers
                         profiles = await _dataContext.UserFollowings
                             .Where(u => u.Target.UserName == request.Username)
                             .Select(u => u.Observer)
-                            .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider)
+                            .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
+                                new { currentUsername = username })
                             .ToListAsync();
                         break;
 
@@ -44,7 +50,8 @@ namespace Application.Followers
                         profiles = await _dataContext.UserFollowings
                             .Where(u => u.Observer.UserName == request.Username)
                             .Select(u => u.Target)
-                            .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider)
+                            .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
+                                new { currentUsername = username })
                             .ToListAsync();
                         break;
                 }
