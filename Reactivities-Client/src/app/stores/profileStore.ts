@@ -8,6 +8,7 @@ export default class ProfileStore {
   loadingProfile: boolean = false;
   uploadingFile: boolean = false;
   loading: boolean = false;
+  followings: Profile[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -127,6 +128,40 @@ export default class ProfileStore {
           this.profile.photos = this.profile.photos?.filter(
             (p) => p.id !== photo.id
           );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.setLoading(false);
+    }
+  };
+
+  updateFollowing = async (username: string, following: boolean) => {
+    this.setLoading(true);
+
+    try {
+      await agent.Profiles.updateFollowing(username);
+
+      store.activityStore.updateAttendeeFollowing(username);
+
+      runInAction(() => {
+        if (
+          this.profile &&
+          this.profile.username !== store.userStore.user?.username
+        ) {
+          following
+            ? this.profile!.followersCount++
+            : this.profile!.followersCount--;
+          this.profile.following = !this.profile.following;
+
+          this.followings.forEach((profile) => {
+            if (profile.username === username) {
+              profile.following
+                ? profile.followersCount--
+                : profile.followingCount++;
+            }
+          });
         }
       });
     } catch (error) {
