@@ -3,7 +3,6 @@ using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Activities
@@ -12,7 +11,7 @@ namespace Application.Activities
     {
         public class Query : IRequest<Result<PagedList<ActivityDto>>>
         {
-            public PagingParams Params { get; set; }
+            public ActivityParams Params { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
@@ -32,9 +31,19 @@ namespace Application.Activities
             {
                 var username = _userAccessor.GetUsername();
                 var query = _dataContext.Activities
+                    .Where(a => a.Date >= request.Params.StartDate)
                     .OrderBy(a => a.Date)
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = username })
                     .AsQueryable();
+
+                if (request.Params.IsGoing && !request.Params.IsHost)
+                {
+                    query = query.Where(a => a.Attendees.Any(u => u.Username == username));
+                }
+                else if (!request.Params.IsGoing && request.Params.IsHost)
+                {
+                    query = query.Where(a => a.HostUsername == username);
+                }
 
                 return Result<PagedList<ActivityDto>>.Success(
                     await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
