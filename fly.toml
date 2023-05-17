@@ -10,7 +10,7 @@ primary_region = "waw"
   image = "bravesthunterdev/reactivities:latest"
 
 [env]
-  ASPNETCORE_URLS="http://+8080"
+  ASPNETCORE_URLS="http://+:8080"
   Cloudinary__CloudName="dcyg0x2zd"
   Cloudinary__ApiKey="733392379556336"
   

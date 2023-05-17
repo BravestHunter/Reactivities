@@ -26,7 +26,7 @@ namespace API.Extensions
 
                 // Depending on if in development or production, use either FlyIO
                 // connection string, or development connection string from env var.
-                if (env == "Development")
+                if (env == "Development" || string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
                 {
                     // Use connection string from file.
                     connectionString = config.GetConnectionString("DefaultConnection");
