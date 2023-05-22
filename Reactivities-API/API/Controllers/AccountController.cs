@@ -112,6 +112,8 @@ namespace API.Controllers
                 .Include(u => u.Photos)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
+            await SetRefreshToken(user);
+
             return CreateUserObject(user);
         }
 
