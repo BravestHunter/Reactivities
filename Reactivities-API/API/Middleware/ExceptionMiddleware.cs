@@ -39,7 +39,7 @@ namespace API.Middleware
                 {
                     response = new AppException(
                         context.Response.StatusCode, ex.Message, ex.StackTrace.ToString()
-                        );
+                    );
                 }
                 else
                 {

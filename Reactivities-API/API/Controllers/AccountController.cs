@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using API.Dto;
 using API.DTO;
 using API.Services;
 using Domain;
@@ -24,7 +25,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
         {
             var user = await _userManager.Users
                 .Include(u => u.Photos)
@@ -47,7 +48,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto registerDto)
         {
             if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.Username))
             {
@@ -81,7 +82,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("refreshToken")]
-        public async Task<ActionResult<UserDto>> RefreshToken()
+        public async Task<ActionResult<UserResponseDto>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
@@ -105,7 +106,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public async Task<ActionResult<UserResponseDto>> GetCurrentUser()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
             var user = await _userManager.Users
@@ -133,9 +134,9 @@ namespace API.Controllers
             Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
         }
 
-        private UserDto CreateUserObject(AppUser user)
+        private UserResponseDto CreateUserObject(AppUser user)
         {
-            return new UserDto
+            return new UserResponseDto
             {
                 Username = user.UserName,
                 DisplayName = user.DisplayName,
