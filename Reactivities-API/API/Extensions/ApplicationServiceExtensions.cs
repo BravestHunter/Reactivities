@@ -1,15 +1,14 @@
 using Application.Activities;
 using Application.Core;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
-using FluentValidation.AspNetCore;
+using Application.Interfaces;
 using FluentValidation;
+using FluentValidation.AspNetCore;
+using Infrastructure.Photos;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Application.Interfaces;
-using Infrastructure.Security;
-using Infrastructure.Photos;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace API.Extensions
 {
@@ -46,7 +45,7 @@ namespace API.Extensions
                     var pgPass = pgUserPass.Split(":")[1];
                     var pgHost = pgHostPort.Split(":")[0];
                     var pgPort = pgHostPort.Split(":")[1];
-	                var updatedHost = pgHost.Replace("flycast", "internal");
+                    var updatedHost = pgHost.Replace("flycast", "internal");
 
                     connectionString = $"Server={updatedHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
                 }
@@ -55,12 +54,15 @@ namespace API.Extensions
                 // or from the environment variable from FlyIO, use it to set up your DbContext.
                 options.UseNpgsql(connectionString);
             });
-            services.AddMediatR(typeof(List.Handler));
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblyContaining<List.Handler>();
+            });
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<Create>();
 
-            services.AddControllers(opt => 
+            services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
