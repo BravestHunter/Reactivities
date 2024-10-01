@@ -9,7 +9,7 @@ using Persistence;
 
 namespace API.Extensions
 {
-    public static class IdentityServiceExtensions
+    public static class ServiceExtensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
@@ -21,9 +21,9 @@ namespace API.Extensions
                 })
                 .AddEntityFrameworkStores<DataContext>();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["AuthTokenKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Authorization:AccessTokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer((opt) => 
+                .AddJwtBearer((opt) =>
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters()
                     {
@@ -36,7 +36,7 @@ namespace API.Extensions
                     };
                     opt.Events = new JwtBearerEvents
                     {
-                        OnMessageReceived = context => 
+                        OnMessageReceived = context =>
                         {
                             var accessToken = context.Request.Query["access_token"];
                             var path = context.HttpContext.Request.Path;

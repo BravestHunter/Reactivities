@@ -15,8 +15,8 @@ namespace API.Services
         {
             _config = config;
         }
-        
-        public string CreateToken(AppUser user)
+
+        public string CreateAccessToken(AppUser user)
         {
             var claims = new List<Claim>()
             {
@@ -25,7 +25,7 @@ namespace API.Services
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["AuthTokenKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Authorization:AccessTokenKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor

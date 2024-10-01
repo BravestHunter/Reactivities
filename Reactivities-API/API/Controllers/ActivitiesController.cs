@@ -1,15 +1,19 @@
 using Application.Activities;
-using Application.Core;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class ActivitiesController : BaseApiController
     {
+        public ActivitiesController(IMediator mediator) : base(mediator) { }
+
         [HttpGet]
-        public async Task<IActionResult> GetActivities([FromQuery]ActivityParams activityParams)
+        public async Task<IActionResult> GetActivities([FromQuery] ActivityParams activityParams)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query() { Params = activityParams }));
         }

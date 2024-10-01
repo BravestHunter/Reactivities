@@ -1,10 +1,13 @@
 using Application.Followers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     public class FollowController : BaseApiController
     {
+        public FollowController(IMediator mediator) : base(mediator) { }
+
         [HttpPost("{username}")]
         public async Task<IActionResult> Follow(string username)
         {

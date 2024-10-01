@@ -24,36 +24,13 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
-        {
-            var user = await _userManager.Users
-                .Include(u => u.Photos)
-                .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-            if (!result)
-            {
-                return Unauthorized();
-            }
-
-            await SetRefreshToken(user);
-
-            return CreateUserObject(user);
-        }
-
-        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto registerDto)
         {
             if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.Username))
             {
                 ModelState.AddModelError("username", "Username is already taken");
-                return ValidationProblem("Username is already taken");
+                return ValidationProblem(ModelState);
             }
 
             if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email))
@@ -73,6 +50,29 @@ namespace API.Controllers
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
+            }
+
+            await SetRefreshToken(user);
+
+            return CreateUserObject(user);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
+        {
+            var user = await _userManager.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+            if (!result)
+            {
+                return Unauthorized();
             }
 
             await SetRefreshToken(user);
@@ -113,8 +113,6 @@ namespace API.Controllers
                 .Include(u => u.Photos)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
-            await SetRefreshToken(user);
-
             return CreateUserObject(user);
         }
 
@@ -141,7 +139,7 @@ namespace API.Controllers
                 Username = user.UserName,
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(p => p.IsMain)?.Url,
-                Token = _tokenService.CreateToken(user)
+                AccessToken = _tokenService.CreateAccessToken(user)
             };
         }
     }

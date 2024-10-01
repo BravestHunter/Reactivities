@@ -7,11 +7,15 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseApiController : ControllerBase
+    public abstract class BaseApiController : ControllerBase
     {
-        private IMediator _mediator;
-        protected IMediator Mediator => _mediator ??= 
-            HttpContext.RequestServices.GetRequiredService<IMediator>();
+        private readonly IMediator _mediator;
+        protected IMediator Mediator => _mediator;
+
+        public BaseApiController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
         protected ActionResult HandleResult<T>(Result<T> result)
         {
@@ -33,7 +37,7 @@ namespace API.Controllers
             return BadRequest(result.Error);
         }
 
-         protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
+        protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
         {
             if (result == null)
             {
@@ -45,9 +49,9 @@ namespace API.Controllers
                 if (result.Value != null)
                 {
                     Response.AddPaginationHeader(
-                        result.Value.CurrentPage, 
-                        result.Value.PageSize, 
-                        result.Value.TotalCount, 
+                        result.Value.CurrentPage,
+                        result.Value.PageSize,
+                        result.Value.TotalCount,
                         result.Value.TotalPages
                         );
                     return Ok(result.Value);
