@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Reactivities.Api.Extensions;
 using Reactivities.Api.Middleware;
 using Reactivities.Api.SignalR;
-using Reactivities.Domain;
-using Reactivities.Persistence;
+using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Api
 {
@@ -56,20 +53,10 @@ namespace Reactivities.Api
             app.MapHub<ChatHub>("/chat");
             app.MapFallbackToController("Index", "Fallback");
 
-            using (var scope = app.Services.CreateScope())
+            app.Services.ApplyPersistentMigrations();
+            if (app.Environment.IsDevelopment())
             {
-                try
-                {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-                    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                    dbContext.Database.MigrateAsync().Wait();
-                    Seed.SeedData(dbContext, userManager).Wait();
-                }
-                catch (Exception ex)
-                {
-                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occuredc during database migration");
-                }
+                app.Services.SeedPersistentData();
             }
 
             app.Run();
