@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reactivities.Application.Profiles;
+using Reactivities.Application.Mediator.Profiles;
 
 namespace Reactivities.Api.Controllers
 {

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Reactivities.Application.Profiles
+namespace Reactivities.Application.Mediator.Profiles
 {
     public class UserActivityDto
     {

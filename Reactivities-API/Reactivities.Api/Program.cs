@@ -1,6 +1,7 @@
 using Reactivities.Api.Extensions;
 using Reactivities.Api.Middleware;
 using Reactivities.Api.SignalR;
+using Reactivities.Application.Extensions;
 using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Api
@@ -22,8 +23,9 @@ namespace Reactivities.Api
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddApplicationServices(configuration);
-            services.AddIdentityServices(configuration);
+            services.AddPersistanceServices();
+            services.AddApplicationServices();
+            services.AddApiServices(configuration);
 
             services.AddHealthChecks();
         }

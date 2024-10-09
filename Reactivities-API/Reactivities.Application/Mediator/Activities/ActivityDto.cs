@@ -1,4 +1,4 @@
-namespace Reactivities.Application.Activities
+namespace Reactivities.Application.Mediator.Activities
 {
     public class ActivityDto
     {

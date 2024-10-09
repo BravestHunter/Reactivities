@@ -3,28 +3,27 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
+using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Profiles
+namespace Reactivities.Application.Mediator.Activities
 {
-    public class Edit
+    public class Create
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public string DisplayName { get; set; }
-            public string Bio { get; set; }
-
+            public Activity Activity { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        internal class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.DisplayName).NotEmpty();
+                RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;
@@ -39,18 +38,22 @@ namespace Reactivities.Application.Profiles
             {
                 var username = _userAccessor.GetUsername();
                 var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
-                if (user == null)
-                {
-                    return null;
-                }
 
-                user.DisplayName = request.DisplayName;
-                user.Bio = request.Bio;
+                var attendee = new ActivityAttendee
+                {
+                    AppUser = user,
+                    Activity = request.Activity,
+                    IsHost = true
+                };
+                request.Activity.Attendees.Add(attendee);
+
+                await _dataContext.Activities.AddAsync(request.Activity);
 
                 var result = await _dataContext.SaveChangesAsync() > 0;
+
                 if (!result)
                 {
-                    return Result<Unit>.Failure("Failed to update profile");
+                    return Result<Unit>.Failure("Failed to create activity");
                 }
 
                 return Result<Unit>.Success(Unit.Value);

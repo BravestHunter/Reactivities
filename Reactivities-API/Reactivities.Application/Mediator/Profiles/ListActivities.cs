@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Profiles
+namespace Reactivities.Application.Mediator.Profiles
 {
     public class ListActivities
     {
@@ -15,7 +15,7 @@ namespace Reactivities.Application.Profiles
             public string Predicate { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<UserActivityDto>>>
+        internal class Handler : IRequestHandler<Query, Result<List<UserActivityDto>>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;

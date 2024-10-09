@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using Reactivities.Application.Photos;
+using Reactivities.Application.Mediator.Photos;
 
 namespace Reactivities.Application.Interfaces
 {

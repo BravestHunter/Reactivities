@@ -1,4 +1,4 @@
-namespace Reactivities.Application.Photos
+namespace Reactivities.Application.Mediator.Photos
 {
     public class PhotoUploadResult
     {

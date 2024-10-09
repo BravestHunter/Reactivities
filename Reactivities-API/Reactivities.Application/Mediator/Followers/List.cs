@@ -10,13 +10,13 @@ namespace Reactivities.Application.Followers
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Profiles.Profile>>>
+        public class Query : IRequest<Result<List<Mediator.Profiles.Profile>>>
         {
             public string Predicate { get; set; }
             public string Username { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<Profiles.Profile>>>
+        public class Handler : IRequestHandler<Query, Result<List<Mediator.Profiles.Profile>>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -29,9 +29,9 @@ namespace Reactivities.Application.Followers
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Result<List<Profiles.Profile>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Mediator.Profiles.Profile>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var profiles = new List<Profiles.Profile>();
+                var profiles = new List<Mediator.Profiles.Profile>();
 
                 var username = _userAccessor.GetUsername();
 
@@ -41,7 +41,7 @@ namespace Reactivities.Application.Followers
                         profiles = await _dataContext.UserFollowings
                             .Where(u => u.Target.UserName == request.Username)
                             .Select(u => u.Observer)
-                            .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
+                            .ProjectTo<Mediator.Profiles.Profile>(_mapper.ConfigurationProvider,
                                 new { currentUsername = username })
                             .ToListAsync();
                         break;
@@ -50,13 +50,13 @@ namespace Reactivities.Application.Followers
                         profiles = await _dataContext.UserFollowings
                             .Where(u => u.Observer.UserName == request.Username)
                             .Select(u => u.Target)
-                            .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
+                            .ProjectTo<Mediator.Profiles.Profile>(_mapper.ConfigurationProvider,
                                 new { currentUsername = username })
                             .ToListAsync();
                         break;
                 }
 
-                return Result<List<Profiles.Profile>>.Success(profiles);
+                return Result<List<Mediator.Profiles.Profile>>.Success(profiles);
             }
         }
     }

@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reactivities.Application.Photos;
+using Reactivities.Application.Mediator.Photos;
 
 namespace Reactivities.Api.Controllers
 {

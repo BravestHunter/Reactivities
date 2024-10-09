@@ -1,21 +1,19 @@
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
-using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Photos
+namespace Reactivities.Application.Mediator.Photos
 {
-    public class Add
+    public class Delete
     {
-        public class Command : IRequest<Result<Photo>>
+        public class Command : IRequest<Result<Unit>>
         {
-            public IFormFile File { get; set; }
+            public long Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Photo>>
+        internal class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IPhotoAccessor _photoAccessor;
@@ -28,7 +26,7 @@ namespace Reactivities.Application.Photos
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Result<Photo>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 string username = _userAccessor.GetUsername();
                 var user = await _dataContext.Users
@@ -39,28 +37,32 @@ namespace Reactivities.Application.Photos
                     return null;
                 }
 
-                var uploadResult = await _photoAccessor.AddPhoto(request.File);
-
-                var photo = new Photo
+                var photo = user.Photos.FirstOrDefault(p => p.Id == request.Id);
+                if (photo == null)
                 {
-                    Url = uploadResult.Url,
-                    StorageId = uploadResult.PublicId
-                };
-
-                if (!user.Photos.Any())
-                {
-                    photo.IsMain = true;
+                    return null;
                 }
 
-                user.Photos.Add(photo);
+                if (photo.IsMain)
+                {
+                    return Result<Unit>.Failure("Main photo can't be deleted");
+                }
+
+                var deleteResult = await _photoAccessor.DeletePhoto(photo.StorageId);
+                if (deleteResult == null)
+                {
+                    return Result<Unit>.Failure("Failed to delete photo from Cloudinary");
+                }
+
+                user.Photos.Remove(photo);
 
                 var saveResult = await _dataContext.SaveChangesAsync() > 0;
                 if (!saveResult)
                 {
-                    return Result<Photo>.Failure("Failed to add a photo");
+                    return Result<Unit>.Failure("Failed to remove photo");
                 }
 
-                return Result<Photo>.Success(photo);
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

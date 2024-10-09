@@ -5,7 +5,7 @@ using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Activities
+namespace Reactivities.Application.Mediator.Activities
 {
     public class List
     {
@@ -14,7 +14,7 @@ namespace Reactivities.Application.Activities
             public ActivityParams Params { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
+        internal class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;

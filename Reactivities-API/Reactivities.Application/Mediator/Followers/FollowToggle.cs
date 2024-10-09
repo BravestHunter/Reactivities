@@ -14,7 +14,7 @@ namespace Reactivities.Application.Followers
             public string TargetUsername { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;

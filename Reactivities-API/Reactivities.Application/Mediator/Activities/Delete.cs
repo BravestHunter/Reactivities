@@ -2,7 +2,7 @@ using MediatR;
 using Reactivities.Application.Core;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Activities
+namespace Reactivities.Application.Mediator.Activities
 {
     public class Delete
     {
@@ -11,7 +11,7 @@ namespace Reactivities.Application.Activities
             public long Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
 

@@ -1,4 +1,4 @@
-namespace Reactivities.Application.Comments
+namespace Reactivities.Application.Mediator.Comments
 {
     public class CommentDto
     {

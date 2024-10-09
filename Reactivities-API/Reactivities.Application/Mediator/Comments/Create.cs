@@ -7,7 +7,7 @@ using Reactivities.Application.Interfaces;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Comments
+namespace Reactivities.Application.Mediator.Comments
 {
     public class Create
     {
@@ -17,7 +17,7 @@ namespace Reactivities.Application.Comments
             public Guid ActivityId { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Command>
+        internal class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
@@ -25,7 +25,7 @@ namespace Reactivities.Application.Comments
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<CommentDto>>
+        internal class Handler : IRequestHandler<Command, Result<CommentDto>>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;

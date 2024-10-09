@@ -1,6 +1,8 @@
-namespace Reactivities.Application.Activities
+using Reactivities.Domain.Models;
+
+namespace Reactivities.Application.Mediator.Profiles
 {
-    public class AttendeeDto
+    public class Profile
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }
@@ -9,5 +11,6 @@ namespace Reactivities.Application.Activities
         public bool Following { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
+        public ICollection<Photo> Photos { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 using Reactivities.Application.Core;
 
-namespace Reactivities.Application.Activities
+namespace Reactivities.Application.Mediator.Activities
 {
     public class ActivityParams : PagingParams
     {

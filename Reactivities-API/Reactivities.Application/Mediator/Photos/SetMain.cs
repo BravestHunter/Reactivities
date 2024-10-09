@@ -4,25 +4,23 @@ using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Photos
+namespace Reactivities.Application.Mediator.Photos
 {
-    public class Delete
+    public class SetMain
     {
         public class Command : IRequest<Result<Unit>>
         {
             public long Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
-            private readonly IPhotoAccessor _photoAccessor;
             private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext dataContext, IPhotoAccessor photoAccessor, IUserAccessor userAccessor)
+            public Handler(DataContext dataContext, IUserAccessor userAccessor)
             {
                 _dataContext = dataContext;
-                _photoAccessor = photoAccessor;
                 _userAccessor = userAccessor;
             }
 
@@ -43,23 +41,18 @@ namespace Reactivities.Application.Photos
                     return null;
                 }
 
-                if (photo.IsMain)
+                var mainPhoto = user.Photos.FirstOrDefault(p => p.IsMain);
+                if (mainPhoto != null)
                 {
-                    return Result<Unit>.Failure("Main photo can't be deleted");
+                    mainPhoto.IsMain = false;
                 }
 
-                var deleteResult = await _photoAccessor.DeletePhoto(photo.StorageId);
-                if (deleteResult == null)
-                {
-                    return Result<Unit>.Failure("Failed to delete photo from Cloudinary");
-                }
-
-                user.Photos.Remove(photo);
+                photo.IsMain = true;
 
                 var saveResult = await _dataContext.SaveChangesAsync() > 0;
                 if (!saveResult)
                 {
-                    return Result<Unit>.Failure("Failed to remove photo");
+                    return Result<Unit>.Failure("Failed to set main photo");
                 }
 
                 return Result<Unit>.Success(Unit.Value);

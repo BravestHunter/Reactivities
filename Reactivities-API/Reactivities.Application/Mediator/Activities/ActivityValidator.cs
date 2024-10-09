@@ -1,7 +1,7 @@
 using FluentValidation;
 using Reactivities.Domain.Models;
 
-namespace Reactivities.Application.Activities
+namespace Reactivities.Application.Mediator.Activities
 {
     public class ActivityValidator : AbstractValidator<Activity>
     {

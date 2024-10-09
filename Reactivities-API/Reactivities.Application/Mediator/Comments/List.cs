@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Comments
+namespace Reactivities.Application.Mediator.Comments
 {
     public class List
     {
@@ -14,7 +14,7 @@ namespace Reactivities.Application.Comments
             public long ActivityId { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<CommentDto>>>
+        internal class Handler : IRequestHandler<Query, Result<List<CommentDto>>>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;

@@ -1,30 +1,15 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Reactivities.Application.Activities;
-using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
 using Reactivities.Infrastructure.Photos;
 using Reactivities.Infrastructure.Security;
-using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Api.Extensions
 {
     public static class ApplicationServiceExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddPersistanceServices(config);
-
-            services.AddMediatR(config =>
-            {
-                config.RegisterServicesFromAssemblyContaining<List.Handler>();
-            });
-            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssemblyContaining<Create>();
-
             services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder()

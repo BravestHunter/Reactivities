@@ -3,7 +3,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Reactivities.Application.Interfaces;
-using Reactivities.Application.Photos;
+using Reactivities.Application.Mediator.Photos;
 
 namespace Reactivities.Infrastructure.Photos
 {

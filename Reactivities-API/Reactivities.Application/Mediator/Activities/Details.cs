@@ -6,16 +6,16 @@ using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Profiles
+namespace Reactivities.Application.Mediator.Activities
 {
     public class Details
     {
-        public class Query : IRequest<Result<Profile>>
+        public class Query : IRequest<Result<ActivityDto>>
         {
-            public string Username { get; set; }
+            public long Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<Profile>>
+        internal class Handler : IRequestHandler<Query, Result<ActivityDto>>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;
@@ -28,18 +28,14 @@ namespace Reactivities.Application.Profiles
                 _mapper = mapper;
             }
 
-            public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var username = _userAccessor.GetUsername();
-                var profile = await _dataContext.Users
-                    .ProjectTo<Profile>(_mapper.ConfigurationProvider, new { currentUsername = username })
-                    .SingleOrDefaultAsync(u => u.Username == request.Username);
-                if (profile == null)
-                {
-                    return null;
-                }
+                var activity = await _dataContext.Activities
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = username })
+                    .FirstOrDefaultAsync(a => a.Id == request.Id);
 
-                return Result<Profile>.Success(profile);
+                return Result<ActivityDto>.Success(activity);
             }
         }
     }

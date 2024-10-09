@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Reactivities.Application.Comments;
+using Reactivities.Application.Mediator.Comments;
 
 namespace Reactivities.Api.SignalR
 {

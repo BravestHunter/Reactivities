@@ -5,7 +5,7 @@ using Reactivities.Application.Interfaces;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
-namespace Reactivities.Application.Activities
+namespace Reactivities.Application.Mediator.Activities
 {
     public class UpdateAttendance
     {
@@ -14,7 +14,7 @@ namespace Reactivities.Application.Activities
             public long Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;
