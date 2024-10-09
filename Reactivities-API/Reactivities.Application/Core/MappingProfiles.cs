@@ -1,7 +1,7 @@
 using AutoMapper;
 using Reactivities.Application.Activities;
 using Reactivities.Application.Comments;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Application.Core
 {

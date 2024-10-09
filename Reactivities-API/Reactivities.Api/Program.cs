@@ -32,7 +32,6 @@ namespace Reactivities.Api
         {
             app.UseHealthChecks("/healthCheck");
 
-            // Configure the HTTP request pipeline.
             app.UseMiddleware<ExceptionMiddleware>();
 
             if (app.Environment.IsDevelopment())

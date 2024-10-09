@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
 namespace Reactivities.Application.Photos
@@ -44,7 +44,7 @@ namespace Reactivities.Application.Photos
                 var photo = new Photo
                 {
                     Url = uploadResult.Url,
-                    Id = uploadResult.PublicId
+                    StorageId = uploadResult.PublicId
                 };
 
                 if (!user.Photos.Any())

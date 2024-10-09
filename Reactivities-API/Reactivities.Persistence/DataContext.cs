@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Persistence
 {
-    public class DataContext : IdentityDbContext<AppUser>
+    public class DataContext : IdentityDbContext<AppUser, AppRole, long>
     {
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ActivityAttendee> ActivityAtendees { get; set; }

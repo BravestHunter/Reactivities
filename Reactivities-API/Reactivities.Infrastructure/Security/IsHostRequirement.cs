@@ -24,13 +24,15 @@ namespace Reactivities.Infrastructure.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
         {
-            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            var userIdStr = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdStr == null)
             {
                 return Task.CompletedTask;
             }
 
-            var activityId = Guid.Parse(
+            var userId = long.Parse(userIdStr);
+
+            var activityId = long.Parse(
                 _httpContextAccessor.HttpContext?.Request.RouteValues.SingleOrDefault(x => x.Key == "id").Value?.ToString()
                 );
 

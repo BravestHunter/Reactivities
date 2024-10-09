@@ -15,13 +15,13 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(long id)
         {
             return HandleResult(await Mediator.Send(new Delete.Command() { Id = id }));
         }
 
         [HttpPost("{id}/setmain")]
-        public async Task<IActionResult> SetMain(string id)
+        public async Task<IActionResult> SetMain(long id)
         {
             return HandleResult(await Mediator.Send(new SetMain.Command() { Id = id }));
         }

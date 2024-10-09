@@ -2,7 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Reactivities.Application.Core;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
 namespace Reactivities.Application.Activities

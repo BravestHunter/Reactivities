@@ -1,10 +1,10 @@
-namespace Reactivities.Domain
+namespace Reactivities.Domain.Models
 {
     public class UserFollowing
     {
-        public string ObserverId { get; set; }
+        public long ObserverId { get; set; }
         public AppUser Observer { get; set; }
-        public string TargetId { get; set; }
+        public long TargetId { get; set; }
         public AppUser Target { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Identity;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Persistence
 {
-    public class Seed
+    internal class Seed
     {
         public static async Task SeedData(DataContext context,
             UserManager<AppUser> userManager)

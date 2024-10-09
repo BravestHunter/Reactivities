@@ -10,7 +10,7 @@ namespace Reactivities.Application.Photos
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public string Id { get; set; }
+            public long Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -48,7 +48,7 @@ namespace Reactivities.Application.Photos
                     return Result<Unit>.Failure("Main photo can't be deleted");
                 }
 
-                var deleteResult = await _photoAccessor.DeletePhoto(photo.Id);
+                var deleteResult = await _photoAccessor.DeletePhoto(photo.StorageId);
                 if (deleteResult == null)
                 {
                     return Result<Unit>.Failure("Failed to delete photo from Cloudinary");

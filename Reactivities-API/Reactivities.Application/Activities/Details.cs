@@ -12,7 +12,7 @@ namespace Reactivities.Application.Activities
     {
         public class Query : IRequest<Result<ActivityDto>>
         {
-            public Guid Id { get; set; }
+            public long Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<ActivityDto>>

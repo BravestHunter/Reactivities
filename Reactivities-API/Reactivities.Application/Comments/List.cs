@@ -11,7 +11,7 @@ namespace Reactivities.Application.Comments
     {
         public class Query : IRequest<Result<List<CommentDto>>>
         {
-            public Guid ActivityId { get; set; }
+            public long ActivityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<CommentDto>>>

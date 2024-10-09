@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.Api.Services;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 using Reactivities.Infrastructure.Security;
 using Reactivities.Persistence;
 

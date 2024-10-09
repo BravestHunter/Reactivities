@@ -1,4 +1,4 @@
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Application.Profiles
 {

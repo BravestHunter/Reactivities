@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.Api.Dto;
 using Reactivities.Api.DTO;
 using Reactivities.Api.Services;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Api.Controllers
 {

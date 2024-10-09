@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Reactivities.Persistence\Reactivities.Persistence.csproj" />
   </ItemGroup>
 

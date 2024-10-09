@@ -8,7 +8,7 @@ namespace Reactivities.Application.Activities
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; }
+            public long Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>

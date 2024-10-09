@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
-using Reactivities.Domain;
+using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 
 namespace Reactivities.Application.Activities
@@ -11,7 +11,7 @@ namespace Reactivities.Application.Activities
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; }
+            public long Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
