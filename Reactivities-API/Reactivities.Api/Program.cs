@@ -25,6 +25,7 @@ namespace Reactivities.Api
         {
             services.AddPersistanceServices();
             services.AddApplicationServices();
+            services.AddIdentityServices(configuration);
             services.AddApiServices(configuration);
 
             services.AddHealthChecks();
