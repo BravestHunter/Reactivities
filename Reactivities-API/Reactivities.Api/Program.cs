@@ -55,10 +55,10 @@ namespace Reactivities.Api
             app.MapHub<ChatHub>("/chat");
             app.MapFallbackToController("Index", "Fallback");
 
-            app.Services.ApplyPersistentMigrations();
+            app.Services.ApplyPersistentMigrations(app.Logger);
             if (app.Environment.IsDevelopment())
             {
-                app.Services.SeedPersistentData();
+                app.Services.SeedPersistentData(app.Logger);
             }
 
             app.Run();

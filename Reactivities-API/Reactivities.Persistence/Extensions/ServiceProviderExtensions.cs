@@ -8,38 +8,36 @@ namespace Reactivities.Persistence.Extensions
 {
     public static class ServiceProviderExtensions
     {
-        public static void ApplyPersistentMigrations(this IServiceProvider serviceProvider)
+        public static void ApplyPersistentMigrations(this IServiceProvider serviceProvider, ILogger logger)
         {
-            using (var scope = serviceProvider.CreateScope())
+            try
             {
-                try
+                using (var scope = serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
                     dbContext.Database.MigrateAsync().Wait();
                 }
-                catch (Exception ex)
-                {
-                    var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
-                    logger.LogError(ex, "An error occured during database migration");
-                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occured during database migration");
             }
         }
 
-        public static void SeedPersistentData(this IServiceProvider serviceProvider)
+        public static void SeedPersistentData(this IServiceProvider serviceProvider, ILogger logger)
         {
-            using (var scope = serviceProvider.CreateScope())
+            try
             {
-                try
+                using (var scope = serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
                     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                     Seed.SeedData(dbContext, userManager).Wait();
                 }
-                catch (Exception ex)
-                {
-                    var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
-                    logger.LogError(ex, "An error occured during database seeding");
-                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occured during database seeding");
             }
         }
     }
