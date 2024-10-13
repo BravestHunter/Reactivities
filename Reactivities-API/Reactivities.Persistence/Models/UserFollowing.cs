@@ -1,4 +1,4 @@
-namespace Reactivities.Domain.Models
+namespace Reactivities.Persistence.Models
 {
     public class UserFollowing
     {

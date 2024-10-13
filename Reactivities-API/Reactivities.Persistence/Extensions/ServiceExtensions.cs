@@ -12,7 +12,12 @@ namespace Reactivities.Persistence.Extensions
             {
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
 
-                string connectionString = configuration.GetConnectionString("PostgresDb") ?? string.Empty;
+                string? connectionString = configuration.GetConnectionString("PostgresDb");
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new ApplicationException("Failed to retrieve PostgresDb connection string");
+                }
+
                 options.UseNpgsql(connectionString);
             });
 

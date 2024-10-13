@@ -27,8 +27,6 @@ namespace Reactivities.Api
             services.AddApplicationServices();
             services.AddIdentityServices(configuration);
             services.AddApiServices(configuration);
-
-            services.AddHealthChecks();
         }
 
         private static void ConfigurePipeline(WebApplication app)

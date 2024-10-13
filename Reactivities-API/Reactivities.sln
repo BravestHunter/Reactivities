@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reactivities.Api", "Reactiv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reactivities.Application", "Reactivities.Application\Reactivities.Application.csproj", "{8385EB0C-3075-4F2D-B4B2-A4B4A8DA1BAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reactivities.Domain", "Reactivities.Domain\Reactivities.Domain.csproj", "{232E0072-5108-4ED5-B95F-BE7DE3B6A09E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reactivities.Persistence", "Reactivities.Persistence\Reactivities.Persistence.csproj", "{F610452C-DFEC-4EFC-A0C0-D66487D8CC7A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reactivities.Infrastructure", "Reactivities.Infrastructure\Reactivities.Infrastructure.csproj", "{3901CBEA-7FA7-4E55-B607-4EB1E053CBCC}"
@@ -32,10 +30,6 @@ Global
 		{8385EB0C-3075-4F2D-B4B2-A4B4A8DA1BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8385EB0C-3075-4F2D-B4B2-A4B4A8DA1BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8385EB0C-3075-4F2D-B4B2-A4B4A8DA1BAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{232E0072-5108-4ED5-B95F-BE7DE3B6A09E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{232E0072-5108-4ED5-B95F-BE7DE3B6A09E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{232E0072-5108-4ED5-B95F-BE7DE3B6A09E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{232E0072-5108-4ED5-B95F-BE7DE3B6A09E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F610452C-DFEC-4EFC-A0C0-D66487D8CC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F610452C-DFEC-4EFC-A0C0-D66487D8CC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F610452C-DFEC-4EFC-A0C0-D66487D8CC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU

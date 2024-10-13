@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Mediator.Activities;
-using Reactivities.Domain.Models;
+using Reactivities.Persistence.Models;
 
 namespace Reactivities.Api.Controllers
 {

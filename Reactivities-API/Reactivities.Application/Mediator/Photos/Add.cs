@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Core;
 using Reactivities.Application.Interfaces;
-using Reactivities.Domain.Models;
 using Reactivities.Persistence;
+using Reactivities.Persistence.Models;
 
 namespace Reactivities.Application.Mediator.Photos
 {

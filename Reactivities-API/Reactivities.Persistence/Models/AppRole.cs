@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Reactivities.Domain.Models
+namespace Reactivities.Persistence.Models
 {
     public class AppRole : IdentityRole<long> { }
 }
