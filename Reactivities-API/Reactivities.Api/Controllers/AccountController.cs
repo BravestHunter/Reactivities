@@ -12,6 +12,7 @@ namespace Reactivities.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
@@ -23,7 +24,6 @@ namespace Reactivities.Api.Controllers
             _tokenService = tokenService;
         }
 
-        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto registerDto)
         {
@@ -57,7 +57,6 @@ namespace Reactivities.Api.Controllers
             return CreateUserObject(user);
         }
 
-        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
         {
@@ -80,8 +79,7 @@ namespace Reactivities.Api.Controllers
             return CreateUserObject(user);
         }
 
-        [Authorize]
-        [HttpPost("refreshToken")]
+        [HttpGet("refreshToken")]
         public async Task<ActionResult<UserResponseDto>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -89,7 +87,7 @@ namespace Reactivities.Api.Controllers
             var user = await _userManager.Users
                 .Include(u => u.RefreshTokens)
                 .Include(u => u.Photos)
-                .FirstOrDefaultAsync(u => u.UserName == User.FindFirstValue(ClaimTypes.Name));
+                .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
             if (user == null)
             {
                 return Unauthorized();
@@ -106,6 +104,7 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<UserResponseDto>> GetCurrentUser()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
@@ -126,7 +125,7 @@ namespace Reactivities.Api.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(30)
             };
 
             Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
