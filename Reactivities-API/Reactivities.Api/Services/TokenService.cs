@@ -2,18 +2,20 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Reactivities.Api.Configuration;
 using Reactivities.Persistence.Models;
 
 namespace Reactivities.Api.Services
 {
     public class TokenService
     {
-        private readonly IConfiguration _config;
+        private readonly AuthConfiguration _config;
 
-        public TokenService(IConfiguration config)
+        public TokenService(IOptions<AuthConfiguration> options)
         {
-            _config = config;
+            _config = options.Value;
         }
 
         public string CreateAccessToken(AppUser user)
@@ -25,7 +27,7 @@ namespace Reactivities.Api.Services
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Authorization:AccessTokenKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.AccessTokenKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor

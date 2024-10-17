@@ -2,7 +2,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Reactivities.Api.Configuration;
 using Reactivities.Api.Services;
 using Reactivities.Application.Interfaces;
 using Reactivities.Infrastructure.Photos;
@@ -14,8 +16,19 @@ namespace Reactivities.Api.Extensions
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
+        public const string ConfigAuthorizationSection = "Authorization";
+
+        public static IServiceCollection BindAuthConfiguration(this IServiceCollection services, IConfiguration config)
         {
+            services.Configure<AuthConfiguration>(config.GetSection(ConfigAuthorizationSection));
+
+            return services;
+        }
+
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        {
+            using var serviceProvider = services.BuildServiceProvider();
+
             services
                 .AddIdentityCore<AppUser>(opt =>
                 {
@@ -24,7 +37,9 @@ namespace Reactivities.Api.Extensions
                 })
                 .AddEntityFrameworkStores<DataContext>();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Authorization:AccessTokenKey"]));
+            var authConfig = serviceProvider.GetRequiredService<IOptions<AuthConfiguration>>().Value;
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.AccessTokenKey));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer((opt) =>
                 {
