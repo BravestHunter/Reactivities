@@ -12,7 +12,6 @@ namespace Reactivities.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
@@ -25,6 +24,7 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto registerDto)
         {
             if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.Username))
@@ -52,12 +52,13 @@ namespace Reactivities.Api.Controllers
                 return BadRequest(result.Errors);
             }
 
-            await SetRefreshToken(user);
+            await SetRefreshTokenCookie(user);
 
             return CreateUserObject(user);
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
         {
             var user = await _userManager.Users
@@ -74,12 +75,13 @@ namespace Reactivities.Api.Controllers
                 return Unauthorized();
             }
 
-            await SetRefreshToken(user);
+            await SetRefreshTokenCookie(user);
 
             return CreateUserObject(user);
         }
 
         [HttpGet("refreshToken")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserResponseDto>> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -104,7 +106,6 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<UserResponseDto>> GetCurrentUser()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
@@ -115,7 +116,7 @@ namespace Reactivities.Api.Controllers
             return CreateUserObject(user);
         }
 
-        private async Task SetRefreshToken(AppUser user)
+        private async Task SetRefreshTokenCookie(AppUser user)
         {
             var refreshToken = _tokenService.GenerateRefreshToken();
 
@@ -125,7 +126,7 @@ namespace Reactivities.Api.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(30)
+                Expires = refreshToken.Expires
             };
 
             Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);

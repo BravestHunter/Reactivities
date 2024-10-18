@@ -12,6 +12,7 @@ namespace Reactivities.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            BindConfiguration(builder.Services, builder.Configuration);
             ConfigureServices(builder.Services, builder.Configuration);
 
             var app = builder.Build();
@@ -21,11 +22,16 @@ namespace Reactivities.Api
             app.Run();
         }
 
+        private static void BindConfiguration(IServiceCollection services, IConfiguration configuration)
+        {
+            services.BindAuthConfiguration(configuration);
+        }
+
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddPersistanceServices();
             services.AddApplicationServices();
-            services.AddIdentityServices(configuration);
+            services.AddIdentityServices();
             services.AddApiServices(configuration);
         }
 
