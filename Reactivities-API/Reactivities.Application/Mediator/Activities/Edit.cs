@@ -9,7 +9,7 @@ namespace Reactivities.Application.Mediator.Activities
 {
     public class Edit
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result>
         {
             public Activity Activity { get; set; }
         }
@@ -22,7 +22,7 @@ namespace Reactivities.Application.Mediator.Activities
             }
         }
 
-        internal class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result>
         {
             private readonly DataContext _dataContext;
             private readonly IMapper _mapper;
@@ -33,23 +33,30 @@ namespace Reactivities.Application.Mediator.Activities
                 _mapper = mapper;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
-                var existingActivity = await _dataContext.Activities.FindAsync(request.Activity.Id);
-                if (existingActivity == null)
+                try
                 {
-                    return null;
+                    var existingActivity = await _dataContext.Activities.FindAsync(request.Activity.Id);
+                    if (existingActivity == null)
+                    {
+                        return Result.Failure("Failed to find activity");
+                    }
+
+                    _mapper.Map(request.Activity, existingActivity);
+
+                    var result = await _dataContext.SaveChangesAsync() > 0;
+                    if (!result)
+                    {
+                        return Result.Failure("Failed to update activity");
+                    }
+
+                    return Result.Success();
                 }
-
-                _mapper.Map(request.Activity, existingActivity);
-
-                var result = await _dataContext.SaveChangesAsync() > 0;
-                if (!result)
+                catch (Exception ex)
                 {
-                    return Result<Unit>.Failure("Failed to update activity");
+                    return Result.Failure("Failed to update activity", ex);
                 }
-
-                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

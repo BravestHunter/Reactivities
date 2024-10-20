@@ -9,12 +9,12 @@ namespace Reactivities.Application.Mediator.Activities
 {
     public class UpdateAttendance
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result>
         {
             public long Id { get; set; }
         }
 
-        internal class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;
@@ -25,59 +25,66 @@ namespace Reactivities.Application.Mediator.Activities
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _dataContext.Activities
-                    .Include(a => a.Attendees)
-                    .ThenInclude(u => u.AppUser)
-                    .FirstOrDefaultAsync(a => a.Id == request.Id);
-                if (activity == null)
+                try
                 {
-                    return null;
-                }
-
-                var username = _userAccessor.GetUsername();
-                var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
-                if (user == null)
-                {
-                    return null;
-                }
-
-                var hostUsername = activity.Attendees.FirstOrDefault(u => u.IsHost)?.AppUser?.UserName;
-
-                var attendance = activity.Attendees.FirstOrDefault(u => u.AppUser.UserName == user.UserName);
-
-                if (attendance != null)
-                {
-                    if (hostUsername == user.UserName)
+                    var activity = await _dataContext.Activities
+                        .Include(a => a.Attendees)
+                        .ThenInclude(u => u.AppUser)
+                        .FirstOrDefaultAsync(a => a.Id == request.Id);
+                    if (activity == null)
                     {
-                        activity.IsCancelled = !activity.IsCancelled;
+                        return Result.Failure("Failed to find activity");
+                    }
+
+                    var username = _userAccessor.GetUsername();
+                    var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+                    if (user == null)
+                    {
+                        return Result.Failure("Failed to find user");
+                    }
+
+                    var hostUsername = activity.Attendees.FirstOrDefault(u => u.IsHost)?.AppUser?.UserName;
+
+                    var attendance = activity.Attendees.FirstOrDefault(u => u.AppUser.UserName == user.UserName);
+
+                    if (attendance != null)
+                    {
+                        if (hostUsername == user.UserName)
+                        {
+                            activity.IsCancelled = !activity.IsCancelled;
+                        }
+                        else
+                        {
+                            activity.Attendees.Remove(attendance);
+                        }
                     }
                     else
                     {
-                        activity.Attendees.Remove(attendance);
+                        attendance = new ActivityAttendee
+                        {
+                            AppUser = user,
+                            Activity = activity,
+                            IsHost = false
+                        };
+
+                        activity.Attendees.Add(attendance);
                     }
-                }
-                else
-                {
-                    attendance = new ActivityAttendee
+
+                    var result = await _dataContext.SaveChangesAsync() > 0;
+
+                    if (!result)
                     {
-                        AppUser = user,
-                        Activity = activity,
-                        IsHost = false
-                    };
+                        return Result.Failure("Failed to update attendance");
+                    }
 
-                    activity.Attendees.Add(attendance);
+                    return Result.Success();
                 }
-
-                var result = await _dataContext.SaveChangesAsync() > 0;
-
-                if (!result)
+                catch (Exception ex)
                 {
-                    return Result<Unit>.Failure("Failed to update attendance");
+                    return Result.Failure("Failed to update attendance", ex);
                 }
-
-                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

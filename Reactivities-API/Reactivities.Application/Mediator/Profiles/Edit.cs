@@ -9,7 +9,7 @@ namespace Reactivities.Application.Mediator.Profiles
 {
     public class Edit
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result>
         {
             public string DisplayName { get; set; }
             public string Bio { get; set; }
@@ -24,7 +24,7 @@ namespace Reactivities.Application.Mediator.Profiles
             }
         }
 
-        internal class Handler : IRequestHandler<Command, Result<Unit>>
+        internal class Handler : IRequestHandler<Command, Result>
         {
             private readonly DataContext _dataContext;
             private readonly IUserAccessor _userAccessor;
@@ -35,25 +35,32 @@ namespace Reactivities.Application.Mediator.Profiles
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
-                var username = _userAccessor.GetUsername();
-                var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
-                if (user == null)
+                try
                 {
-                    return null;
+                    var username = _userAccessor.GetUsername();
+                    var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+                    if (user == null)
+                    {
+                        return Result.Failure("Failed to find user");
+                    }
+
+                    user.DisplayName = request.DisplayName;
+                    user.Bio = request.Bio;
+
+                    var result = await _dataContext.SaveChangesAsync() > 0;
+                    if (!result)
+                    {
+                        return Result.Failure("Failed to update profile");
+                    }
+
+                    return Result.Success();
                 }
-
-                user.DisplayName = request.DisplayName;
-                user.Bio = request.Bio;
-
-                var result = await _dataContext.SaveChangesAsync() > 0;
-                if (!result)
+                catch (Exception ex)
                 {
-                    return Result<Unit>.Failure("Failed to update profile");
+                    return Result.Failure("Failed to update profile", ex);
                 }
-
-                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

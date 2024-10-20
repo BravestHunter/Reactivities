@@ -30,16 +30,23 @@ namespace Reactivities.Application.Mediator.Profiles
 
             public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var username = _userAccessor.GetUsername();
-                var profile = await _dataContext.Users
-                    .ProjectTo<Profile>(_mapper.ConfigurationProvider, new { currentUsername = username })
-                    .SingleOrDefaultAsync(u => u.Username == request.Username);
-                if (profile == null)
+                try
                 {
-                    return null;
-                }
+                    var username = _userAccessor.GetUsername();
+                    var profile = await _dataContext.Users
+                        .ProjectTo<Profile>(_mapper.ConfigurationProvider, new { currentUsername = username })
+                        .SingleOrDefaultAsync(u => u.Username == request.Username);
+                    if (profile == null)
+                    {
+                        return Result<Profile>.Failure("Failed to find profile");
+                    }
 
-                return Result<Profile>.Success(profile);
+                    return Result<Profile>.Success(profile);
+                }
+                catch (Exception ex)
+                {
+                    return Result<Profile>.Failure("Failed to get profile", ex);
+                }
             }
         }
     }

@@ -1,12 +1,103 @@
 namespace Reactivities.Application.Core
 {
-    public class Result<T>
+    public readonly struct Result
     {
-        public bool IsSuccess { get; set; }
-        public T Value { get; set; }
-        public string Error { get; set; }
+        private static readonly Exception DefaultException = new ApplicationException("Unknown error");
 
-        public static Result<T> Success(T value) => new Result<T>() { IsSuccess = true, Value = value };
-        public static Result<T> Failure(string error) => new Result<T>() { IsSuccess = false, Error = error };
+        private readonly bool _success;
+        private readonly Exception _exception;
+
+        public bool IsSuccess => _success;
+        public bool IsFailure => !_success;
+        public Exception Exception => _exception;
+
+        private Result(bool success, Exception? exception = null)
+        {
+            _success = success;
+            _exception = exception ?? DefaultException;
+        }
+
+        public void ThrowIfError()
+        {
+            if (IsFailure) throw _exception;
+        }
+
+        public static Result Success()
+        {
+            return new Result(true);
+        }
+
+        public static Result Failure(Exception exception)
+        {
+            return new Result(false, exception: exception);
+        }
+
+        public static Result Failure(string errorMessage)
+        {
+            return new Result(false, exception: new ApplicationException(errorMessage));
+        }
+
+        public static Result Failure(string errorMessage, Exception exception)
+        {
+            return new Result(false, exception: new ApplicationException(errorMessage, exception));
+        }
+
+        public static Result Failure()
+        {
+            return new Result(false);
+        }
+    }
+
+    public readonly struct Result<T>
+    {
+        private static readonly Exception DefaultException = new ApplicationException("Unknown error");
+
+        private readonly bool _success;
+        private readonly T? _value;
+        private readonly Exception _exception;
+
+        public bool IsSuccess => _success;
+        public bool IsFailure => !_success;
+        public T? Value => _value;
+        public Exception Exception => _exception;
+
+        private Result(bool success, T? value = default, Exception? exception = null)
+        {
+            _success = success;
+            _value = value;
+            _exception = exception ?? DefaultException;
+        }
+
+        public T GetOrThrow() => _value ?? throw _exception;
+
+        public void ThrowIfError()
+        {
+            if (IsFailure) throw _exception;
+        }
+
+        public static Result<T> Success(T value)
+        {
+            return new Result<T>(true, value: value);
+        }
+
+        public static Result<T> Failure(Exception exception)
+        {
+            return new Result<T>(false, exception: exception);
+        }
+
+        public static Result<T> Failure(string errorMessage)
+        {
+            return new Result<T>(false, exception: new ApplicationException(errorMessage));
+        }
+
+        public static Result<T> Failure(string errorMessage, Exception exception)
+        {
+            return new Result<T>(false, exception: new ApplicationException(errorMessage, exception));
+        }
+
+        public static Result<T> Failure()
+        {
+            return new Result<T>(false);
+        }
     }
 }

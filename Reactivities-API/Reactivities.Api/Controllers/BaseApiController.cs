@@ -17,50 +17,45 @@ namespace Reactivities.Api.Controllers
             _mediator = mediator;
         }
 
+        protected ActionResult HandleResult(Result result)
+        {
+            if (result.IsFailure)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
         protected ActionResult HandleResult<T>(Result<T> result)
         {
-            if (result == null)
+            if (result.IsFailure)
             {
                 return NotFound();
             }
 
-            if (result.IsSuccess)
-            {
-                if (result.Value != null)
-                {
-                    return Ok(result.Value);
-                }
+            var value = result.GetOrThrow();
 
-                return NotFound();
-            }
-
-            return BadRequest(result.Error);
+            return Ok(value);
         }
 
         protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
         {
-            if (result == null)
+            if (result.IsFailure)
             {
                 return NotFound();
             }
 
-            if (result.IsSuccess)
-            {
-                if (result.Value != null)
-                {
-                    Response.AddPaginationHeader(
-                        result.Value.CurrentPage,
-                        result.Value.PageSize,
-                        result.Value.TotalCount,
-                        result.Value.TotalPages
-                        );
-                    return Ok(result.Value);
-                }
+            var value = result.GetOrThrow();
 
-                return NotFound();
-            }
+            Response.AddPaginationHeader(
+                value.CurrentPage,
+                value.PageSize,
+                value.TotalCount,
+                value.TotalPages
+            );
 
-            return BadRequest(result.Error);
+            return Ok(value);
         }
     }
 }

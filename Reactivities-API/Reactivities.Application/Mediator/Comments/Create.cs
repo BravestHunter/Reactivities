@@ -40,36 +40,43 @@ namespace Reactivities.Application.Mediator.Comments
 
             public async Task<Result<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var username = _userAccessor.GetUsername();
-                var user = await _dataContext.Users
-                    .Include(u => u.Photos)
-                    .SingleOrDefaultAsync(u => u.UserName == username);
-                if (user == null)
+                try
                 {
-                    return null;
+                    var activity = await _dataContext.Activities.FindAsync(request.ActivityId);
+                    if (activity == null)
+                    {
+                        return Result<CommentDto>.Failure("Failed to find activity");
+                    }
+
+                    var username = _userAccessor.GetUsername();
+                    var user = await _dataContext.Users
+                        .Include(u => u.Photos)
+                        .SingleOrDefaultAsync(u => u.UserName == username);
+                    if (user == null)
+                    {
+                        return Result<CommentDto>.Failure("Failed to find user");
+                    }
+
+                    var comment = new Comment
+                    {
+                        Author = user,
+                        Activity = activity,
+                        Body = request.Body
+                    };
+                    activity.Comments.Add(comment);
+
+                    var result = await _dataContext.SaveChangesAsync() > 0;
+                    if (!result)
+                    {
+                        return Result<CommentDto>.Failure("Failed to create comment");
+                    }
+
+                    return Result<CommentDto>.Success(_mapper.Map<CommentDto>(comment));
                 }
-
-                var activity = await _dataContext.Activities.FindAsync(request.ActivityId);
-                if (activity == null)
+                catch (Exception ex)
                 {
-                    return null;
+                    return Result<CommentDto>.Failure("Failed to create comment", ex);
                 }
-
-                var comment = new Comment
-                {
-                    Author = user,
-                    Activity = activity,
-                    Body = request.Body
-                };
-                activity.Comments.Add(comment);
-
-                var result = await _dataContext.SaveChangesAsync() > 0;
-                if (!result)
-                {
-                    return Result<CommentDto>.Failure("Failed to create comment");
-                }
-
-                return Result<CommentDto>.Success(_mapper.Map<CommentDto>(comment));
             }
         }
     }
