@@ -45,7 +45,7 @@ namespace Reactivities.Application.Mediator.Activities
                         return Result.Failure("Failed to find user");
                     }
 
-                    var hostUsername = activity.Attendees.FirstOrDefault(u => u.IsHost)?.AppUser?.UserName;
+                    var hostUsername = activity.Host.UserName;
 
                     var attendance = activity.Attendees.FirstOrDefault(u => u.AppUser.UserName == user.UserName);
 
@@ -65,8 +65,7 @@ namespace Reactivities.Application.Mediator.Activities
                         attendance = new ActivityAttendee
                         {
                             AppUser = user,
-                            Activity = activity,
-                            IsHost = false
+                            Activity = activity
                         };
 
                         activity.Attendees.Add(attendance);

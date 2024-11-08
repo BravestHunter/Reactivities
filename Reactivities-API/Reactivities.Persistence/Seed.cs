@@ -47,14 +47,7 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                AppUser = users[0],
-                                IsHost = true
-                            }
-                        }
+                        Host = users[0]
                     },
                     new Activity
                     {
@@ -64,18 +57,13 @@ namespace Reactivities.Persistence
                         Category = "culture",
                         City = "Paris",
                         Venue = "The Louvre",
+                        Host = users[0],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[0],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[1],
-                                IsHost = false
-                            },
+                                AppUser = users[1]
+                            }
                         }
                     },
                     new Activity
@@ -86,18 +74,13 @@ namespace Reactivities.Persistence
                         Category = "music",
                         City = "London",
                         Venue = "Wembly Stadium",
+                        Host =  users[2],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[2],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[1],
-                                IsHost = false
-                            },
+                                AppUser = users[1]
+                            }
                         }
                     },
                     new Activity
@@ -108,18 +91,13 @@ namespace Reactivities.Persistence
                         Category = "food",
                         City = "London",
                         Venue = "Jamies Italian",
+                        Host = users[0],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[0],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[2],
-                                IsHost = false
-                            },
+                                AppUser = users[2]
+                            }
                         }
                     },
                     new Activity
@@ -130,18 +108,13 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
+                        Host = users[1],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[1],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[0],
-                                IsHost = false
-                            },
+                                AppUser = users[0]
+                            }
                         }
                     },
                     new Activity
@@ -152,14 +125,7 @@ namespace Reactivities.Persistence
                         Category = "culture",
                         City = "London",
                         Venue = "British Museum",
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                AppUser = users[1],
-                                IsHost = true
-                            }
-                        }
+                        Host = users[1]
                     },
                     new Activity
                     {
@@ -169,18 +135,17 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Punch and Judy",
+                        Host = users[0],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[0],
-                                IsHost = true
+                                AppUser = users[1]
                             },
                             new ActivityAttendee
                             {
-                                AppUser = users[1],
-                                IsHost = false
-                            },
+                                AppUser = users[2]
+                            }
                         }
                     },
                     new Activity
@@ -191,18 +156,13 @@ namespace Reactivities.Persistence
                         Category = "music",
                         City = "London",
                         Venue = "O2 Arena",
+                        Host = users[2],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[2],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[1],
-                                IsHost = false
-                            },
+                                AppUser = users[1]
+                            }
                         }
                     },
                     new Activity
@@ -213,18 +173,13 @@ namespace Reactivities.Persistence
                         Category = "travel",
                         City = "Berlin",
                         Venue = "All",
+                        Host = users[0],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[0],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[2],
-                                IsHost = false
-                            },
+                                AppUser = users[2]
+                            }
                         }
                     },
                     new Activity
@@ -235,18 +190,13 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
+                        Host = users[2],
                         Attendees = new List<ActivityAttendee>
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[2],
-                                IsHost = true
-                            },
-                            new ActivityAttendee
-                            {
-                                AppUser = users[1],
-                                IsHost = false
-                            },
+                                AppUser = users[1]
+                            }
                         }
                     }
                 };

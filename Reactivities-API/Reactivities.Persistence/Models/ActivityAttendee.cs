@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Reactivities.Persistence.Models
 {
     public class ActivityAttendee
@@ -8,8 +6,5 @@ namespace Reactivities.Persistence.Models
         public AppUser AppUser { get; set; }
         public long ActivityId { get; set; }
         public Activity Activity { get; set; }
-
-        [Required]
-        public bool IsHost { get; set; }
     }
 }

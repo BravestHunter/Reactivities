@@ -1,12 +1,10 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Reactivities.Api.Exceptions;
 
 namespace Reactivities.Api.Controllers
 {
-    public class BuggyController : BaseApiController
+    public class BuggyController : ControllerBase
     {
-        public BuggyController(IMediator mediator) : base(mediator) { }
-
         [HttpGet("not-found")]
         public ActionResult GetNotFound()
         {
@@ -22,7 +20,7 @@ namespace Reactivities.Api.Controllers
         [HttpGet("server-error")]
         public ActionResult GetServerError()
         {
-            throw new Exception("This is a server error");
+            throw new SampleException();
         }
 
         [HttpGet("unauthorised")]

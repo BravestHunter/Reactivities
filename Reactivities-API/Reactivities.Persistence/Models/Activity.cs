@@ -9,7 +9,7 @@ namespace Reactivities.Persistence.Models
 
         [Required]
         [StringLength(20)]
-        public string Title { get; set; } = string.Empty;
+        public required string Title { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
@@ -19,19 +19,20 @@ namespace Reactivities.Persistence.Models
 
         [Required]
         [StringLength(20)]
-        public string Category { get; set; } = string.Empty;
+        public required string Category { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string City { get; set; } = string.Empty;
+        public required string City { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Venue { get; set; } = string.Empty;
+        public required string Venue { get; set; }
 
         [Required]
         public bool IsCancelled { get; set; }
 
+        public required AppUser Host { get; set; }
         public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }

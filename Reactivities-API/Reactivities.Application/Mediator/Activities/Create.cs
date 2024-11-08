@@ -36,16 +36,10 @@ namespace Reactivities.Application.Mediator.Activities
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var username = _userAccessor.GetUsername();
-                var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+                var currentUsername = _userAccessor.GetUsername();
+                var currentUser = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == currentUsername);
 
-                var attendee = new ActivityAttendee
-                {
-                    AppUser = user,
-                    Activity = request.Activity,
-                    IsHost = true
-                };
-                request.Activity.Attendees.Add(attendee);
+                request.Activity.Host = currentUser;
 
                 await _dataContext.Activities.AddAsync(request.Activity);
 

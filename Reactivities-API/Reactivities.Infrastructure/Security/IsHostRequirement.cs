@@ -22,35 +22,31 @@ namespace Reactivities.Infrastructure.Security
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsHostRequirement requirement)
         {
             var userIdStr = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userIdStr == null)
             {
-                return Task.CompletedTask;
+                return;
             }
-
             var userId = long.Parse(userIdStr);
 
             var activityId = long.Parse(
                 _httpContextAccessor.HttpContext?.Request.RouteValues.SingleOrDefault(x => x.Key == "id").Value?.ToString()
                 );
 
-            var attendee = _dataContext.ActivityAtendees
-                .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.AppUserId == userId && x.ActivityId == activityId)
-                .Result;
-            if (attendee == null)
+            var activity = await _dataContext.Activities
+                .Include(a => a.Host)
+                .FirstOrDefaultAsync(a => a.Id == activityId);
+            if (activity == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            if (attendee.IsHost)
+            if (activity.Host.Id == userId)
             {
                 context.Succeed(requirement);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Reactivities.Application.Core
 
             CreateMap<Activity, Activity>();
             CreateMap<Activity, ActivityDto>()
-                .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.Attendees.FirstOrDefault(a => a.IsHost).AppUser.UserName));
+                .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.Host.UserName));
             CreateMap<ActivityAttendee, AttendeeDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
@@ -37,7 +37,7 @@ namespace Reactivities.Application.Core
                 .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity.Title))
                 .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
                 .ForMember(d => d.HostUsername, o => o.MapFrom(s =>
-                    s.Activity.Attendees.FirstOrDefault(a => a.IsHost).AppUser.UserName));
+                    s.Activity.Host.UserName));
         }
     }
 }
