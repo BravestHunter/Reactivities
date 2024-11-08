@@ -1,4 +1,4 @@
-namespace Reactivities.Persistence.Models
+namespace Reactivities.Domain.Models
 {
     public class ActivityAttendee
     {

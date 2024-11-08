@@ -42,7 +42,7 @@ namespace Reactivities.Application.Mediator.Activities
                 }
                 else if (!request.Params.IsGoing && request.Params.IsHost)
                 {
-                    query = query.Where(a => a.HostUsername == username);
+                    query = query.Where(a => a.Host.Username == username);
                 }
 
                 return Result<PagedList<ActivityDto>>.Success(

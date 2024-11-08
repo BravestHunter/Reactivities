@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Reactivities.Persistence.Models
+namespace Reactivities.Domain.Models
 {
     public class Photo
     {
@@ -9,11 +9,11 @@ namespace Reactivities.Persistence.Models
 
         [Required]
         [StringLength(100)]
-        public string StorageId { get; set; } = string.Empty;
+        public required string StorageId { get; set; }
 
         [Required]
         [StringLength(300)]
-        public string Url { get; set; } = string.Empty;
+        public required string Url { get; set; }
 
         [Required]
         public bool IsMain { get; set; }

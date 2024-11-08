@@ -1,7 +1,7 @@
 using Reactivities.Application.Mediator.Activities;
 using Reactivities.Application.Mediator.Comments;
 using Reactivities.Application.Mediator.Profiles;
-using Reactivities.Persistence.Models;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Application.Core
 {
@@ -13,7 +13,7 @@ namespace Reactivities.Application.Core
 
             CreateMap<Activity, Activity>();
             CreateMap<Activity, ActivityDto>()
-                .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.Host.UserName));
+                .ForMember(d => d.Host, o => o.MapFrom(s => s.Host));
             CreateMap<ActivityAttendee, AttendeeDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))

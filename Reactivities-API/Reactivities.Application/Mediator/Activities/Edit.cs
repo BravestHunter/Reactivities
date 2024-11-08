@@ -2,8 +2,8 @@ using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Reactivities.Application.Core;
+using Reactivities.Domain.Models;
 using Reactivities.Persistence;
-using Reactivities.Persistence.Models;
 
 namespace Reactivities.Application.Mediator.Activities
 {

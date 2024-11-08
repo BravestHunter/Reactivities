@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Reactivities.Persistence.Models;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Persistence
 {

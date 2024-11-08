@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Identity;
-using Reactivities.Persistence.Models;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Persistence
 {
     internal class Seed
     {
-        public static async Task SeedData(DataContext context,
-            UserManager<AppUser> userManager)
+        public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
             if (!userManager.Users.Any() && !context.Activities.Any())
             {

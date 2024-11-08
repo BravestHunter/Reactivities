@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Reactivities.Persistence.Models
+namespace Reactivities.Domain.Models
 {
     public class RefreshToken
     {

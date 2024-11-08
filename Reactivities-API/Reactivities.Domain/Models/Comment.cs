@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Reactivities.Persistence.Models
+namespace Reactivities.Domain.Models
 {
     public class Comment
     {
@@ -9,12 +9,12 @@ namespace Reactivities.Persistence.Models
 
         [Required]
         [StringLength(300)]
-        public string Body { get; set; } = string.Empty;
+        public required string Body { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public AppUser Author { get; set; }
-        public Activity Activity { get; set; }
+        public required AppUser Author { get; set; }
+        public required Activity Activity { get; set; }
     }
 }

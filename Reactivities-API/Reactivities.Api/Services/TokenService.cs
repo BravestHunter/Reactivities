@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.Api.Configuration;
-using Reactivities.Persistence.Models;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Api.Services
 {

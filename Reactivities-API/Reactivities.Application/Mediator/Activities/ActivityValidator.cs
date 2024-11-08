@@ -1,5 +1,5 @@
 using FluentValidation;
-using Reactivities.Persistence.Models;
+using Reactivities.Domain.Models;
 
 namespace Reactivities.Application.Mediator.Activities
 {
