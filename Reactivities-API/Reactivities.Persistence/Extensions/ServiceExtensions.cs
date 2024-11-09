@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Reactivities.Domain.Activities.Interfaces;
+using Reactivities.Persistence.Repositories;
 
 namespace Reactivities.Persistence.Extensions
 {
@@ -20,6 +22,8 @@ namespace Reactivities.Persistence.Extensions
 
                 options.UseNpgsql(connectionString);
             });
+
+            services.AddScoped<IActivityRepository, ActivityRepository>();
 
             return services;
         }

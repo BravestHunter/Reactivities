@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Models;
 
 namespace Reactivities.Persistence

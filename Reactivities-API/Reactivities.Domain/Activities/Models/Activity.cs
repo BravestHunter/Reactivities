@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Reactivities.Domain.Models;
 
-namespace Reactivities.Domain.Models
+namespace Reactivities.Domain.Activities.Models
 {
     public class Activity
     {

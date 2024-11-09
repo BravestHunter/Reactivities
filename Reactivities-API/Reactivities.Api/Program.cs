@@ -2,6 +2,7 @@ using Reactivities.Api.Extensions;
 using Reactivities.Api.Middleware;
 using Reactivities.Api.SignalR;
 using Reactivities.Application.Extensions;
+using Reactivities.Domain.Extensions;
 using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Api
@@ -29,6 +30,7 @@ namespace Reactivities.Api
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDomainServices();
             services.AddPersistanceServices();
             services.AddApplicationServices();
             services.AddIdentityServices();

@@ -1,4 +1,6 @@
-namespace Reactivities.Domain.Models
+using Reactivities.Domain.Models;
+
+namespace Reactivities.Domain.Activities.Models
 {
     public class ActivityAttendee
     {

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Reactivities.Domain.Activities.Models;
 
 namespace Reactivities.Domain.Models
 {

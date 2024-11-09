@@ -2,7 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Mediator.Activities;
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Activities.Models;
+using Reactivities.Domain.Activities.Queries;
 
 namespace Reactivities.Api.Controllers
 {
@@ -21,7 +22,7 @@ namespace Reactivities.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetActivity(long id)
         {
-            return HandleResult(await Mediator.Send(new Details.Query() { Id = id }));
+            return HandleResult(await Mediator.Send(new GetActivityByIdQuery() { Id = id }));
         }
 
         [HttpPost]

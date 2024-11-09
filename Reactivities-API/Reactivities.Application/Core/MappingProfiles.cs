@@ -1,6 +1,7 @@
 using Reactivities.Application.Mediator.Activities;
 using Reactivities.Application.Mediator.Comments;
 using Reactivities.Application.Mediator.Profiles;
+using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Models;
 
 namespace Reactivities.Application.Core

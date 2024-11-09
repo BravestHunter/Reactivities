@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Reactivities.Domain.Activities.Models;
 
 namespace Reactivities.Domain.Models
 {
