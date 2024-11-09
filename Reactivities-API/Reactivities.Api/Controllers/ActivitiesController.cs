@@ -1,9 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Reactivities.Api.Dto;
 using Reactivities.Application.Mediator.Activities;
+using Reactivities.Domain.Activities.Filters;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Activities.Queries;
+using Reactivities.Domain.Core;
 
 namespace Reactivities.Api.Controllers
 {
@@ -14,9 +17,17 @@ namespace Reactivities.Api.Controllers
         public ActivitiesController(IMediator mediator) : base(mediator) { }
 
         [HttpGet]
-        public async Task<IActionResult> GetActivities([FromQuery] ActivityParams activityParams)
+        public async Task<IActionResult> GetActivities([FromQuery] GetActivitiesRequestDto request)
         {
-            return HandlePagedResult(await Mediator.Send(new List.Query() { Params = activityParams }));
+            return HandlePagedResult(await Mediator.Send(new GetActivityListQuery()
+            {
+                PagingParams = new PagingParams(request.PageNumber, request.PageSize),
+                Filters = new ActivityListFilters()
+                {
+                    StartDate = request.StartDate,
+                    Relationship = request.Relationship
+                }
+            }));
         }
 
         [HttpGet("{id}")]

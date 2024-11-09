@@ -2,8 +2,11 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Domain.Activities.Dtos;
+using Reactivities.Domain.Activities.Filters;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Activities.Models;
+using Reactivities.Domain.Core;
+using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Persistence.Repositories
 {
@@ -28,6 +31,31 @@ namespace Reactivities.Persistence.Repositories
             return await _context.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername })
                     .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<PagedList<ActivityDto>> GetDtoList(PagingParams pagingParams, ActivityListFilters filters, string currentUsername)
+        {
+            var query = _context.Activities
+                .Where(a => a.Date >= filters.StartDate)
+                .OrderBy(a => a.Date)
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername })
+                .AsQueryable();
+
+            switch (filters.Relationship)
+            {
+                case ActivityRelationship.None:
+                    break;
+
+                case ActivityRelationship.IsHost:
+                    query = query.Where(a => a.Host.Username == currentUsername);
+                    break;
+
+                case ActivityRelationship.IsGoing:
+                    query = query.Where(a => a.Attendees.Any(u => u.Username == currentUsername));
+                    break;
+            }
+
+            return await query.ToPagedList(pagingParams.PageNumber, pagingParams.PageSize);
         }
     }
 }
