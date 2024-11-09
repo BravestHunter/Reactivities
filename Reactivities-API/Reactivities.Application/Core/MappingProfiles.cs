@@ -11,6 +11,7 @@ namespace Reactivities.Application.Core
         {
             string currentUsername = null;
 
+            CreateMap<AppUser, AttendeeDto>();
             CreateMap<Activity, Activity>();
             CreateMap<Activity, ActivityDto>()
                 .ForMember(d => d.Host, o => o.MapFrom(s => s.Host));

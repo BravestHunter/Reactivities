@@ -125,7 +125,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Activity", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Activity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,7 +173,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.ActivityAttendee", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.ActivityAttendee", b =>
                 {
                     b.Property<long>("AppUserId")
                         .HasColumnType("bigint");
@@ -188,7 +188,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("ActivityAtendees");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.AppRole", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.AppRole", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -217,7 +217,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.AppUser", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.AppUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -293,7 +293,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Comment", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,7 +324,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Photo", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,7 +355,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.RefreshToken", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.RefreshToken", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -384,7 +384,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("RefreshToken");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.UserFollowing", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.UserFollowing", b =>
                 {
                     b.Property<long>("ObserverId")
                         .HasColumnType("bigint");
@@ -401,7 +401,7 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppRole", null)
+                    b.HasOne("Reactivities.Domain.Models.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -410,7 +410,7 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -419,7 +419,7 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -428,13 +428,13 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppRole", null)
+                    b.HasOne("Reactivities.Domain.Models.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,16 +443,16 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Activity", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Activity", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", "Host")
+                    b.HasOne("Reactivities.Domain.Models.AppUser", "Host")
                         .WithMany()
                         .HasForeignKey("HostId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -461,15 +461,15 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("Host");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.ActivityAttendee", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.ActivityAttendee", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.Activity", "Activity")
+                    b.HasOne("Reactivities.Domain.Models.Activity", "Activity")
                         .WithMany("Attendees")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", "AppUser")
+                    b.HasOne("Reactivities.Domain.Models.AppUser", "AppUser")
                         .WithMany("Activities")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -480,15 +480,15 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Comment", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.Activity", "Activity")
+                    b.HasOne("Reactivities.Domain.Models.Activity", "Activity")
                         .WithMany("Comments")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", "Author")
+                    b.HasOne("Reactivities.Domain.Models.AppUser", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -499,16 +499,16 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Photo", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.RefreshToken", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.RefreshToken", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", "AppUser")
+                    b.HasOne("Reactivities.Domain.Models.AppUser", "AppUser")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -517,15 +517,15 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.UserFollowing", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.UserFollowing", b =>
                 {
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", "Observer")
+                    b.HasOne("Reactivities.Domain.Models.AppUser", "Observer")
                         .WithMany("Followings")
                         .HasForeignKey("ObserverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Persistence.Models.AppUser", "Target")
+                    b.HasOne("Reactivities.Domain.Models.AppUser", "Target")
                         .WithMany("Followers")
                         .HasForeignKey("TargetId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -536,14 +536,14 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("Target");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.Activity", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.Activity", b =>
                 {
                     b.Navigation("Attendees");
 
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("Reactivities.Persistence.Models.AppUser", b =>
+            modelBuilder.Entity("Reactivities.Domain.Models.AppUser", b =>
                 {
                     b.Navigation("Activities");
 
