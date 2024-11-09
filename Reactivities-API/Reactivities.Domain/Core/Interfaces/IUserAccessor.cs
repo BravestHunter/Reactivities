@@ -1,4 +1,4 @@
-namespace Reactivities.Application.Interfaces
+namespace Reactivities.Domain.Core.Interfaces
 {
     public interface IUserAccessor
     {

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Reactivities.Api.Configuration;
 using Reactivities.Api.Services;
 using Reactivities.Application.Interfaces;
+using Reactivities.Domain.Core.Interfaces;
 using Reactivities.Domain.Models;
 using Reactivities.Infrastructure.Photos;
 using Reactivities.Infrastructure.Security;

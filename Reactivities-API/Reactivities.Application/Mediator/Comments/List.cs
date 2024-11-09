@@ -2,7 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Reactivities.Application.Core;
+using Reactivities.Domain.Core;
 using Reactivities.Persistence;
 
 namespace Reactivities.Application.Mediator.Comments

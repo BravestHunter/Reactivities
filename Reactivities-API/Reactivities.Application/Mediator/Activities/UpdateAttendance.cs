@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Reactivities.Application.Core;
-using Reactivities.Application.Interfaces;
+using Reactivities.Domain.Core;
+using Reactivities.Domain.Core.Interfaces;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 

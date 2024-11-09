@@ -1,8 +1,11 @@
-namespace Reactivities.Application.Core
+using Reactivities.Domain.Core.Exceptions;
+
+namespace Reactivities.Domain.Core
 {
+#pragma warning disable CA1000
     public readonly struct Result
     {
-        private static readonly Exception DefaultException = new ApplicationException("Unknown error");
+        private static readonly Exception DefaultException = new InvalidResultException();
 
         private readonly bool _success;
         private readonly Exception _exception;
@@ -34,12 +37,12 @@ namespace Reactivities.Application.Core
 
         public static Result Failure(string errorMessage)
         {
-            return new Result(false, exception: new ApplicationException(errorMessage));
+            return new Result(false, exception: new InvalidResultException(errorMessage));
         }
 
         public static Result Failure(string errorMessage, Exception exception)
         {
-            return new Result(false, exception: new ApplicationException(errorMessage, exception));
+            return new Result(false, exception: new InvalidResultException(errorMessage, exception));
         }
 
         public static Result Failure()
@@ -50,7 +53,7 @@ namespace Reactivities.Application.Core
 
     public readonly struct Result<T>
     {
-        private static readonly Exception DefaultException = new ApplicationException("Unknown error");
+        private static readonly Exception DefaultException = new InvalidResultException();
 
         private readonly bool _success;
         private readonly T? _value;
@@ -87,12 +90,12 @@ namespace Reactivities.Application.Core
 
         public static Result<T> Failure(string errorMessage)
         {
-            return new Result<T>(false, exception: new ApplicationException(errorMessage));
+            return new Result<T>(false, exception: new InvalidResultException(errorMessage));
         }
 
         public static Result<T> Failure(string errorMessage, Exception exception)
         {
-            return new Result<T>(false, exception: new ApplicationException(errorMessage, exception));
+            return new Result<T>(false, exception: new InvalidResultException(errorMessage, exception));
         }
 
         public static Result<T> Failure()
@@ -100,4 +103,5 @@ namespace Reactivities.Application.Core
             return new Result<T>(false);
         }
     }
+#pragma warning restore CA1000
 }

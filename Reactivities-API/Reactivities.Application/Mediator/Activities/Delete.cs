@@ -1,5 +1,5 @@
 using MediatR;
-using Reactivities.Application.Core;
+using Reactivities.Domain.Core;
 using Reactivities.Persistence;
 
 namespace Reactivities.Application.Mediator.Activities

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Reactivities.Application.Interfaces;
+using Reactivities.Domain.Core.Interfaces;
 
 namespace Reactivities.Infrastructure.Security
 {
