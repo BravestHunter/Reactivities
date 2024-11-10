@@ -20,6 +20,16 @@ namespace Reactivities.Persistence.Repositories
             _mapper = mapper;
         }
 
+        public async Task<bool> IsUsernameTaken(string username)
+        {
+            return !await _userManager.Users.AnyAsync(u => u.UserName == username);
+        }
+
+        public async Task<bool> IsEmailTaken(string email)
+        {
+            return !await _userManager.Users.AnyAsync(u => u.Email == email);
+        }
+
         public async Task<AppUser?> GetByUsername(string username)
         {
             return await _userManager.FindByNameAsync(username);

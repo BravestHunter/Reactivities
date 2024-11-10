@@ -5,6 +5,8 @@ namespace Reactivities.Domain.Users.Interfaces
 {
     public interface IUserRepository
     {
+        Task<bool> IsUsernameTaken(string username);
+        Task<bool> IsEmailTaken(string email);
         Task<AppUser?> GetByUsername(string username);
         Task<AppUser?> GetByUsernameWithPhotos(string username);
         Task<ProfileDto?> GetProfileDto(string username, string currentUsername);

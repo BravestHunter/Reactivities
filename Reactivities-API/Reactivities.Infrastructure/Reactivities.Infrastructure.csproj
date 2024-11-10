@@ -9,11 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Reactivities.Application\Reactivities.Application.csproj" />
+    <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
+    <ProjectReference Include="..\Reactivities.Persistence\Reactivities.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

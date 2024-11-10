@@ -21,7 +21,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reactivities.Application\Reactivities.Application.csproj" />
+    <ProjectReference Include="..\Reactivities.Domain\Reactivities.Domain.csproj" />
     <ProjectReference Include="..\Reactivities.Infrastructure\Reactivities.Infrastructure.csproj" />
+    <ProjectReference Include="..\Reactivities.Persistence\Reactivities.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

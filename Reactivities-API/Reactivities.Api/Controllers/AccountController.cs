@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,18 +7,17 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.Api.Dto;
 using Reactivities.Api.DTO;
 using Reactivities.Application.Services;
+using Reactivities.Domain.Account.Commands;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly TokenService _tokenService;
 
-        public AccountController(UserManager<AppUser> userManager, TokenService tokenService)
+        public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IMediator mediator) : base(mediator)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -27,29 +27,17 @@ namespace Reactivities.Api.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto registerDto)
         {
-            if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.Username))
-            {
-                ModelState.AddModelError("username", "Username is already taken");
-                return ValidationProblem(ModelState);
-            }
-
-            if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email))
-            {
-                ModelState.AddModelError("email", "Email is already taken");
-                return ValidationProblem(ModelState);
-            }
-
             var user = new AppUser
             {
                 UserName = registerDto.Username,
-                DisplayName = registerDto.DisplayName,
+                DisplayName = registerDto.DisplayName ?? registerDto.Username,
                 Email = registerDto.Email
             };
 
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-            if (!result.Succeeded)
+            var result = await Mediator.Send(new RegisterCommand() { User = user, Password = registerDto.Password });
+            if (result.IsFailure)
             {
-                return BadRequest(result.Errors);
+                return HandleResult(result);
             }
 
             await SetRefreshTokenCookie(user);
