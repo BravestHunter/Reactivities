@@ -10,13 +10,13 @@ namespace Reactivities.Domain.Activities.Models
         public long Id { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(100)]
         public required string Title { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
 
-        [StringLength(100)]
+        [StringLength(400)]
         public string? Description { get; set; }
 
         [Required]

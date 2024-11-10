@@ -12,7 +12,7 @@ using Reactivities.Persistence;
 namespace Reactivities.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241109005713_InitialCreate")]
+    [Migration("20241110010016_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -128,7 +128,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Activity", b =>
+            modelBuilder.Entity("Reactivities.Domain.Activities.Models.Activity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,8 +150,8 @@ namespace Reactivities.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)");
 
                     b.Property<long>("HostId")
                         .HasColumnType("bigint");
@@ -161,8 +161,8 @@ namespace Reactivities.Persistence.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Venue")
                         .IsRequired()
@@ -176,7 +176,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.ActivityAttendee", b =>
+            modelBuilder.Entity("Reactivities.Domain.Activities.Models.ActivityAttendee", b =>
                 {
                     b.Property<long>("AppUserId")
                         .HasColumnType("bigint");
@@ -189,111 +189,6 @@ namespace Reactivities.Persistence.Migrations
                     b.HasIndex("ActivityId");
 
                     b.ToTable("ActivityAtendees");
-                });
-
-            modelBuilder.Entity("Reactivities.Domain.Models.AppRole", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Reactivities.Domain.Models.AppUser", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Bio")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
@@ -402,9 +297,114 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("UserFollowings");
                 });
 
+            modelBuilder.Entity("Reactivities.Domain.Users.Models.AppRole", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Reactivities.Domain.Users.Models.AppUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Bio")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppRole", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -413,7 +413,7 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -422,7 +422,7 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -431,13 +431,13 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<long>", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppRole", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -446,16 +446,16 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Activity", b =>
+            modelBuilder.Entity("Reactivities.Domain.Activities.Models.Activity", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", "Host")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "Host")
                         .WithMany()
                         .HasForeignKey("HostId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -464,15 +464,15 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("Host");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.ActivityAttendee", b =>
+            modelBuilder.Entity("Reactivities.Domain.Activities.Models.ActivityAttendee", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.Activity", "Activity")
+                    b.HasOne("Reactivities.Domain.Activities.Models.Activity", "Activity")
                         .WithMany("Attendees")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Domain.Models.AppUser", "AppUser")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "AppUser")
                         .WithMany("Activities")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -485,13 +485,13 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.Activity", "Activity")
+                    b.HasOne("Reactivities.Domain.Activities.Models.Activity", "Activity")
                         .WithMany("Comments")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Domain.Models.AppUser", "Author")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -504,14 +504,14 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Models.RefreshToken", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", "AppUser")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "AppUser")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -522,13 +522,13 @@ namespace Reactivities.Persistence.Migrations
 
             modelBuilder.Entity("Reactivities.Domain.Models.UserFollowing", b =>
                 {
-                    b.HasOne("Reactivities.Domain.Models.AppUser", "Observer")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "Observer")
                         .WithMany("Followings")
                         .HasForeignKey("ObserverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Domain.Models.AppUser", "Target")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "Target")
                         .WithMany("Followers")
                         .HasForeignKey("TargetId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -539,14 +539,14 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("Target");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Activity", b =>
+            modelBuilder.Entity("Reactivities.Domain.Activities.Models.Activity", b =>
                 {
                     b.Navigation("Attendees");
 
                     b.Navigation("Comments");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.AppUser", b =>
+            modelBuilder.Entity("Reactivities.Domain.Users.Models.AppUser", b =>
                 {
                     b.Navigation("Activities");
 

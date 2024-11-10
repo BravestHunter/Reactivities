@@ -12,6 +12,7 @@ namespace Reactivities.Domain.Activities.Dtos
             CreateMap<AppUser, AttendeeDto>();
             CreateMap<Activity, ActivityDto>();
             CreateMap<CreateActivityDto, Activity>();
+            CreateMap<EditActivityDto, Activity>();
 
             CreateMap<ActivityAttendee, AttendeeDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))

@@ -62,13 +62,27 @@ namespace Reactivities.Persistence.Repositories
         {
             await _context.Activities.AddAsync(activity);
 
+            await Save();
+
+            return _mapper.Map<ActivityDto>(activity);
+        }
+
+        public async Task<ActivityDto> Update(Activity activity)
+        {
+            _context.Activities.Update(activity);
+
+            await Save();
+
+            return _mapper.Map<ActivityDto>(activity);
+        }
+
+        private async Task Save()
+        {
             var result = await _context.SaveChangesAsync() > 0;
             if (!result)
             {
-                throw new InvalidOperationException("Failed to save new activity");
+                throw new InvalidOperationException("Failed to save persistent change");
             }
-
-            return _mapper.Map<ActivityDto>(activity);
         }
     }
 }

@@ -6,7 +6,6 @@ using Reactivities.Application.Mediator.Activities;
 using Reactivities.Domain.Activities.Commands;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Filters;
-using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Activities.Queries;
 using Reactivities.Domain.Core;
 
@@ -46,10 +45,10 @@ namespace Reactivities.Api.Controllers
 
         [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditActivity(long id, Activity activity)
+        public async Task<IActionResult> EditActivity(long id, EditActivityDto activity)
         {
             activity.Id = id;
-            return HandleResult(await Mediator.Send(new Edit.Command() { Activity = activity }));
+            return HandleResult(await Mediator.Send(new EditActivityCommand() { Activity = activity }));
         }
 
         [Authorize(Policy = "IsActivityHost")]
