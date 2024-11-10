@@ -31,7 +31,7 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                 var photo = currentUser.Photos.FirstOrDefault(p => p.Id == request.Id);
                 if (photo == null)
                 {
-                    return Result.Failure("Failed to find photo");
+                    return Result.Failure(new NotFoundException("Failed to find photo"));
                 }
 
                 var mainPhoto = currentUser.Photos.FirstOrDefault(p => p.IsMain);

@@ -9,13 +9,13 @@ namespace Reactivities.Domain.Users.Queries.Handlers
 {
     internal class GetFollowersListHandler : IRequestHandler<GetFollowersListQuery, Result<List<ProfileDto>>>
     {
-        private readonly IUserFollowingRepository _repository;
+        private readonly IUserFollowingRepository _userFollowingRepository;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public GetFollowersListHandler(IUserFollowingRepository repository, IUserAccessor userAccessor, IMapper mapper)
+        public GetFollowersListHandler(IUserFollowingRepository userFollowingRepository, IUserAccessor userAccessor, IMapper mapper)
         {
-            _repository = repository;
+            _userFollowingRepository = userFollowingRepository;
             _userAccessor = userAccessor;
             _mapper = mapper;
         }
@@ -25,7 +25,7 @@ namespace Reactivities.Domain.Users.Queries.Handlers
             try
             {
                 var currentUsername = _userAccessor.GetUsername();
-                var followers = await _repository.GetFollowerDtos(request.Username, currentUsername);
+                var followers = await _userFollowingRepository.GetFollowerDtos(request.Username, currentUsername);
 
                 return Result<List<ProfileDto>>.Success(followers);
             }

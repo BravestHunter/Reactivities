@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Mediator.Profiles;
+using Reactivities.Domain.Users.Commands;
+using Reactivities.Domain.Users.Dtos;
 using Reactivities.Domain.Users.Queries;
 
 namespace Reactivities.Api.Controllers
@@ -16,9 +18,9 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProfile(Edit.Command command)
+        public async Task<IActionResult> UpdateProfile(EditProfileDto profile)
         {
-            return HandleResult(await Mediator.Send(command));
+            return HandleResult(await Mediator.Send(new EditProfileCommand() { Profile = profile }));
         }
 
         [HttpGet("{username}/activities")]

@@ -44,7 +44,7 @@ namespace Reactivities.Persistence.Repositories
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                throw new FailedToUpdateEntityException("Faield to update user");
+                throw new FailedToUpdateEntityException("Failed to update user");
             }
 
             return user;

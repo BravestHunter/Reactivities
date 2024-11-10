@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
 using Reactivities.Domain.Users.Dtos;
 using Reactivities.Domain.Users.Interfaces;
@@ -28,7 +29,7 @@ namespace Reactivities.Domain.Users.Queries.Handlers
                 var profile = await _userRepository.GetProfileDto(request.Username, currentUsername);
                 if (profile == null)
                 {
-                    return Result<ProfileDto>.Failure("Failed to find user profile");
+                    return Result<ProfileDto>.Failure(new NotFoundException("Failed to find user profile"));
                 }
 
                 return Result<ProfileDto>.Success(profile);

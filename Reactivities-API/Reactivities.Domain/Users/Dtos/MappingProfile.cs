@@ -14,6 +14,7 @@ namespace Reactivities.Domain.Users.Dtos
                 .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
                 .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
                 .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(f => f.Observer.UserName == currentUsername)));
+            CreateMap<EditProfileDto, AppUser>();
         }
     }
 }
