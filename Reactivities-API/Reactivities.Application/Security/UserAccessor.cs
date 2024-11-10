@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Reactivities.Domain.Core.Interfaces;
 
-namespace Reactivities.Infrastructure.Security
+namespace Reactivities.Application.Security
 {
     public class UserAccessor : IUserAccessor
     {

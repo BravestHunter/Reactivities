@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Api.Dto;
 using Reactivities.Api.DTO;
-using Reactivities.Api.Services;
+using Reactivities.Application.Services;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Api.Controllers

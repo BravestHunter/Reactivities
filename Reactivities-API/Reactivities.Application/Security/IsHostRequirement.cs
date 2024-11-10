@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Reactivities.Domain.Activities.Interfaces;
 
-namespace Reactivities.Infrastructure.Security
+namespace Reactivities.Application.Security
 {
     public class IsHostRequirement : IAuthorizationRequirement
     {

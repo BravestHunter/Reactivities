@@ -4,11 +4,11 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Reactivities.Api.Configuration;
+using Reactivities.Application.Configuration;
 using Reactivities.Domain.Models;
 using Reactivities.Domain.Users.Models;
 
-namespace Reactivities.Api.Services
+namespace Reactivities.Application.Services
 {
     public class TokenService
     {

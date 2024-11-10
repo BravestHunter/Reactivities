@@ -1,4 +1,4 @@
-﻿namespace Reactivities.Api.Configuration
+﻿namespace Reactivities.Application.Configuration
 {
     public class AuthConfiguration
     {
