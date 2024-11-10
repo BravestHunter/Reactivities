@@ -7,13 +7,12 @@ namespace Reactivities.Domain.Activities.Dtos
     {
         public MappingProfiles()
         {
-            string currentUsername = null;
+            string currentUsername = string.Empty;
 
-            CreateMap<AppUser, AttendeeDto>();
-            CreateMap<Activity, ActivityDto>();
-            CreateMap<CreateActivityDto, Activity>();
-            CreateMap<EditActivityDto, Activity>();
-
+            CreateMap<AppUser, AttendeeDto>()
+                .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
+                .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
+                .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(f => f.Observer.UserName == currentUsername)));
             CreateMap<ActivityAttendee, AttendeeDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.User.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
@@ -22,6 +21,9 @@ namespace Reactivities.Domain.Activities.Dtos
                 .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.User.Followers.Count))
                 .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.User.Followings.Count))
                 .ForMember(d => d.Following, o => o.MapFrom(s => s.User.Followers.Any(f => f.Observer.UserName == currentUsername)));
+            CreateMap<Activity, ActivityDto>();
+            CreateMap<CreateActivityDto, Activity>();
+            CreateMap<EditActivityDto, Activity>();
         }
     }
 }

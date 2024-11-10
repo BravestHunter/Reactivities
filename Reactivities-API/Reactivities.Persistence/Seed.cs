@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Reactivities.Domain.Activities.Models;
+using Reactivities.Domain.Models;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence
@@ -36,6 +37,31 @@ namespace Reactivities.Persistence
                 {
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
+
+                var userFollowings = new List<UserFollowing>()
+                {
+                    new UserFollowing()
+                    {
+                        Observer = users[0],
+                        Target = users[1]
+                    },
+                    new UserFollowing()
+                    {
+                        Observer = users[1],
+                        Target = users[0]
+                    },
+                    new UserFollowing()
+                    {
+                        Observer = users[2],
+                        Target = users[0]
+                    },
+                    new UserFollowing()
+                    {
+                        Observer = users[2],
+                        Target = users[1]
+                    }
+                };
+                await context.UserFollowings.AddRangeAsync(userFollowings);
 
                 var activities = new List<Activity>
                 {
@@ -152,6 +178,7 @@ namespace Reactivities.Persistence
                 activities[9].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[9] });
 
                 await context.Activities.AddRangeAsync(activities);
+
                 await context.SaveChangesAsync();
             }
         }
