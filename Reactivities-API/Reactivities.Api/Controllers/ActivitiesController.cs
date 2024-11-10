@@ -18,7 +18,7 @@ namespace Reactivities.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetActivities([FromQuery] GetActivitiesRequestDto request)
         {
-            return HandlePagedResult(await Mediator.Send(new GetActivityListQuery()
+            return HandlePagedResult(await Mediator.Send(new GetActivitiesListQuery()
             {
                 PagingParams = new PagingParams(request.PageNumber, request.PageSize),
                 Filters = new ActivityListFilters()

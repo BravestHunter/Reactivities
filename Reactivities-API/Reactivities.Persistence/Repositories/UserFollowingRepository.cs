@@ -1,4 +1,8 @@
-﻿using Reactivities.Domain.Users.Interfaces;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Reactivities.Domain.Users.Dtos;
+using Reactivities.Domain.Users.Interfaces;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence.Repositories
@@ -6,15 +10,35 @@ namespace Reactivities.Persistence.Repositories
     internal class UserFollowingRepository : IUserFollowingRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public UserFollowingRepository(DataContext context)
+        public UserFollowingRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<UserFollowing?> GetByIds(long observerId, long targetId)
         {
             return await _context.UserFollowings.FindAsync(observerId, targetId);
+        }
+
+        public async Task<List<ProfileDto>> GetFollowerDtos(string username, string currentUsername)
+        {
+            return await _context.UserFollowings
+                .Where(u => u.Target.UserName == username)
+                .Select(u => u.Observer)
+                .ProjectTo<ProfileDto>(_mapper.ConfigurationProvider, new { currentUsername })
+                .ToListAsync();
+        }
+
+        public async Task<List<ProfileDto>> GetFollowingDtos(string username, string currentUsername)
+        {
+            return await _context.UserFollowings
+                .Where(u => u.Observer.UserName == username)
+                .Select(u => u.Target)
+                .ProjectTo<ProfileDto>(_mapper.ConfigurationProvider, new { currentUsername })
+                .ToListAsync();
         }
 
         public async Task Add(UserFollowing following)

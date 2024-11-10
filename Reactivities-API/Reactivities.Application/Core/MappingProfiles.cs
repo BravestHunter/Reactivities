@@ -2,7 +2,6 @@ using Reactivities.Application.Mediator.Comments;
 using Reactivities.Application.Mediator.Profiles;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Models;
-using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Application.Core
 {
@@ -12,11 +11,6 @@ namespace Reactivities.Application.Core
         {
             string currentUsername = null;
 
-            CreateMap<AppUser, Profile>()
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.Photos.FirstOrDefault(p => p.IsMain).Url))
-                .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
-                .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
-                .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(f => f.Observer.UserName == currentUsername)));
             CreateMap<Comment, CommentDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Author.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Author.DisplayName))

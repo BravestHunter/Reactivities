@@ -7,20 +7,20 @@ using Reactivities.Domain.Core.Interfaces;
 
 namespace Reactivities.Domain.Activities.Queries.Handlers
 {
-    internal class GetActivityListHandler : IRequestHandler<GetActivityListQuery, Result<PagedList<ActivityDto>>>
+    internal class GetFollowersListHandler : IRequestHandler<GetActivitiesListQuery, Result<PagedList<ActivityDto>>>
     {
         private readonly IActivityRepository _repository;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public GetActivityListHandler(IActivityRepository repository, IUserAccessor userAccessor, IMapper mapper)
+        public GetFollowersListHandler(IActivityRepository repository, IUserAccessor userAccessor, IMapper mapper)
         {
             _repository = repository;
             _userAccessor = userAccessor;
             _mapper = mapper;
         }
 
-        public async Task<Result<PagedList<ActivityDto>>> Handle(GetActivityListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PagedList<ActivityDto>>> Handle(GetActivitiesListQuery request, CancellationToken cancellationToken)
         {
             try
             {

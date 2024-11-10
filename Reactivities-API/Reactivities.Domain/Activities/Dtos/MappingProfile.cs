@@ -1,9 +1,10 @@
-﻿using Reactivities.Domain.Activities.Models;
+﻿using AutoMapper;
+using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Domain.Activities.Dtos
 {
-    public class MappingProfiles : AutoMapper.Profile
+    public class MappingProfiles : Profile
     {
         public MappingProfiles()
         {

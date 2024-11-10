@@ -5,7 +5,7 @@ using Reactivities.Domain.Core;
 
 namespace Reactivities.Domain.Activities.Queries
 {
-    public class GetActivityListQuery : IRequest<Result<PagedList<ActivityDto>>>
+    public class GetActivitiesListQuery : IRequest<Result<PagedList<ActivityDto>>>
     {
         public required PagingParams PagingParams { get; set; }
         public required ActivityListFilters Filters { get; set; }
