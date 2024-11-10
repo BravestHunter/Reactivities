@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Api.Dto;
 using Reactivities.Application.Mediator.Activities;
+using Reactivities.Domain.Activities.Commands;
+using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Filters;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Activities.Queries;
@@ -37,9 +39,9 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateActivity(Activity activity)
+        public async Task<IActionResult> CreateActivity(CreateActivityDto activity)
         {
-            return HandleResult(await Mediator.Send(new Create.Command() { Activity = activity }));
+            return HandleResult(await Mediator.Send(new CreateActivityCommand() { Activity = activity }));
         }
 
         [Authorize(Policy = "IsActivityHost")]

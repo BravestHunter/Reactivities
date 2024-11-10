@@ -1,3 +1,5 @@
+using Reactivities.Domain.Users.Models;
+
 namespace Reactivities.Domain.Models
 {
     public class UserFollowing

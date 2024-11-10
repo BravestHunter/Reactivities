@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence.Extensions
 {

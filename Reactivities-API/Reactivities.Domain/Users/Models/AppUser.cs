@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Reactivities.Domain.Activities.Models;
+using Reactivities.Domain.Models;
 
-namespace Reactivities.Domain.Models
+namespace Reactivities.Domain.Users.Models
 {
     public class AppUser : IdentityUser<long>
     {

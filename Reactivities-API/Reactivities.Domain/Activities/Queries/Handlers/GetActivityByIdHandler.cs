@@ -26,7 +26,7 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
             {
                 var currentUsername = _userAccessor.GetUsername();
 
-                var activityDto = await _repository.GetDtoByIdAsync(request.Id, currentUsername);
+                var activityDto = await _repository.GetDtoById(request.Id, currentUsername);
                 if (activityDto == null)
                 {
                     return Result<ActivityDto>.Failure("Failed to get activity from storage");

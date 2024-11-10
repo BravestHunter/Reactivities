@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Reactivities.Domain.Activities.Models;
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence
 {

@@ -21,12 +21,12 @@ namespace Reactivities.Persistence.Repositories
             _mapper = mapper;
         }
 
-        public async Task<Activity?> GetByIdAsync(long id)
+        public async Task<Activity?> GetById(long id)
         {
             return await _context.Activities.FindAsync(id);
         }
 
-        public async Task<ActivityDto?> GetDtoByIdAsync(long id, string currentUsername)
+        public async Task<ActivityDto?> GetDtoById(long id, string currentUsername)
         {
             return await _context.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername })
@@ -56,6 +56,19 @@ namespace Reactivities.Persistence.Repositories
             }
 
             return await query.ToPagedList(pagingParams.PageNumber, pagingParams.PageSize);
+        }
+
+        public async Task<ActivityDto> Add(Activity activity)
+        {
+            await _context.Activities.AddAsync(activity);
+
+            var result = await _context.SaveChangesAsync() > 0;
+            if (!result)
+            {
+                throw new InvalidOperationException("Failed to save new activity");
+            }
+
+            return _mapper.Map<ActivityDto>(activity);
         }
     }
 }

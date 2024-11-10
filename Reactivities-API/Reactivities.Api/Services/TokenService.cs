@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.Api.Configuration;
 using Reactivities.Domain.Models;
+using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Api.Services
 {

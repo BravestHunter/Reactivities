@@ -1,5 +1,5 @@
 ﻿using Reactivities.Domain.Activities.Models;
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Domain.Activities.Dtos
 {
@@ -10,9 +10,9 @@ namespace Reactivities.Domain.Activities.Dtos
             string currentUsername = null;
 
             CreateMap<AppUser, AttendeeDto>();
-            CreateMap<Activity, Activity>();
-            CreateMap<Activity, ActivityDto>()
-                .ForMember(d => d.Host, o => o.MapFrom(s => s.Host));
+            CreateMap<Activity, ActivityDto>();
+            CreateMap<CreateActivityDto, Activity>();
+
             CreateMap<ActivityAttendee, AttendeeDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))

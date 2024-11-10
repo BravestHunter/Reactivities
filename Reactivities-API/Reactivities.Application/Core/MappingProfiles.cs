@@ -3,6 +3,7 @@ using Reactivities.Application.Mediator.Comments;
 using Reactivities.Application.Mediator.Profiles;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Models;
+using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Application.Core
 {
