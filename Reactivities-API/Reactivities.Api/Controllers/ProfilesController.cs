@@ -34,7 +34,8 @@ namespace Reactivities.Api.Controllers
                 PagingParams = new PagingParams(request.PageNumber, request.PageSize),
                 Filters = new UserActivityListFilters()
                 {
-                    StartDate = request.StartDate,
+                    FromDate = request.FromDate,
+                    ToDate = request.ToDate,
                     Relationship = request.Relationship,
                     TargetUsername = username
                 }

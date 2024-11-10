@@ -52,7 +52,7 @@ namespace Reactivities.Persistence.Repositories
         public async Task<PagedList<ActivityDto>> GetDtoList(PagingParams pagingParams, ActivityListFilters filters, string currentUsername)
         {
             var query = _context.Activities
-                .Where(a => a.Date >= filters.StartDate)
+                .Where(a => a.Date >= filters.FromDate && a.Date <= filters.ToDate)
                 .OrderBy(a => a.Date)
                 .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername })
                 .AsQueryable();
@@ -77,7 +77,7 @@ namespace Reactivities.Persistence.Repositories
         public async Task<PagedList<UserActivityDto>> GetUserActivityDtoList(PagingParams pagingParams, UserActivityListFilters filters)
         {
             var query = _context.Activities
-                .Where(a => a.Date >= filters.StartDate);
+                .Where(a => a.Date >= filters.FromDate && a.Date <= filters.ToDate);
 
             switch (filters.Relationship)
             {

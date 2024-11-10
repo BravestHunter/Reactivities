@@ -2,7 +2,8 @@
 {
     public class ActivityListFilters
     {
-        public DateTime StartDate { get; set; } = DateTime.UtcNow;
+        public DateTime FromDate { get; set; } = DateTime.UtcNow;
+        public DateTime ToDate { get; set; } = DateTime.MaxValue;
         public ActivityRelationship Relationship { get; set; }
     }
 }

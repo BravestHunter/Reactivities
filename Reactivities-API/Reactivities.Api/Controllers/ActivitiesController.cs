@@ -23,7 +23,8 @@ namespace Reactivities.Api.Controllers
                 PagingParams = new PagingParams(request.PageNumber, request.PageSize),
                 Filters = new ActivityListFilters()
                 {
-                    StartDate = request.StartDate,
+                    FromDate = request.FromDate,
+                    ToDate = request.ToDate,
                     Relationship = request.Relationship
                 }
             }));
