@@ -4,6 +4,7 @@ using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Interfaces;
+using Reactivities.Domain.Exceptions;
 
 namespace Reactivities.Domain.Activities.Queries.Handlers
 {
@@ -29,7 +30,7 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
                 var activityDto = await _repository.GetDtoById(request.Id, currentUsername);
                 if (activityDto == null)
                 {
-                    return Result<ActivityDto>.Failure("Failed to get activity from storage");
+                    return Result<ActivityDto>.Failure(new NotFoundException("Failed to find activity"));
                 }
 
                 return Result<ActivityDto>.Success(activityDto);

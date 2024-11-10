@@ -4,6 +4,7 @@ using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Interfaces;
+using Reactivities.Domain.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
@@ -30,13 +31,13 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 var activity = await _activityRepository.GetByIdWithAttendees(request.Id);
                 if (activity == null)
                 {
-                    return Result.Failure("Failed to find activity");
+                    return Result.Failure(new NotFoundException("Failed to find activity"));
                 }
 
                 var currentUsername = _userAccessor.GetUsername();
                 if (activity.Host.UserName == currentUsername)
                 {
-                    return Result.Failure("Can't set attendance for host");
+                    return Result.Failure(new BadRequestException("Can't set attendance for host"));
                 }
 
                 var attendance = activity.Attendees.FirstOrDefault(a => a.User.UserName == currentUsername);
@@ -49,7 +50,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 var currentUser = await _userRepository.GetByUsername(currentUsername);
                 if (currentUser == null)
                 {
-                    return Result.Failure("Failed to find current user");
+                    return Result.Failure(new NotFoundException("Failed to find current user"));
                 }
 
                 if (request.Attend)

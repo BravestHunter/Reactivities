@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Api.Extensions;
-using Reactivities.Application.Core;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Exceptions;
 
 namespace Reactivities.Api.Controllers
 {
@@ -22,7 +22,7 @@ namespace Reactivities.Api.Controllers
         {
             if (result.IsFailure)
             {
-                return NotFound();
+                return HandleFailure(result.Exception);
             }
 
             return Ok();
@@ -32,7 +32,7 @@ namespace Reactivities.Api.Controllers
         {
             if (result.IsFailure)
             {
-                return NotFound();
+                return HandleFailure(result.Exception);
             }
 
             var value = result.GetOrThrow();
@@ -44,7 +44,7 @@ namespace Reactivities.Api.Controllers
         {
             if (result.IsFailure)
             {
-                return NotFound();
+                return HandleFailure(result.Exception);
             }
 
             var value = result.GetOrThrow();
@@ -57,6 +57,21 @@ namespace Reactivities.Api.Controllers
             );
 
             return Ok(value);
+        }
+
+        private ActionResult HandleFailure(Exception exception)
+        {
+            switch (exception)
+            {
+                case NotFoundException ex:
+                    return NotFound(ex.Message);
+
+                case BadRequestException ex:
+                    return BadRequest(ex.Message);
+
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError, exception.Message);
+            }
         }
     }
 }

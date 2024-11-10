@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Exceptions;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
 {
@@ -20,7 +21,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 var existingActivity = await _repository.GetById(request.Id);
                 if (existingActivity == null)
                 {
-                    return Result.Failure("Failed to find activity");
+                    return Result.Failure(new NotFoundException("Failed to find activity"));
                 }
 
                 await _repository.Delete(existingActivity);

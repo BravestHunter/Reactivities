@@ -5,6 +5,7 @@ using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Interfaces;
+using Reactivities.Domain.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
@@ -32,7 +33,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 var currentUser = await _userRepository.GetByUsername(currentUsername);
                 if (currentUser == null)
                 {
-                    return Result<ActivityDto>.Failure("Failed to find current user");
+                    return Result<ActivityDto>.Failure(new NotFoundException("Failed to find current user"));
                 }
 
                 var activity = _mapper.Map<Activity>(request.Activity);

@@ -3,6 +3,7 @@ using MediatR;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Exceptions;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
 {
@@ -24,7 +25,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 var existingActivity = await _repository.GetById(request.Activity.Id);
                 if (existingActivity == null)
                 {
-                    return Result<ActivityDto>.Failure("Failed to find activity");
+                    return Result<ActivityDto>.Failure(new NotFoundException("Failed to find activity"));
                 }
 
                 _mapper.Map(request.Activity, existingActivity);
