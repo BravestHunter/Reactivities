@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 using Reactivities.Domain.Users.Models;
-using Reactivities.Persistence.Exceptions;
 
 namespace Reactivities.Persistence.Repositories
 {

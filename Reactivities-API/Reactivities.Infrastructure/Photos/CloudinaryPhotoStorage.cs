@@ -46,13 +46,16 @@ namespace Reactivities.Infrastructure.Photos
             };
         }
 
-        public async Task<bool> Delete(string storageId)
+        public async Task Delete(string storageId)
         {
             var deleteParams = new DeletionParams(storageId);
 
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
-            return result.Result == "ok";
+            if (result.Result != "ok")
+            {
+                throw new FailedToDeleteEntityException($"Failed to remove photo {storageId}");
+            }
         }
     }
 }

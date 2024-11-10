@@ -20,7 +20,7 @@ namespace Reactivities.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            return HandleResult(await Mediator.Send(new Delete.Command() { Id = id }));
+            return HandleResult(await Mediator.Send(new DeletePhotoCommand() { Id = id }));
         }
 
         [HttpPost("{id}/setmain")]
