@@ -25,6 +25,7 @@ namespace Reactivities.Domain.Activities.Dtos
             CreateMap<Activity, ActivityDto>();
             CreateMap<CreateActivityDto, Activity>();
             CreateMap<EditActivityDto, Activity>();
+            CreateMap<Activity, UserActivityDto>();
         }
     }
 }

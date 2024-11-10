@@ -11,6 +11,7 @@ namespace Reactivities.Domain.Activities.Interfaces
         Task<Activity?> GetByIdWithAttendees(long id);
         Task<ActivityDto?> GetDtoById(long id, string currentUsername);
         Task<PagedList<ActivityDto>> GetDtoList(PagingParams pagingParams, ActivityListFilters filters, string currentUsername);
+        Task<PagedList<UserActivityDto>> GetUserActivityDtoList(PagingParams pagingParams, UserActivityListFilters filters);
         Task<ActivityDto> Add(Activity activity);
         Task<ActivityDto> Update(Activity activity);
         Task Delete(Activity activity);

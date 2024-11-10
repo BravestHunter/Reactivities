@@ -67,6 +67,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 {
                     activity.Attendees.Remove(attendance);
                 }
+                await _activityRepository.Update(activity);
 
                 return Result.Success();
             }

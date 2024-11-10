@@ -7,13 +7,13 @@ using Reactivities.Domain.Core.Interfaces;
 
 namespace Reactivities.Domain.Activities.Queries.Handlers
 {
-    internal class GetFollowersListHandler : IRequestHandler<GetActivitiesListQuery, Result<PagedList<ActivityDto>>>
+    internal class GetActivitiesListHandler : IRequestHandler<GetActivitiesListQuery, Result<PagedList<ActivityDto>>>
     {
         private readonly IActivityRepository _activityRepository;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public GetFollowersListHandler(IActivityRepository activityRepository, IUserAccessor userAccessor, IMapper mapper)
+        public GetActivitiesListHandler(IActivityRepository activityRepository, IUserAccessor userAccessor, IMapper mapper)
         {
             _activityRepository = activityRepository;
             _userAccessor = userAccessor;

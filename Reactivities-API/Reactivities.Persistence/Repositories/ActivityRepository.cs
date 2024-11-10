@@ -67,6 +67,33 @@ namespace Reactivities.Persistence.Repositories
             return await query.ToPagedList(pagingParams.PageNumber, pagingParams.PageSize);
         }
 
+        public async Task<PagedList<UserActivityDto>> GetUserActivityDtoList(PagingParams pagingParams, UserActivityListFilters filters)
+        {
+            var query = _context.Activities
+                .Where(a => a.Date >= filters.StartDate);
+
+            switch (filters.Relationship)
+            {
+                case ActivityRelationship.None:
+                    break;
+
+                case ActivityRelationship.IsHost:
+                    query = query.Where(a => a.Host.UserName == filters.TargetUsername);
+                    break;
+
+                case ActivityRelationship.IsGoing:
+                    query = query.Where(a => a.Attendees.Any(u => u.User.UserName == filters.TargetUsername));
+                    break;
+            }
+
+            var dtoQuery = query
+                .OrderBy(a => a.Date)
+                .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
+                .AsQueryable();
+
+            return await dtoQuery.ToPagedList(pagingParams.PageNumber, pagingParams.PageSize);
+        }
+
         public async Task<ActivityDto> Add(Activity activity)
         {
             await _context.Activities.AddAsync(activity);
