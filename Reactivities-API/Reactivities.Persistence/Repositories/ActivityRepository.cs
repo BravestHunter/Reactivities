@@ -76,6 +76,13 @@ namespace Reactivities.Persistence.Repositories
             return _mapper.Map<ActivityDto>(activity);
         }
 
+        public async Task Delete(Activity activity)
+        {
+            _context.Activities.Remove(activity);
+
+            await Save();
+        }
+
         private async Task Save()
         {
             var result = await _context.SaveChangesAsync() > 0;
