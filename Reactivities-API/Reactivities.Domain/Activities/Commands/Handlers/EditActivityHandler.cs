@@ -9,12 +9,12 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
 {
     internal class EditActivityHandler : IRequestHandler<EditActivityCommand, Result<ActivityDto>>
     {
-        private readonly IActivityRepository _repository;
+        private readonly IActivityRepository _activityRepository;
         private readonly IMapper _mapper;
 
-        public EditActivityHandler(IActivityRepository repository, IMapper mapper)
+        public EditActivityHandler(IActivityRepository activityRepository, IMapper mapper)
         {
-            _repository = repository;
+            _activityRepository = activityRepository;
             _mapper = mapper;
         }
 
@@ -22,7 +22,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
         {
             try
             {
-                var existingActivity = await _repository.GetById(request.Activity.Id);
+                var existingActivity = await _activityRepository.GetById(request.Activity.Id);
                 if (existingActivity == null)
                 {
                     return Result<ActivityDto>.Failure(new NotFoundException("Failed to find activity"));
@@ -30,7 +30,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
 
                 _mapper.Map(request.Activity, existingActivity);
 
-                var activityDto = await _repository.Update(existingActivity);
+                var activityDto = await _activityRepository.Update(existingActivity);
                 return Result<ActivityDto>.Success(activityDto);
             }
             catch (Exception ex)

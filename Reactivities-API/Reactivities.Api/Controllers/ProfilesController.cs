@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Mediator.Profiles;
+using Reactivities.Domain.Users.Queries;
 
 namespace Reactivities.Api.Controllers
 {
@@ -11,7 +12,7 @@ namespace Reactivities.Api.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> GetProfile(string username)
         {
-            return HandleResult(await Mediator.Send(new Details.Query() { Username = username }));
+            return HandleResult(await Mediator.Send(new GetProfileByUsernameQuery() { Username = username }));
         }
 
         [HttpPut]

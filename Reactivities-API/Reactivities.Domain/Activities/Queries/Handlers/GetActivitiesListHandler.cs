@@ -9,13 +9,13 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
 {
     internal class GetFollowersListHandler : IRequestHandler<GetActivitiesListQuery, Result<PagedList<ActivityDto>>>
     {
-        private readonly IActivityRepository _repository;
+        private readonly IActivityRepository _activityRepository;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public GetFollowersListHandler(IActivityRepository repository, IUserAccessor userAccessor, IMapper mapper)
+        public GetFollowersListHandler(IActivityRepository activityRepository, IUserAccessor userAccessor, IMapper mapper)
         {
-            _repository = repository;
+            _activityRepository = activityRepository;
             _userAccessor = userAccessor;
             _mapper = mapper;
         }
@@ -25,7 +25,7 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
             try
             {
                 var currentUsername = _userAccessor.GetUsername();
-                var list = await _repository.GetDtoList(request.PagingParams, request.Filters, currentUsername);
+                var list = await _activityRepository.GetDtoList(request.PagingParams, request.Filters, currentUsername);
 
                 return Result<PagedList<ActivityDto>>.Success(list);
             }

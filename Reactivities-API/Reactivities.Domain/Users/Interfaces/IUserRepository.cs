@@ -1,4 +1,5 @@
-﻿using Reactivities.Domain.Users.Models;
+﻿using Reactivities.Domain.Users.Dtos;
+using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Domain.Users.Interfaces
 {
@@ -6,6 +7,7 @@ namespace Reactivities.Domain.Users.Interfaces
     {
         Task<AppUser?> GetByUsername(string username);
         Task<AppUser?> GetByUsernameWithPhotos(string username);
+        Task<ProfileDto?> GetProfileDto(string username, string currentUsername);
         Task<AppUser> Update(AppUser user);
     }
 }

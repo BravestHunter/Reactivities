@@ -1,4 +1,4 @@
-using Reactivities.Domain.Photos.Models;
+using Reactivities.Domain.Photos.Dtos;
 
 namespace Reactivities.Domain.Users.Dtos
 {
@@ -11,6 +11,6 @@ namespace Reactivities.Domain.Users.Dtos
         public required bool Following { get; set; }
         public required int FollowersCount { get; set; }
         public required int FollowingCount { get; set; }
-        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
+        public ICollection<PhotoDto> Photos { get; set; } = new List<PhotoDto>();
     }
 }

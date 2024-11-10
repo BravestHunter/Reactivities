@@ -10,13 +10,13 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
 {
     internal class GetActivityByIdHandler : IRequestHandler<GetActivityByIdQuery, Result<ActivityDto>>
     {
-        private readonly IActivityRepository _repository;
+        private readonly IActivityRepository _activityRepository;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public GetActivityByIdHandler(IActivityRepository repository, IUserAccessor userAccessor, IMapper mapper)
+        public GetActivityByIdHandler(IActivityRepository activityRepository, IUserAccessor userAccessor, IMapper mapper)
         {
-            _repository = repository;
+            _activityRepository = activityRepository;
             _userAccessor = userAccessor;
             _mapper = mapper;
         }
@@ -27,7 +27,7 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
             {
                 var currentUsername = _userAccessor.GetUsername();
 
-                var activityDto = await _repository.GetDtoById(request.Id, currentUsername);
+                var activityDto = await _activityRepository.GetDtoById(request.Id, currentUsername);
                 if (activityDto == null)
                 {
                     return Result<ActivityDto>.Failure(new NotFoundException("Failed to find activity"));
