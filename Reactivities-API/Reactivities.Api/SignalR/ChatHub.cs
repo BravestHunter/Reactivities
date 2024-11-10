@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Reactivities.Application.Mediator.Comments;
+using Reactivities.Domain.Comments.Queries;
 
 namespace Reactivities.Api.SignalR
 {
@@ -29,7 +30,7 @@ namespace Reactivities.Api.SignalR
 
             await Groups.AddToGroupAsync(Context.ConnectionId, activityId);
 
-            var result = await _mediator.Send(new List.Query() { ActivityId = long.Parse(activityId) });
+            var result = await _mediator.Send(new GetCommentsListQuery() { ActivityId = long.Parse(activityId) });
 
             await Clients.Caller.SendAsync("LoadComments", result.Value);
         }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Domain.Activities.Models;
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Comments.Models;
 using Reactivities.Domain.Photos.Models;
 using Reactivities.Domain.Users.Models;
 

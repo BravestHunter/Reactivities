@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reactivities.Domain.Activities.Interfaces;
+using Reactivities.Domain.Comments.Interfaces;
 using Reactivities.Domain.Users.Interfaces;
 using Reactivities.Persistence.Repositories;
 
@@ -27,6 +28,7 @@ namespace Reactivities.Persistence.Extensions
             services.AddScoped<IActivityRepository, ActivityRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserFollowingRepository, UserFollowingRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
 
             return services;
         }

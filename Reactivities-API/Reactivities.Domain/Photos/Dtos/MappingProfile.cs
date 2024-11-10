@@ -7,8 +7,6 @@ namespace Reactivities.Domain.Photos.Dtos
     {
         public MappingProfiles()
         {
-            string currentUsername = string.Empty;
-
             CreateMap<Photo, PhotoDto>();
         }
     }

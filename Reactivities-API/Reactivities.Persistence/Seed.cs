@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Reactivities.Domain.Activities.Models;
+using Reactivities.Domain.Comments.Models;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence
@@ -175,6 +176,21 @@ namespace Reactivities.Persistence
                 activities[7].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[7] });
                 activities[8].Attendees.Add(new ActivityAttendee() { User = users[2], Activity = activities[8] });
                 activities[9].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[9] });
+
+                activities[6].Comments.Add(new Comment()
+                {
+                    Body = "Comment 1",
+                    CreatedAt = DateTime.UtcNow.AddDays(-10),
+                    Author = users[1],
+                    Activity = activities[6]
+                });
+                activities[6].Comments.Add(new Comment()
+                {
+                    Body = "Comment 2",
+                    CreatedAt = DateTime.UtcNow.AddDays(-5),
+                    Author = users[0],
+                    Activity = activities[6]
+                });
 
                 await context.Activities.AddRangeAsync(activities);
 

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Comments.Models;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Domain.Activities.Models
