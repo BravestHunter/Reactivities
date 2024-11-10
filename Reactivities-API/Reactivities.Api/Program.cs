@@ -1,7 +1,6 @@
 using Reactivities.Api.Extensions;
 using Reactivities.Api.Middleware;
 using Reactivities.Api.SignalR;
-using Reactivities.Application.Extensions;
 using Reactivities.Domain.Extensions;
 using Reactivities.Infrastructure.Extensions;
 using Reactivities.Persistence.Extensions;
@@ -34,7 +33,6 @@ namespace Reactivities.Api
             services.AddDomainServices();
             services.AddPersistanceServices();
             services.AddInfrastructureServices(configuration);
-            services.AddApplicationServices();
             services.AddIdentityServices();
             services.AddApiServices(configuration);
         }

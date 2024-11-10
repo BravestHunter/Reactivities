@@ -3,7 +3,7 @@ using Reactivities.Domain.Users.Dtos;
 
 namespace Reactivities.Domain.Activities.Dtos.Validators
 {
-    public class EditProfileDtoValidator : AbstractValidator<EditProfileDto>
+    internal class EditProfileDtoValidator : AbstractValidator<EditProfileDto>
     {
         public EditProfileDtoValidator()
         {

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Reactivities.Application.Mediator.Comments;
+using Reactivities.Domain.Comments.Commands;
+using Reactivities.Domain.Comments.Dtos;
 using Reactivities.Domain.Comments.Queries;
 
 namespace Reactivities.Api.SignalR
@@ -14,12 +15,12 @@ namespace Reactivities.Api.SignalR
             _mediator = mediator;
         }
 
-        public async Task SendComment(Create.Command command)
+        public async Task SendComment(CreateCommentDto dto)
         {
-            var comment = await _mediator.Send(command);
+            var comment = await _mediator.Send(new CreateCommentCommand() { Comment = dto });
 
             await Clients
-                .Group(command.ActivityId.ToString())
+                .Group(dto.ActivityId.ToString())
                 .SendAsync("ReceiveComment", comment.Value);
         }
 
