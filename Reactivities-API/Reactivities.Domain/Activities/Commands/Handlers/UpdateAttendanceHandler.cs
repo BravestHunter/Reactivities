@@ -27,7 +27,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
         {
             try
             {
-                var activity = await _activityRepository.GetByIdWithAtendees(request.Id);
+                var activity = await _activityRepository.GetByIdWithAttendees(request.Id);
                 if (activity == null)
                 {
                     return Result.Failure("Failed to find activity");
@@ -36,7 +36,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 var currentUsername = _userAccessor.GetUsername();
                 if (activity.Host.UserName == currentUsername)
                 {
-                    return Result.Failure("Can't set atendance for host");
+                    return Result.Failure("Can't set attendance for host");
                 }
 
                 var attendance = activity.Attendees.FirstOrDefault(a => a.User.UserName == currentUsername);

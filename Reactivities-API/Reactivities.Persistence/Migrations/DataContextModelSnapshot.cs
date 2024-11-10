@@ -185,7 +185,7 @@ namespace Reactivities.Persistence.Migrations
 
                     b.HasIndex("ActivityId");
 
-                    b.ToTable("ActivityAtendees");
+                    b.ToTable("ActivityAttendees");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>

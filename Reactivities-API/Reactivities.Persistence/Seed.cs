@@ -57,14 +57,7 @@ namespace Reactivities.Persistence
                         Category = "culture",
                         City = "Paris",
                         Venue = "The Louvre",
-                        Host = users[0],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[1]
-                            }
-                        }
+                        Host = users[0]
                     },
                     new Activity
                     {
@@ -74,14 +67,7 @@ namespace Reactivities.Persistence
                         Category = "music",
                         City = "London",
                         Venue = "Wembly Stadium",
-                        Host =  users[2],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[1]
-                            }
-                        }
+                        Host =  users[2]
                     },
                     new Activity
                     {
@@ -91,14 +77,7 @@ namespace Reactivities.Persistence
                         Category = "food",
                         City = "London",
                         Venue = "Jamies Italian",
-                        Host = users[0],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[2]
-                            }
-                        }
+                        Host = users[0]
                     },
                     new Activity
                     {
@@ -108,14 +87,7 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        Host = users[1],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[0]
-                            }
-                        }
+                        Host = users[1]
                     },
                     new Activity
                     {
@@ -135,18 +107,7 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Punch and Judy",
-                        Host = users[0],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[1]
-                            },
-                            new ActivityAttendee
-                            {
-                                User = users[2]
-                            }
-                        }
+                        Host = users[0]
                     },
                     new Activity
                     {
@@ -156,14 +117,7 @@ namespace Reactivities.Persistence
                         Category = "music",
                         City = "London",
                         Venue = "O2 Arena",
-                        Host = users[2],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[1]
-                            }
-                        }
+                        Host = users[2]
                     },
                     new Activity
                     {
@@ -173,14 +127,7 @@ namespace Reactivities.Persistence
                         Category = "travel",
                         City = "Berlin",
                         Venue = "All",
-                        Host = users[0],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[2]
-                            }
-                        }
+                        Host = users[0]
                     },
                     new Activity
                     {
@@ -190,16 +137,19 @@ namespace Reactivities.Persistence
                         Category = "drinks",
                         City = "London",
                         Venue = "Pub",
-                        Host = users[2],
-                        Attendees = new List<ActivityAttendee>
-                        {
-                            new ActivityAttendee
-                            {
-                                User = users[1]
-                            }
-                        }
+                        Host = users[2]
                     }
                 };
+
+                activities[1].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[1] });
+                activities[2].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[2] });
+                activities[3].Attendees.Add(new ActivityAttendee() { User = users[2], Activity = activities[3] });
+                activities[4].Attendees.Add(new ActivityAttendee() { User = users[0], Activity = activities[4] });
+                activities[6].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[6] });
+                activities[6].Attendees.Add(new ActivityAttendee() { User = users[2], Activity = activities[6] });
+                activities[7].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[7] });
+                activities[8].Attendees.Add(new ActivityAttendee() { User = users[2], Activity = activities[8] });
+                activities[9].Attendees.Add(new ActivityAttendee() { User = users[1], Activity = activities[9] });
 
                 await context.Activities.AddRangeAsync(activities);
                 await context.SaveChangesAsync();

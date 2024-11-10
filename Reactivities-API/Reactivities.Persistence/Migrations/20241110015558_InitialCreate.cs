@@ -255,7 +255,7 @@ namespace Reactivities.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActivityAtendees",
+                name: "ActivityAttendees",
                 columns: table => new
                 {
                     AppUserId = table.Column<long>(type: "bigint", nullable: false),
@@ -263,15 +263,15 @@ namespace Reactivities.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityAtendees", x => new { x.AppUserId, x.ActivityId });
+                    table.PrimaryKey("PK_ActivityAttendees", x => new { x.AppUserId, x.ActivityId });
                     table.ForeignKey(
-                        name: "FK_ActivityAtendees_Activities_ActivityId",
+                        name: "FK_ActivityAttendees_Activities_ActivityId",
                         column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActivityAtendees_AspNetUsers_AppUserId",
+                        name: "FK_ActivityAttendees_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -312,8 +312,8 @@ namespace Reactivities.Persistence.Migrations
                 column: "HostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivityAtendees_ActivityId",
-                table: "ActivityAtendees",
+                name: "IX_ActivityAttendees_ActivityId",
+                table: "ActivityAttendees",
                 column: "ActivityId");
 
             migrationBuilder.CreateIndex(
@@ -383,7 +383,7 @@ namespace Reactivities.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ActivityAtendees");
+                name: "ActivityAttendees");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

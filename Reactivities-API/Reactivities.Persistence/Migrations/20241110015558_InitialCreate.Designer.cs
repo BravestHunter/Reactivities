@@ -12,7 +12,7 @@ using Reactivities.Persistence;
 namespace Reactivities.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241110014535_InitialCreate")]
+    [Migration("20241110015558_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -188,7 +188,7 @@ namespace Reactivities.Persistence.Migrations
 
                     b.HasIndex("ActivityId");
 
-                    b.ToTable("ActivityAtendees");
+                    b.ToTable("ActivityAttendees");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
