@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Reactivities.Application.Mediator.Photos;
+using Reactivities.Domain.Photos.Commands;
 
 namespace Reactivities.Api.Controllers
 {
@@ -9,9 +11,10 @@ namespace Reactivities.Api.Controllers
         public PhotosController(IMediator mediator) : base(mediator) { }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromForm] Add.Command command)
+        public async Task<IActionResult> Add([FromQuery, BindRequired] string fileName, IFormFile file)
         {
-            return HandleResult(await Mediator.Send(command));
+            using var stream = file.OpenReadStream();
+            return HandleResult(await Mediator.Send(new AddPhotoCommand() { Stream = stream, FileName = fileName }));
         }
 
         [HttpDelete("{id}")]

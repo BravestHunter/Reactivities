@@ -1,9 +1,5 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Reactivities.Application.Interfaces;
 using Reactivities.Domain.Core;
-using Reactivities.Domain.Core.Interfaces;
-using Reactivities.Persistence;
 
 namespace Reactivities.Application.Mediator.Photos
 {
@@ -14,7 +10,7 @@ namespace Reactivities.Application.Mediator.Photos
             public long Id { get; set; }
         }
 
-        internal class Handler : IRequestHandler<Command, Result>
+        /*internal class Handler : IRequestHandler<Command, Result>
         {
             private readonly DataContext _dataContext;
             private readonly IPhotoAccessor _photoAccessor;
@@ -72,6 +68,6 @@ namespace Reactivities.Application.Mediator.Photos
                     return Result.Failure("Failed to remove photo", ex);
                 }
             }
-        }
+        }*/
     }
 }

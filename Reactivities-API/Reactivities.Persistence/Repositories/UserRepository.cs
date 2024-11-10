@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Reactivities.Domain.Users.Interfaces;
 using Reactivities.Domain.Users.Models;
+using Reactivities.Persistence.Exceptions;
 
 namespace Reactivities.Persistence.Repositories
 {
@@ -16,6 +18,24 @@ namespace Reactivities.Persistence.Repositories
         public async Task<AppUser?> GetByUsername(string username)
         {
             return await _userManager.FindByNameAsync(username);
+        }
+
+        public async Task<AppUser?> GetByUsernameWithPhotos(string username)
+        {
+            return await _userManager.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.UserName == username);
+        }
+
+        public async Task<AppUser> Update(AppUser user)
+        {
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new FailedToUpdateEntityException("Faield to update user");
+            }
+
+            return user;
         }
     }
 }

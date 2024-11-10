@@ -6,10 +6,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.Api.Configuration;
 using Reactivities.Api.Services;
-using Reactivities.Application.Interfaces;
 using Reactivities.Domain.Core.Interfaces;
 using Reactivities.Domain.Users.Models;
-using Reactivities.Infrastructure.Photos;
 using Reactivities.Infrastructure.Security;
 using Reactivities.Persistence;
 
@@ -109,9 +107,6 @@ namespace Reactivities.Api.Extensions
 
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor, UserAccessor>();
-
-            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
-            services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
             services.AddSignalR();
 

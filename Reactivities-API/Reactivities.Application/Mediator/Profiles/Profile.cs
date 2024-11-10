@@ -1,4 +1,4 @@
-using Reactivities.Domain.Models;
+using Reactivities.Domain.Photos.Models;
 
 namespace Reactivities.Application.Mediator.Profiles
 {

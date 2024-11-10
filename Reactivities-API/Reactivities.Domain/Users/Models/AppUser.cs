@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Models;
+using Reactivities.Domain.Photos.Models;
 
 namespace Reactivities.Domain.Users.Models
 {

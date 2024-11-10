@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Reactivities.Domain.Models
+namespace Reactivities.Domain.Photos.Models
 {
     public class Photo
     {

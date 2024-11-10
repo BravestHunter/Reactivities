@@ -1,33 +1,34 @@
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Reactivities.Application.Interfaces;
-using Reactivities.Application.Mediator.Photos;
+using Reactivities.Domain.Core.Exceptions;
+using Reactivities.Domain.Photos.Dtos;
+using Reactivities.Domain.Photos.Interfaces;
+using Reactivities.Infrastructure.Configuration;
 
 namespace Reactivities.Infrastructure.Photos
 {
-    public class PhotoAccessor : IPhotoAccessor
+    internal class CloudinaryPhotoStorage : IPhotoStorage
     {
         private readonly Cloudinary _cloudinary;
 
-        public PhotoAccessor(IOptions<CloudinarySettings> config)
+        public CloudinaryPhotoStorage(IOptions<CloudinarySettings> config)
         {
             var account = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
             _cloudinary = new Cloudinary(account);
         }
 
-        public async Task<PhotoUploadResult> AddPhoto(IFormFile file)
+        public async Task<PhotoUploadResult> Add(Stream stream, string fileName)
         {
-            if (file.Length == 0)
+            if (stream.Length == 0)
             {
-                return null;
+                throw new BadRequestException("Can't upload empty image");
             }
 
-            await using var stream = file.OpenReadStream();
             var uploadParams = new ImageUploadParams
             {
-                File = new FileDescription(file.FileName, stream),
+                File = new FileDescription(fileName, stream),
+                Folder = "Reactivities",
                 Transformation = new Transformation().Height(500).Width(500).Crop("fill")
             };
 
@@ -35,23 +36,23 @@ namespace Reactivities.Infrastructure.Photos
 
             if (uploadResult.Error != null)
             {
-                throw new Exception(uploadResult.Error.Message);
+                throw new BadRequestException($"Failed to upload image: {uploadResult.Error.Message}");
             }
 
             return new PhotoUploadResult
             {
-                PublicId = uploadResult.PublicId,
+                StorageId = uploadResult.PublicId,
                 Url = uploadResult.SecureUrl.ToString()
             };
         }
 
-        public async Task<string> DeletePhoto(string publicId)
+        public async Task<bool> Delete(string storageId)
         {
-            var deleteParams = new DeletionParams(publicId);
+            var deleteParams = new DeletionParams(storageId);
 
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
-            return result.Result == "ok" ? result.Result : null;
+            return result.Result == "ok";
         }
     }
 }
