@@ -54,12 +54,8 @@ namespace Reactivities.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-
             app.MapControllers();
             app.MapHub<ChatHub>("/chat");
-            app.MapFallbackToController("Index", "Fallback");
 
             app.Services.ApplyPersistentMigrations(app.Logger);
             if (app.Environment.IsDevelopment())
