@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Reactivities.Application.Mediator.Photos;
 using Reactivities.Domain.Photos.Commands;
 
 namespace Reactivities.Api.Controllers
@@ -23,10 +22,10 @@ namespace Reactivities.Api.Controllers
             return HandleResult(await Mediator.Send(new DeletePhotoCommand() { Id = id }));
         }
 
-        [HttpPost("{id}/setmain")]
+        [HttpPost("{id}/setMain")]
         public async Task<IActionResult> SetMain(long id)
         {
-            return HandleResult(await Mediator.Send(new SetMain.Command() { Id = id }));
+            return HandleResult(await Mediator.Send(new SetMainPhotoCommand() { Id = id }));
         }
     }
 }

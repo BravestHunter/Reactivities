@@ -35,8 +35,8 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
             try
             {
                 string currentUsername = _userAccessor.GetUsername();
-                var user = await _userRepository.GetByUsernameWithPhotos(currentUsername);
-                if (user == null)
+                var currentUser = await _userRepository.GetByUsernameWithPhotos(currentUsername);
+                if (currentUser == null)
                 {
                     return Result<PhotoDto>.Failure(new NotFoundException("Failed to find current user"));
                 }
@@ -48,13 +48,13 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                     StorageId = uploadResult.StorageId
                 };
 
-                if (!user.Photos.Any())
+                if (!currentUser.Photos.Any())
                 {
                     photo.IsMain = true;
                 }
 
-                user.Photos.Add(photo);
-                await _userRepository.Update(user);
+                currentUser.Photos.Add(photo);
+                await _userRepository.Update(currentUser);
 
                 var photoDto = _mapper.Map<PhotoDto>(photo);
                 return Result<PhotoDto>.Success(photoDto);

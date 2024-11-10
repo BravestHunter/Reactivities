@@ -1,34 +1,23 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
-using Reactivities.Domain.Photos.Interfaces;
 using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Photos.Commands.Handlers
 {
-    internal class DeletePhotoHandler : IRequestHandler<DeletePhotoCommand, Result>
+    internal class SetMainPhotoHandler : IRequestHandler<SetMainPhotoCommand, Result>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IPhotoStorage _photoStorage;
         private readonly IUserAccessor _userAccessor;
-        private readonly IMapper _mapper;
 
-        public DeletePhotoHandler(
-            IUserRepository userRepository,
-            IPhotoStorage photoStorage,
-            IUserAccessor userAccessor,
-            IMapper mapper
-            )
+        public SetMainPhotoHandler(IUserRepository userRepository, IUserAccessor userAccessor)
         {
             _userRepository = userRepository;
-            _photoStorage = photoStorage;
             _userAccessor = userAccessor;
-            _mapper = mapper;
         }
 
-        public async Task<Result> Handle(DeletePhotoCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(SetMainPhotoCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -42,17 +31,17 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                 var photo = currentUser.Photos.FirstOrDefault(p => p.Id == request.Id);
                 if (photo == null)
                 {
-                    return Result.Failure(new NotFoundException("Failed to find photo"));
+                    return Result.Failure("Failed to find photo");
                 }
 
-                if (photo.IsMain)
+                var mainPhoto = currentUser.Photos.FirstOrDefault(p => p.IsMain);
+                if (mainPhoto != null)
                 {
-                    return Result.Failure(new BadRequestException("Main photo can't be deleted"));
+                    mainPhoto.IsMain = false;
                 }
 
-                await _photoStorage.Delete(photo.StorageId);
+                photo.IsMain = true;
 
-                currentUser.Photos.Remove(photo);
                 await _userRepository.Update(currentUser);
 
                 return Result.Success();
