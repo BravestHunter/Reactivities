@@ -9,7 +9,7 @@ using Reactivities.Api.Services;
 using Reactivities.Domain.Core.Interfaces;
 using Reactivities.Domain.Users.Models;
 using Reactivities.Infrastructure.Security;
-using Reactivities.Persistence;
+using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Api.Extensions
 {
@@ -34,7 +34,7 @@ namespace Reactivities.Api.Extensions
                     opt.User.RequireUniqueEmail = true;
                     opt.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<DataContext>();
+                .AddPersistenceIdentityStores();
 
             var authConfig = serviceProvider.GetRequiredService<IOptions<AuthConfiguration>>().Value;
 

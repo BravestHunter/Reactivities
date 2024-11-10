@@ -1,8 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Reactivities.Persistence;
+using Reactivities.Domain.Activities.Interfaces;
 
 namespace Reactivities.Infrastructure.Security
 {
@@ -13,12 +12,12 @@ namespace Reactivities.Infrastructure.Security
 
     public class IsHostRequirementHandler : AuthorizationHandler<IsHostRequirement>
     {
-        private readonly DataContext _dataContext;
+        private readonly IActivityRepository _activityRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public IsHostRequirementHandler(DataContext dataContext, IHttpContextAccessor httpContextAccessor)
+        public IsHostRequirementHandler(IActivityRepository activityRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _dataContext = dataContext;
+            _activityRepository = activityRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -35,9 +34,7 @@ namespace Reactivities.Infrastructure.Security
                 _httpContextAccessor.HttpContext?.Request.RouteValues.SingleOrDefault(x => x.Key == "id").Value?.ToString()
                 );
 
-            var activity = await _dataContext.Activities
-                .Include(a => a.Host)
-                .FirstOrDefaultAsync(a => a.Id == activityId);
+            var activity = await _activityRepository.GetByIdWithHost(activityId);
             if (activity == null)
             {
                 return;

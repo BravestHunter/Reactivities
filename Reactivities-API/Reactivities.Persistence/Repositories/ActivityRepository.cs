@@ -26,6 +26,13 @@ namespace Reactivities.Persistence.Repositories
             return await _context.Activities.FindAsync(id);
         }
 
+        public async Task<Activity?> GetByIdWithHost(long id)
+        {
+            return await _context.Activities
+                .Include(a => a.Host)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<Activity?> GetByIdWithAttendees(long id)
         {
             return await _context.Activities

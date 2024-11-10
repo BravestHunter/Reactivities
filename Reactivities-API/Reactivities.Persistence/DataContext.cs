@@ -7,7 +7,7 @@ using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence
 {
-    public class DataContext : IdentityDbContext<AppUser, AppRole, long>
+    internal class DataContext : IdentityDbContext<AppUser, AppRole, long>
     {
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ActivityAttendee> ActivityAttendees { get; set; }

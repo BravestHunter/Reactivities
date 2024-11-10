@@ -8,6 +8,7 @@ namespace Reactivities.Domain.Activities.Interfaces
     public interface IActivityRepository
     {
         Task<Activity?> GetById(long id);
+        Task<Activity?> GetByIdWithHost(long id);
         Task<Activity?> GetByIdWithAttendees(long id);
         Task<ActivityDto?> GetDtoById(long id, string currentUsername);
         Task<PagedList<ActivityDto>> GetDtoList(PagingParams pagingParams, ActivityListFilters filters, string currentUsername);
