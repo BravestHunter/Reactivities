@@ -29,7 +29,7 @@ namespace Reactivities.Application.Mediator.Profiles
             public async Task<Result<List<UserActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = _dataContext.ActivityAtendees
-                    .Where(u => u.AppUser.UserName == request.Username)
+                    .Where(u => u.User.UserName == request.Username)
                     .OrderBy(a => a.Activity.Date)
                     .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
                     .AsQueryable();

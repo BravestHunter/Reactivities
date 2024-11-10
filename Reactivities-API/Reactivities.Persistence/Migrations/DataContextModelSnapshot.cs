@@ -469,7 +469,7 @@ namespace Reactivities.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "AppUser")
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "User")
                         .WithMany("Activities")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -477,7 +477,7 @@ namespace Reactivities.Persistence.Migrations
 
                     b.Navigation("Activity");
 
-                    b.Navigation("AppUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>

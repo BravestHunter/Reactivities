@@ -26,6 +26,15 @@ namespace Reactivities.Persistence.Repositories
             return await _context.Activities.FindAsync(id);
         }
 
+        public async Task<Activity?> GetByIdWithAtendees(long id)
+        {
+            return await _context.Activities
+                .Include(a => a.Host)
+                .Include(a => a.Attendees)
+                .ThenInclude(aa => aa.User)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<ActivityDto?> GetDtoById(long id, string currentUsername)
         {
             return await _context.Activities
@@ -83,12 +92,17 @@ namespace Reactivities.Persistence.Repositories
             await Save();
         }
 
+        public async Task SaveChanges()
+        {
+            await Save();
+        }
+
         private async Task Save()
         {
             var result = await _context.SaveChangesAsync() > 0;
             if (!result)
             {
-                throw new InvalidOperationException("Failed to save persistent change");
+                throw new InvalidOperationException("Failed to save persistent changes");
             }
         }
     }

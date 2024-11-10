@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Reactivities.Api.Dto;
-using Reactivities.Application.Mediator.Activities;
 using Reactivities.Domain.Activities.Commands;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Filters;
@@ -58,10 +58,10 @@ namespace Reactivities.Api.Controllers
             return HandleResult(await Mediator.Send(new DeleteActivityCommand() { Id = id }));
         }
 
-        [HttpPost("{id}/attend")]
-        public async Task<IActionResult> Attend(long id)
+        [HttpPost("{id}/updateAttendance")]
+        public async Task<IActionResult> UpdateAttendance(long id, [BindRequired] bool attend)
         {
-            return HandleResult(await Mediator.Send(new UpdateAttendance.Command() { Id = id }));
+            return HandleResult(await Mediator.Send(new UpdateAttendanceCommand() { Id = id, Attend = attend }));
         }
     }
 }

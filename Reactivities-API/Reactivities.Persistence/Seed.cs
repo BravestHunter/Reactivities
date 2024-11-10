@@ -62,7 +62,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[1]
+                                User = users[1]
                             }
                         }
                     },
@@ -79,7 +79,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[1]
+                                User = users[1]
                             }
                         }
                     },
@@ -96,7 +96,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[2]
+                                User = users[2]
                             }
                         }
                     },
@@ -113,7 +113,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[0]
+                                User = users[0]
                             }
                         }
                     },
@@ -140,11 +140,11 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[1]
+                                User = users[1]
                             },
                             new ActivityAttendee
                             {
-                                AppUser = users[2]
+                                User = users[2]
                             }
                         }
                     },
@@ -161,7 +161,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[1]
+                                User = users[1]
                             }
                         }
                     },
@@ -178,7 +178,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[2]
+                                User = users[2]
                             }
                         }
                     },
@@ -195,7 +195,7 @@ namespace Reactivities.Persistence
                         {
                             new ActivityAttendee
                             {
-                                AppUser = users[1]
+                                User = users[1]
                             }
                         }
                     }

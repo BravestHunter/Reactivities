@@ -3,20 +3,17 @@ using MediatR;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Core;
-using Reactivities.Domain.Core.Interfaces;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
 {
     internal class EditActivityHandler : IRequestHandler<EditActivityCommand, Result<ActivityDto>>
     {
         private readonly IActivityRepository _repository;
-        private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-        public EditActivityHandler(IActivityRepository repository, IUserAccessor userAccessor, IMapper mapper)
+        public EditActivityHandler(IActivityRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _userAccessor = userAccessor;
             _mapper = mapper;
         }
 
