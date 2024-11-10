@@ -3,8 +3,8 @@ using MediatR;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
-using Reactivities.Domain.Exceptions;
 
 namespace Reactivities.Domain.Activities.Queries.Handlers
 {

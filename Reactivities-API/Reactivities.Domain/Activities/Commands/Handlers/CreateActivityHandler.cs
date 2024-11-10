@@ -4,8 +4,8 @@ using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
-using Reactivities.Domain.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers

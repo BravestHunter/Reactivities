@@ -1,4 +1,4 @@
-﻿namespace Reactivities.Domain.Exceptions
+﻿namespace Reactivities.Domain.Core.Exceptions
 {
     public class BadRequestException : ApplicationException
     {

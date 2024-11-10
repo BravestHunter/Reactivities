@@ -1,6 +1,4 @@
-using Reactivities.Domain.Users.Models;
-
-namespace Reactivities.Domain.Models
+namespace Reactivities.Domain.Users.Models
 {
     public class UserFollowing
     {

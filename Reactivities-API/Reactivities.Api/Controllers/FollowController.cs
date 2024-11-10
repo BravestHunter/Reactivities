@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Followers;
+using Reactivities.Domain.Users.Commands;
 
 namespace Reactivities.Api.Controllers
 {
@@ -11,7 +12,7 @@ namespace Reactivities.Api.Controllers
         [HttpPost("{username}")]
         public async Task<IActionResult> Follow(string username)
         {
-            return HandleResult(await Mediator.Send(new FollowToggle.Command() { TargetUsername = username }));
+            return HandleResult(await Mediator.Send(new TogleFollowCommand() { TargetUsername = username }));
         }
 
         [HttpGet("{username}")]

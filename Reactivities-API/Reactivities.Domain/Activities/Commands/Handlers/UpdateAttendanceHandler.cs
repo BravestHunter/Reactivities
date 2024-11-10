@@ -3,8 +3,8 @@ using MediatR;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
-using Reactivities.Domain.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
@@ -67,7 +67,6 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 {
                     activity.Attendees.Remove(attendance);
                 }
-                await _activityRepository.SaveChanges();
 
                 return Result.Success();
             }

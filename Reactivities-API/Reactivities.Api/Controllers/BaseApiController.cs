@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Api.Extensions;
 using Reactivities.Domain.Core;
-using Reactivities.Domain.Exceptions;
+using Reactivities.Domain.Core.Exceptions;
 
 namespace Reactivities.Api.Controllers
 {

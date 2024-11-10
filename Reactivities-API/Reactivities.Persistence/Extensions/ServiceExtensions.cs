@@ -26,6 +26,7 @@ namespace Reactivities.Persistence.Extensions
 
             services.AddScoped<IActivityRepository, ActivityRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserFollowingRepository, UserFollowingRepository>();
 
             return services;
         }

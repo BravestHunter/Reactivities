@@ -14,7 +14,5 @@ namespace Reactivities.Domain.Activities.Interfaces
         Task<ActivityDto> Add(Activity activity);
         Task<ActivityDto> Update(Activity activity);
         Task Delete(Activity activity);
-
-        Task SaveChanges();
     }
 }

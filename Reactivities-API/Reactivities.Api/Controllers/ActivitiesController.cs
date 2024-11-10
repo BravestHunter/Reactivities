@@ -11,8 +11,6 @@ using Reactivities.Domain.Core;
 
 namespace Reactivities.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class ActivitiesController : BaseApiController
     {
         public ActivitiesController(IMediator mediator) : base(mediator) { }

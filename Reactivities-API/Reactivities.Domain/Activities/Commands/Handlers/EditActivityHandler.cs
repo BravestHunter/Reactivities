@@ -3,7 +3,7 @@ using MediatR;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Core;
-using Reactivities.Domain.Exceptions;
+using Reactivities.Domain.Core.Exceptions;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
 {

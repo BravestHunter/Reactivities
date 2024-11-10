@@ -70,8 +70,7 @@ namespace Reactivities.Persistence.Repositories
         public async Task<ActivityDto> Add(Activity activity)
         {
             await _context.Activities.AddAsync(activity);
-
-            await Save();
+            await SaveChanges();
 
             return _mapper.Map<ActivityDto>(activity);
         }
@@ -79,8 +78,7 @@ namespace Reactivities.Persistence.Repositories
         public async Task<ActivityDto> Update(Activity activity)
         {
             _context.Activities.Update(activity);
-
-            await Save();
+            await SaveChanges();
 
             return _mapper.Map<ActivityDto>(activity);
         }
@@ -88,16 +86,10 @@ namespace Reactivities.Persistence.Repositories
         public async Task Delete(Activity activity)
         {
             _context.Activities.Remove(activity);
-
-            await Save();
+            await SaveChanges();
         }
 
-        public async Task SaveChanges()
-        {
-            await Save();
-        }
-
-        private async Task Save()
+        private async Task SaveChanges()
         {
             var result = await _context.SaveChangesAsync() > 0;
             if (!result)
