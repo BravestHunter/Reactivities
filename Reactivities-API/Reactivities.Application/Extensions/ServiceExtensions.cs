@@ -75,6 +75,7 @@ namespace Reactivities.Application.Extensions
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
             services.AddScoped<TokenService>();
+            services.AddScoped<AccountService>();
 
             return services;
         }

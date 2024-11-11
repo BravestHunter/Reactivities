@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reactivities.Api.Dto;
+using Reactivities.Api.Dtos;
 using Reactivities.Domain.Activities.Filters;
 using Reactivities.Domain.Activities.Queries;
 using Reactivities.Domain.Core;

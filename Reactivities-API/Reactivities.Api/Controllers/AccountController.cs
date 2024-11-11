@@ -1,127 +1,69 @@
-using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Reactivities.Api.Dto;
-using Reactivities.Api.DTO;
+using Reactivities.Application.Dtos;
 using Reactivities.Application.Services;
-using Reactivities.Domain.Account.Commands;
-using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Api.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly TokenService _tokenService;
+        private readonly AccountService _accountService;
 
-        public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IMediator mediator) : base(mediator)
+        public AccountController(AccountService accountService, IMediator mediator) : base(mediator)
         {
-            _userManager = userManager;
-            _tokenService = tokenService;
+            _accountService = accountService;
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserResponseDto>> Register(RegisterRequestDto registerDto)
+        public async Task<ActionResult> Register(RegisterRequestDto registerDto)
         {
-            var user = new AppUser
-            {
-                UserName = registerDto.Username,
-                DisplayName = registerDto.DisplayName ?? registerDto.Username,
-                Email = registerDto.Email
-            };
-
-            var result = await Mediator.Send(new RegisterCommand() { User = user, Password = registerDto.Password });
+            var result = await _accountService.Register(registerDto);
             if (result.IsFailure)
             {
                 return HandleResult(result);
             }
 
-            await SetRefreshTokenCookie(user);
-
-            return CreateUserObject(user);
+            return Ok(result.GetOrThrow());
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
+        public async Task<ActionResult> Login(LoginRequestDto loginDto)
         {
-            var result = await Mediator.Send(new LoginCommand() { Email = loginDto.Email, Password = loginDto.Password });
+            var result = await _accountService.Login(loginDto);
             if (result.IsFailure)
             {
                 return Unauthorized();
             }
-            var user = result.GetOrThrow();
 
-            await SetRefreshTokenCookie(user);
-
-            return CreateUserObject(user);
+            return Ok(result.GetOrThrow());
         }
 
         [HttpGet("refreshToken")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserResponseDto>> RefreshToken()
+        public async Task<ActionResult> RefreshToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
-
-            var user = await _userManager.Users
-                .Include(u => u.RefreshTokens)
-                .Include(u => u.Photos)
-                .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
-            if (user == null)
+            var result = await _accountService.RefreshToken();
+            if (result.IsFailure)
             {
                 return Unauthorized();
             }
 
-            var oldToken = user.RefreshTokens.SingleOrDefault(t => t.Token == refreshToken);
-
-            if (oldToken != null && !oldToken.IsActive)
-            {
-                return Unauthorized();
-            }
-
-            return CreateUserObject(user);
+            return Ok(result.GetOrThrow());
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserResponseDto>> GetCurrentUser()
+        public async Task<ActionResult> GetCurrentUser()
         {
-            var email = User.FindFirstValue(ClaimTypes.Email);
-            var user = await _userManager.Users
-                .Include(u => u.Photos)
-                .FirstOrDefaultAsync(u => u.Email == email);
-
-            return CreateUserObject(user);
-        }
-
-        private async Task SetRefreshTokenCookie(AppUser user)
-        {
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            user.RefreshTokens.Add(refreshToken);
-            await _userManager.UpdateAsync(user);
-
-            var cookieOptions = new CookieOptions
+            var result = await _accountService.GetCurrentUser();
+            if (result.IsFailure)
             {
-                HttpOnly = true,
-                Expires = refreshToken.Expires
-            };
+                return HandleResult(result);
+            }
 
-            Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
-        }
-
-        private UserResponseDto CreateUserObject(AppUser user)
-        {
-            return new UserResponseDto
-            {
-                Username = user.UserName,
-                DisplayName = user.DisplayName,
-                Image = user?.Photos?.FirstOrDefault(p => p.IsMain)?.Url,
-                AccessToken = _tokenService.CreateAccessToken(user)
-            };
+            return Ok(result.GetOrThrow());
         }
     }
 }

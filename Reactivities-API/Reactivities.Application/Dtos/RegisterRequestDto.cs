@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Reactivities.Api.Dto
+namespace Reactivities.Application.Dtos
 {
     public class RegisterRequestDto
     {

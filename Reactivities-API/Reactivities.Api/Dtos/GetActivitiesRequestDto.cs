@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Reactivities.Domain.Activities.Filters;
 
-namespace Reactivities.Api.Dto
+namespace Reactivities.Api.Dtos
 {
     public class GetActivitiesRequestDto
     {
