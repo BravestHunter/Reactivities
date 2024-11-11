@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Cryptography;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,8 @@ namespace Reactivities.Domain.Extensions
             {
                 config.RegisterServicesFromAssembly(thisAssembly);
             });
+
+            services.AddSingleton(serviceProvider => RandomNumberGenerator.Create());
 
             return services;
         }

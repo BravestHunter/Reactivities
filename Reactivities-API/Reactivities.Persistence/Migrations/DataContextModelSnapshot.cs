@@ -125,6 +125,35 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Reactivities.Domain.Account.Models.RefreshToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("Reactivities.Domain.Activities.Models.Activity", b =>
                 {
                     b.Property<long>("Id")
@@ -188,7 +217,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("ActivityAttendees");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
+            modelBuilder.Entity("Reactivities.Domain.Comments.Models.Comment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -219,7 +248,7 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
+            modelBuilder.Entity("Reactivities.Domain.Photos.Models.Photo", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,50 +277,6 @@ namespace Reactivities.Persistence.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Photos");
-                });
-
-            modelBuilder.Entity("Reactivities.Domain.Models.RefreshToken", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("AppUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("Expires")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("Revoked")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("RefreshToken");
-                });
-
-            modelBuilder.Entity("Reactivities.Domain.Models.UserFollowing", b =>
-                {
-                    b.Property<long>("ObserverId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TargetId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ObserverId", "TargetId");
-
-                    b.HasIndex("TargetId");
-
-                    b.ToTable("UserFollowings");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Users.Models.AppRole", b =>
@@ -399,6 +384,21 @@ namespace Reactivities.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Reactivities.Domain.Users.Models.UserFollowing", b =>
+                {
+                    b.Property<long>("ObserverId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TargetId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ObserverId", "TargetId");
+
+                    b.HasIndex("TargetId");
+
+                    b.ToTable("UserFollowings");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("Reactivities.Domain.Users.Models.AppRole", null)
@@ -450,6 +450,17 @@ namespace Reactivities.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Reactivities.Domain.Account.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Reactivities.Domain.Activities.Models.Activity", b =>
                 {
                     b.HasOne("Reactivities.Domain.Users.Models.AppUser", "Host")
@@ -480,7 +491,7 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Comment", b =>
+            modelBuilder.Entity("Reactivities.Domain.Comments.Models.Comment", b =>
                 {
                     b.HasOne("Reactivities.Domain.Activities.Models.Activity", "Activity")
                         .WithMany("Comments")
@@ -499,25 +510,14 @@ namespace Reactivities.Persistence.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
+            modelBuilder.Entity("Reactivities.Domain.Photos.Models.Photo", b =>
                 {
                     b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
                 });
 
-            modelBuilder.Entity("Reactivities.Domain.Models.RefreshToken", b =>
-                {
-                    b.HasOne("Reactivities.Domain.Users.Models.AppUser", "AppUser")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("Reactivities.Domain.Models.UserFollowing", b =>
+            modelBuilder.Entity("Reactivities.Domain.Users.Models.UserFollowing", b =>
                 {
                     b.HasOne("Reactivities.Domain.Users.Models.AppUser", "Observer")
                         .WithMany("Followings")

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Reactivities.Domain.Account.Models;
 using Reactivities.Domain.Activities.Models;
-using Reactivities.Domain.Models;
 using Reactivities.Domain.Photos.Models;
 
 namespace Reactivities.Domain.Users.Models
@@ -10,7 +10,7 @@ namespace Reactivities.Domain.Users.Models
     {
         [Required]
         [StringLength(20)]
-        public string DisplayName { get; set; } = string.Empty;
+        public required string DisplayName { get; set; }
 
         [StringLength(300)]
         public string? Bio { get; set; }

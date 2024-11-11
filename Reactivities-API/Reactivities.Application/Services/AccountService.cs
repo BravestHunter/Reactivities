@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Dtos;
+using Reactivities.Application.Exceptions;
 using Reactivities.Domain.Account.Commands;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
@@ -132,10 +133,12 @@ namespace Reactivities.Application.Services
 
         private async Task SetRefreshTokenCookie(AppUser user)
         {
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            user.RefreshTokens.Add(refreshToken);
-            await _userManager.UpdateAsync(user);
+            var refreshTokenResult = await _mediator.Send(new CreateRefreshTokenCommand() { User = user });
+            if (refreshTokenResult.IsFailure)
+            {
+                throw new AccountOperationFailedException("Failed to generate RefreshToken", refreshTokenResult.Exception);
+            }
+            var refreshToken = refreshTokenResult.GetOrThrow();
 
             var cookieOptions = new CookieOptions
             {

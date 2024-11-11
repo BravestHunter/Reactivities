@@ -1,11 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.Application.Configuration;
-using Reactivities.Domain.Models;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Application.Services
@@ -42,16 +40,6 @@ namespace Reactivities.Application.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-        }
-
-        public RefreshToken GenerateRefreshToken()
-        {
-            using var rng = RandomNumberGenerator.Create();
-
-            var bytes = new byte[32];
-            rng.GetBytes(bytes);
-
-            return new RefreshToken() { Token = Convert.ToBase64String(bytes) };
         }
     }
 }

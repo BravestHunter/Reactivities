@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Reactivities.Domain.Users.Models;
 
-namespace Reactivities.Domain.Models
+namespace Reactivities.Domain.Account.Models
 {
     public class RefreshToken
     {
@@ -10,14 +10,14 @@ namespace Reactivities.Domain.Models
 
         [Required]
         [StringLength(100)]
-        public string Token { get; set; } = string.Empty;
+        public required string Token { get; set; }
 
         [Required]
-        public DateTime Expires { get; set; } = DateTime.UtcNow.AddMonths(1);
+        public required DateTime Expires { get; set; }
 
         public DateTime? Revoked { get; set; }
 
-        public AppUser AppUser { get; set; }
+        public required AppUser User { get; set; }
 
         public bool IsExpired => DateTime.UtcNow >= Expires;
         public bool IsActive => Revoked == null && !IsExpired;

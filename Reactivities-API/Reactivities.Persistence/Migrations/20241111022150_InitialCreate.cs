@@ -217,14 +217,14 @@ namespace Reactivities.Persistence.Migrations
                     Token = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Expires = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Revoked = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    AppUserId = table.Column<long>(type: "bigint", nullable: false)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RefreshToken", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RefreshToken_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_RefreshToken_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -369,9 +369,9 @@ namespace Reactivities.Persistence.Migrations
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshToken_AppUserId",
+                name: "IX_RefreshToken_UserId",
                 table: "RefreshToken",
-                column: "AppUserId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserFollowings_TargetId",
