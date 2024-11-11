@@ -42,6 +42,8 @@ namespace Reactivities.Api
         {
             app.UseHealthChecks("/healthCheck");
 
+            app.UseHttpsRedirection();
+
             app.UseMiddleware<ExceptionMiddleware>();
 
             if (app.Environment.IsDevelopment())
