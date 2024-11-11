@@ -42,6 +42,11 @@ namespace Reactivities.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.UserName == username);
         }
 
+        public async Task<AppUser?> GetByEmail(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
         public async Task<ProfileDto?> GetProfileDto(string username, string currentUsername)
         {
             return await _userManager.Users

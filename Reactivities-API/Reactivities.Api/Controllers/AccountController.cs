@@ -49,19 +49,12 @@ namespace Reactivities.Api.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<UserResponseDto>> Login(LoginRequestDto loginDto)
         {
-            var user = await _userManager.Users
-                .Include(u => u.Photos)
-                .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
-            if (user == null)
+            var result = await Mediator.Send(new LoginCommand() { Email = loginDto.Email, Password = loginDto.Password });
+            if (result.IsFailure)
             {
                 return Unauthorized();
             }
-
-            var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-            if (!result)
-            {
-                return Unauthorized();
-            }
+            var user = result.GetOrThrow();
 
             await SetRefreshTokenCookie(user);
 

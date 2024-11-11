@@ -9,6 +9,7 @@ namespace Reactivities.Domain.Users.Interfaces
         Task<bool> IsEmailTaken(string email);
         Task<AppUser?> GetByUsername(string username);
         Task<AppUser?> GetByUsernameWithPhotos(string username);
+        Task<AppUser?> GetByEmail(string email);
         Task<ProfileDto?> GetProfileDto(string username, string currentUsername);
         Task<AppUser> Update(AppUser user);
     }
