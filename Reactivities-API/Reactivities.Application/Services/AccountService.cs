@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactivities.Application.Dtos;
 using Reactivities.Application.Exceptions;
 using Reactivities.Domain.Account.Commands;
+using Reactivities.Domain.Account.Interfaces;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Users.Models;
@@ -15,11 +16,11 @@ namespace Reactivities.Application.Services
     public class AccountService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMediator _mediator;
 
-        public AccountService(IHttpContextAccessor httpContextAccessor, TokenService tokenService, UserManager<AppUser> userManager, IMediator mediator)
+        public AccountService(IHttpContextAccessor httpContextAccessor, ITokenService tokenService, UserManager<AppUser> userManager, IMediator mediator)
         {
             _httpContextAccessor = httpContextAccessor;
             _tokenService = tokenService;
@@ -77,34 +78,29 @@ namespace Reactivities.Application.Services
             }
         }
 
-        public async Task<Result<UserResponseDto>> RefreshToken()
+        public async Task<Result<AccessTokenResponseDto>> RefreshToken()
         {
             try
             {
                 var refreshToken = _httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
-
-                var user = await _userManager.Users
-                    .Include(u => u.RefreshTokens)
-                    .Include(u => u.Photos)
-                    .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
-                if (user == null)
+                if (string.IsNullOrWhiteSpace(refreshToken))
                 {
-                    return Result<UserResponseDto>.Failure(new NotFoundException("Refresh token not found"));
+                    return Result<AccessTokenResponseDto>.Failure(new BadRequestException("Failed to get RefreshToken cookie"));
                 }
 
-                var oldToken = user.RefreshTokens.SingleOrDefault(t => t.Token == refreshToken);
-
-                if (oldToken != null && !oldToken.IsActive)
+                var result = await _mediator.Send(new RefreshAccessTokenCommand() { RefreshToken = refreshToken });
+                if (result.IsFailure)
                 {
-                    return Result<UserResponseDto>.Failure(new NotFoundException("Failed to find valid refresh token"));
+                    return Result<AccessTokenResponseDto>.Failure(result.Exception);
                 }
+                var accessToken = result.GetOrThrow();
 
-                var userDto = CreateUserObject(user);
-                return Result<UserResponseDto>.Success(userDto);
+                var accessTokenDto = new AccessTokenResponseDto() { AccessToken = accessToken };
+                return Result<AccessTokenResponseDto>.Success(accessTokenDto);
             }
             catch (Exception ex)
             {
-                return Result<UserResponseDto>.Failure(ex);
+                return Result<AccessTokenResponseDto>.Failure(ex);
             }
         }
 
@@ -156,7 +152,7 @@ namespace Reactivities.Application.Services
                 Username = user.UserName,
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(p => p.IsMain)?.Url,
-                AccessToken = _tokenService.CreateAccessToken(user)
+                AccessToken = _tokenService.GenerateAccessToken(user)
             };
         }
     }

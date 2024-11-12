@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Reactivities.Application.Configuration;
 using Reactivities.Application.Security;
 using Reactivities.Application.Services;
+using Reactivities.Domain.Account.Interfaces;
 using Reactivities.Domain.Users.Models;
 using Reactivities.Persistence.Extensions;
 
@@ -74,7 +75,7 @@ namespace Reactivities.Application.Extensions
             });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
-            services.AddScoped<TokenService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<AccountService>();
 
             return services;

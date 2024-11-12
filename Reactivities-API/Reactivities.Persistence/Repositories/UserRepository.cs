@@ -42,6 +42,14 @@ namespace Reactivities.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.UserName == username);
         }
 
+        public async Task<AppUser?> GetByRefreshToken(string refreshToken)
+        {
+            return await _userManager.Users
+                .Include(u => u.RefreshTokens)
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+        }
+
         public async Task<AppUser?> GetByEmail(string email)
         {
             return await _userManager.FindByEmailAsync(email);

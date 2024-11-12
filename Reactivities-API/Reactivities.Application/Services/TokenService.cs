@@ -4,11 +4,12 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Reactivities.Application.Configuration;
+using Reactivities.Domain.Account.Interfaces;
 using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Application.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly AuthConfiguration _config;
 
@@ -17,7 +18,7 @@ namespace Reactivities.Application.Services
             _config = options.Value;
         }
 
-        public string CreateAccessToken(AppUser user)
+        public string GenerateAccessToken(AppUser user)
         {
             var claims = new List<Claim>()
             {
