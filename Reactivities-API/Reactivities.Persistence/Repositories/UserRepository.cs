@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Reactivities.Domain.Account.Dtos;
 using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Users.Dtos;
 using Reactivities.Domain.Users.Interfaces;
@@ -42,6 +43,18 @@ namespace Reactivities.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.UserName == username);
         }
 
+        public async Task<AppUser?> GetByEmail(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<AppUser?> GetByEmailWithPhoto(string email)
+        {
+            return await _userManager.Users
+                .Include(u => u.Photos)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<AppUser?> GetByRefreshToken(string refreshToken)
         {
             return await _userManager.Users
@@ -50,9 +63,11 @@ namespace Reactivities.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
         }
 
-        public async Task<AppUser?> GetByEmail(string email)
+        public async Task<CurrentUserDto?> GetCurrentUserDto(string username)
         {
-            return await _userManager.FindByEmailAsync(email);
+            return await _userManager.Users
+                .ProjectTo<CurrentUserDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task<ProfileDto?> GetProfileDto(string username, string currentUsername)

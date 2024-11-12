@@ -2,6 +2,7 @@
 using MediatR;
 using Reactivities.Domain.Account.Models;
 using Reactivities.Domain.Core;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Account.Commands.Handlers
@@ -21,16 +22,22 @@ namespace Reactivities.Domain.Account.Commands.Handlers
         {
             try
             {
+                var user = await _userRepository.GetByUsername(request.Username);
+                if (user == null)
+                {
+                    return Result<RefreshToken>.Failure(new NotFoundException("Failed to find user with given RefreshToken"));
+                }
+
                 string token = GenerateRefreshToken();
                 var resfreshToken = new RefreshToken()
                 {
                     Token = token,
                     Expires = DateTime.UtcNow.AddMonths(3),
-                    User = request.User
+                    User = user
                 };
-                request.User.RefreshTokens.Add(resfreshToken);
+                user.RefreshTokens.Add(resfreshToken);
 
-                await _userRepository.Update(request.User);
+                await _userRepository.Update(user);
 
                 return Result<RefreshToken>.Success(resfreshToken);
             }
