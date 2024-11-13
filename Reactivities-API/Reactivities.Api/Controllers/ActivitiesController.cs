@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Reactivities.Api.Dtos;
+using Reactivities.Api.Models;
 using Reactivities.Domain.Activities.Commands;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Filters;
@@ -16,7 +16,7 @@ namespace Reactivities.Api.Controllers
         public ActivitiesController(IMediator mediator) : base(mediator) { }
 
         [HttpGet]
-        public async Task<IActionResult> GetActivities([FromQuery] GetActivitiesRequestDto request)
+        public async Task<IActionResult> GetActivities([FromQuery] GetActivitiesRequest request)
         {
             return HandlePagedResult(await Mediator.Send(new GetActivitiesListQuery()
             {

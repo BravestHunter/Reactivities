@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Reactivities.Domain.Activities.Filters;
 
-namespace Reactivities.Api.Dtos
+namespace Reactivities.Api.Models
 {
-    public class GetActivitiesRequestDto
+    public class GetActivitiesRequest
     {
         [BindRequired]
         public required int PageNumber { get; set; }

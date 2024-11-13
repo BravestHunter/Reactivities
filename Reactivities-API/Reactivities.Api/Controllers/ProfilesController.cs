@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reactivities.Api.Dtos;
+using Reactivities.Api.Models;
 using Reactivities.Domain.Activities.Filters;
 using Reactivities.Domain.Activities.Queries;
 using Reactivities.Domain.Core;
@@ -27,7 +27,7 @@ namespace Reactivities.Api.Controllers
         }
 
         [HttpGet("{username}/activities")]
-        public async Task<IActionResult> GetUserActivities([FromQuery] GetActivitiesRequestDto request, string username)
+        public async Task<IActionResult> GetUserActivities([FromQuery] GetActivitiesRequest request, string username)
         {
             return HandleResult(await Mediator.Send(new GetUserActivitiesListQuery()
             {
