@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Reactivities.Application.Configuration;
 using Reactivities.Application.Dtos;
 using Reactivities.Application.Exceptions;
 using Reactivities.Domain.Account.Commands;
@@ -15,11 +17,13 @@ namespace Reactivities.Application.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMediator _mediator;
+        private readonly AuthConfiguration _authConfig;
 
-        public AccountService(IHttpContextAccessor httpContextAccessor, IMediator mediator)
+        public AccountService(IHttpContextAccessor httpContextAccessor, IMediator mediator, IOptions<AuthConfiguration> authOptions)
         {
             _httpContextAccessor = httpContextAccessor;
             _mediator = mediator;
+            _authConfig = authOptions.Value;
         }
 
         public async Task<Result<CurrentUserDto>> Register(RegisterRequestDto registerDto)
@@ -111,7 +115,11 @@ namespace Reactivities.Application.Services
 
         private async Task SetRefreshTokenCookie(CurrentUserDto user)
         {
-            var refreshTokenResult = await _mediator.Send(new CreateRefreshTokenCommand() { Username = user.Username });
+            var refreshTokenResult = await _mediator.Send(new CreateRefreshTokenCommand()
+            {
+                Username = user.Username,
+                RefreshTokenLifetime = _authConfig.RefreshTokenLifetime
+            });
             if (refreshTokenResult.IsFailure)
             {
                 throw new AccountOperationFailedException("Failed to generate RefreshToken", refreshTokenResult.Exception);

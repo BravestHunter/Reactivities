@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -20,9 +21,18 @@ namespace Reactivities.Application.Services
 
         public string GenerateAccessToken(AppUser user)
         {
+            if (user.UserName == null)
+            {
+                throw new ArgumentNullException(nameof(user), "Username can't be null");
+            }
+            if (user.Email == null)
+            {
+                throw new ArgumentNullException(nameof(user), "Email can't be null");
+            }
+
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.Integer64),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email)
             };
@@ -33,7 +43,7 @@ namespace Reactivities.Application.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow + _config.AccessTokenLifetime,
                 SigningCredentials = creds
             };
 

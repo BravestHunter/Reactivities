@@ -32,7 +32,7 @@ namespace Reactivities.Domain.Account.Commands.Handlers
                 var resfreshToken = new RefreshToken()
                 {
                     Token = token,
-                    Expires = DateTime.UtcNow.AddMonths(3),
+                    Expires = DateTime.UtcNow + request.RefreshTokenLifetime,
                     User = user
                 };
                 user.RefreshTokens.Add(resfreshToken);

@@ -7,5 +7,6 @@ namespace Reactivities.Domain.Account.Commands
     public class CreateRefreshTokenCommand : IRequest<Result<RefreshToken>>
     {
         public required string Username { get; set; }
+        public required TimeSpan RefreshTokenLifetime { get; set; }
     }
 }
