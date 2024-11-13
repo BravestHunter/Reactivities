@@ -12,7 +12,7 @@ using Reactivities.Persistence;
 namespace Reactivities.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241111022150_InitialCreate")]
+    [Migration("20241112213144_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -262,9 +262,6 @@ namespace Reactivities.Persistence.Migrations
                     b.Property<long?>("AppUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("StorageId")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -365,6 +362,9 @@ namespace Reactivities.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<long?>("ProfilePhotoId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -383,6 +383,8 @@ namespace Reactivities.Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("ProfilePhotoId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -518,6 +520,15 @@ namespace Reactivities.Persistence.Migrations
                     b.HasOne("Reactivities.Domain.Users.Models.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("Reactivities.Domain.Users.Models.AppUser", b =>
+                {
+                    b.HasOne("Reactivities.Domain.Photos.Models.Photo", "ProfilePhoto")
+                        .WithMany()
+                        .HasForeignKey("ProfilePhotoId");
+
+                    b.Navigation("ProfilePhoto");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Users.Models.UserFollowing", b =>

@@ -45,15 +45,15 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                     return Result.Failure(new NotFoundException("Failed to find photo"));
                 }
 
-                if (photo.IsMain)
+                if (currentUser.ProfilePhoto == photo)
                 {
-                    return Result.Failure(new BadRequestException("Main photo can't be deleted"));
+                    currentUser.ProfilePhoto = null;
                 }
+                currentUser.Photos.Remove(photo);
+
+                await _userRepository.Update(currentUser);
 
                 await _photoStorage.Delete(photo.StorageId);
-
-                currentUser.Photos.Remove(photo);
-                await _userRepository.Update(currentUser);
 
                 return Result.Success();
             }

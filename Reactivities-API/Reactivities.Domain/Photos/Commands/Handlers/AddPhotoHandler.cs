@@ -48,11 +48,6 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                     StorageId = uploadResult.StorageId
                 };
 
-                if (!currentUser.Photos.Any())
-                {
-                    photo.IsMain = true;
-                }
-
                 currentUser.Photos.Add(photo);
                 await _userRepository.Update(currentUser);
 

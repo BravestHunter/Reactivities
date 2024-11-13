@@ -39,6 +39,7 @@ namespace Reactivities.Persistence.Repositories
         public async Task<AppUser?> GetByUsernameWithPhotos(string username)
         {
             return await _userManager.Users
+                .Include(u => u.ProfilePhoto)
                 .Include(u => u.Photos)
                 .FirstOrDefaultAsync(u => u.UserName == username);
         }
@@ -48,10 +49,10 @@ namespace Reactivities.Persistence.Repositories
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<AppUser?> GetByEmailWithPhoto(string email)
+        public async Task<AppUser?> GetByEmailWithProfilePhoto(string email)
         {
             return await _userManager.Users
-                .Include(u => u.Photos)
+                .Include(u => u.ProfilePhoto)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 

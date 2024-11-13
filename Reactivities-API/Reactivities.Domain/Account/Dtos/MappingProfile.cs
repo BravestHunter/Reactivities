@@ -10,7 +10,7 @@ namespace Reactivities.Domain.Account.Dtos
             string currentUsername = string.Empty;
 
             CreateMap<AppUser, CurrentUserDto>()
-                .ForMember(d => d.PhotoUrl, o => o.MapFrom(s => s.Photos.FirstOrDefault(p => p.IsMain).Url));
+                .ForMember(d => d.ProfilePhotoUrl, o => o.MapFrom(s => s.ProfilePhoto != null ? s.ProfilePhoto.Url : null));
         }
     }
 }

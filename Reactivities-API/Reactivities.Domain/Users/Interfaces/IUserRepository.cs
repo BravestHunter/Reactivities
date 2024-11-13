@@ -11,7 +11,7 @@ namespace Reactivities.Domain.Users.Interfaces
         Task<AppUser?> GetByUsername(string username);
         Task<AppUser?> GetByUsernameWithPhotos(string username);
         Task<AppUser?> GetByEmail(string email);
-        Task<AppUser?> GetByEmailWithPhoto(string email);
+        Task<AppUser?> GetByEmailWithProfilePhoto(string email);
         Task<AppUser?> GetByRefreshToken(string refreshToken);
         Task<CurrentUserDto?> GetCurrentUserDto(string username);
         Task<ProfileDto?> GetProfileDto(string username, string currentUsername);

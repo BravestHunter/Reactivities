@@ -6,18 +6,18 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Photos.Commands.Handlers
 {
-    internal class SetMainPhotoHandler : IRequestHandler<SetMainPhotoCommand, Result>
+    internal class SetProfilePhotoHandler : IRequestHandler<SetProfilePhotoCommand, Result>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserAccessor _userAccessor;
 
-        public SetMainPhotoHandler(IUserRepository userRepository, IUserAccessor userAccessor)
+        public SetProfilePhotoHandler(IUserRepository userRepository, IUserAccessor userAccessor)
         {
             _userRepository = userRepository;
             _userAccessor = userAccessor;
         }
 
-        public async Task<Result> Handle(SetMainPhotoCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(SetProfilePhotoCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -34,13 +34,7 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                     return Result.Failure(new NotFoundException("Failed to find photo"));
                 }
 
-                var mainPhoto = currentUser.Photos.FirstOrDefault(p => p.IsMain);
-                if (mainPhoto != null)
-                {
-                    mainPhoto.IsMain = false;
-                }
-
-                photo.IsMain = true;
+                currentUser.ProfilePhoto = photo;
 
                 await _userRepository.Update(currentUser);
 

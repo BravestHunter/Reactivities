@@ -18,7 +18,7 @@ namespace Reactivities.Domain.Activities.Dtos
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.User.UserName))
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
                 .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.User.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ForMember(d => d.ProfilePhotoUrl, o => o.MapFrom(s => s.User.ProfilePhoto != null ? s.User.ProfilePhoto.Url : null))
                 .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.User.Followers.Count))
                 .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.User.Followings.Count))
                 .ForMember(d => d.Following, o => o.MapFrom(s => s.User.Followers.Any(f => f.Observer.UserName == currentUsername)));

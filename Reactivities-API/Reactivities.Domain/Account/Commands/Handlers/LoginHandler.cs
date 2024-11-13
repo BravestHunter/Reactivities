@@ -26,7 +26,7 @@ namespace Reactivities.Domain.Account.Commands.Handlers
         {
             try
             {
-                var user = await _userRepository.GetByEmailWithPhoto(request.Email);
+                var user = await _userRepository.GetByEmailWithProfilePhoto(request.Email);
                 if (user == null)
                 {
                     return Result<CurrentUserDto>.Failure(new NotFoundException("Failed to find user"));

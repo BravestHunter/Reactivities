@@ -14,8 +14,5 @@ namespace Reactivities.Domain.Photos.Models
         [Required]
         [StringLength(300)]
         public required string Url { get; set; }
-
-        [Required]
-        public bool IsMain { get; set; }
     }
 }

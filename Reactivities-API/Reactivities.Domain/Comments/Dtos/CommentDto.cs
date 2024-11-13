@@ -7,6 +7,6 @@
         public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public required string Username { get; set; }
         public required string DisplayName { get; set; }
-        public string? Image { get; set; }
+        public string? ProfilePhotoUrl { get; set; }
     }
 }

@@ -4,6 +4,6 @@
     {
         public required string Username { get; set; }
         public required string DisplayName { get; set; }
-        public string? PhotoUrl { get; set; }
+        public string? ProfilePhotoUrl { get; set; }
     }
 }

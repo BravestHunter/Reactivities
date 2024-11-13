@@ -4,6 +4,5 @@
     {
         public required long Id { get; set; }
         public required string Url { get; set; }
-        public required bool IsMain { get; set; }
     }
 }

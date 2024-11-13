@@ -22,10 +22,10 @@ namespace Reactivities.Api.Controllers
             return HandleResult(await Mediator.Send(new DeletePhotoCommand() { Id = id }));
         }
 
-        [HttpPost("{id}/setMain")]
-        public async Task<IActionResult> SetMain(long id)
+        [HttpPost("{id}/setProfile")]
+        public async Task<IActionResult> SetProfile(long id)
         {
-            return HandleResult(await Mediator.Send(new SetMainPhotoCommand() { Id = id }));
+            return HandleResult(await Mediator.Send(new SetProfilePhotoCommand() { Id = id }));
         }
     }
 }
