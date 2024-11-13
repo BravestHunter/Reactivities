@@ -8,7 +8,7 @@ using Reactivities.Infrastructure.Configuration;
 
 namespace Reactivities.Infrastructure.Photos
 {
-    internal class CloudinaryPhotoStorage : IPhotoStorage
+    internal sealed class CloudinaryPhotoStorage : IPhotoStorage
     {
         private readonly Cloudinary _cloudinary;
 

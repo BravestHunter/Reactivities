@@ -10,7 +10,7 @@ using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence.Repositories
 {
-    internal class UserRepository : IUserRepository
+    internal sealed class UserRepository : IUserRepository
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;

@@ -6,7 +6,7 @@ using Reactivities.Domain.Comments.Interfaces;
 
 namespace Reactivities.Persistence.Repositories
 {
-    internal class CommentRepository : ICommentRepository
+    internal sealed class CommentRepository : ICommentRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;

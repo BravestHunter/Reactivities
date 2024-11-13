@@ -10,7 +10,7 @@ using Reactivities.Persistence.Extensions;
 
 namespace Reactivities.Persistence.Repositories
 {
-    internal class ActivityRepository : IActivityRepository
+    internal sealed class ActivityRepository : IActivityRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;

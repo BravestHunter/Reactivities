@@ -1,6 +1,6 @@
 ﻿namespace Reactivities.Application.Exceptions
 {
-    internal class AccountOperationFailedException : ApplicationException
+    internal sealed class AccountOperationFailedException : ApplicationException
     {
         public AccountOperationFailedException(string? message) : base(message)
         {

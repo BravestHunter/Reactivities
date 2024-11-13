@@ -7,7 +7,7 @@ using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence.Repositories
 {
-    internal class UserFollowingRepository : IUserFollowingRepository
+    internal sealed class UserFollowingRepository : IUserFollowingRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;

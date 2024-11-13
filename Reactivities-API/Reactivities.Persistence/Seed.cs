@@ -5,7 +5,7 @@ using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Persistence
 {
-    internal class Seed
+    internal sealed class Seed
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
