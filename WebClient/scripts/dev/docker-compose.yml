@@ -1,0 +1,13 @@
+version: '3'
+services:
+  dev:
+    image: node:23
+    volumes:
+      - ./../..:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm run dev
+    ports:
+      - 3000:3000
+      - 3001:3001
+
+# Based on https://medium.com/hackernoon/a-better-way-to-develop-node-js-with-docker-cd29d3a0093
