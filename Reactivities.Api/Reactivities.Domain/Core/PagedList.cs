@@ -1,14 +1,16 @@
 ﻿namespace Reactivities.Domain.Core
 {
-    public class PagedList<T> : List<T>
+    public class PagedList<T>
     {
-        public int CurrentPage { get; set; }
-        public int TotalPages { get; set; }
-        public int PageSize { get; set; }
-        public int TotalCount { get; set; }
+        public List<T> Items { get; init; }
+        public int CurrentPage { get; init; }
+        public int TotalPages { get; init; }
+        public int PageSize { get; init; }
+        public int TotalCount { get; init; }
 
-        public PagedList(IEnumerable<T> items, int totalCount, int pageNumber, int pageSize) : base(items)
+        public PagedList(IEnumerable<T> items, int totalCount, int pageNumber, int pageSize)
         {
+            Items = new List<T>(items);
             CurrentPage = pageNumber;
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
             PageSize = pageSize;
