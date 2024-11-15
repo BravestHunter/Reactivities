@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reactivities.Api.Extensions;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
 
@@ -36,7 +35,6 @@ namespace Reactivities.Api.Controllers
             }
 
             var value = result.GetOrThrow();
-
             return Ok(value);
         }
 
@@ -48,14 +46,6 @@ namespace Reactivities.Api.Controllers
             }
 
             var value = result.GetOrThrow();
-
-            Response.AddPaginationHeader(
-                value.CurrentPage,
-                value.PageSize,
-                value.TotalCount,
-                value.TotalPages
-            );
-
             return Ok(value);
         }
 

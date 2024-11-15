@@ -3,7 +3,7 @@
     public class PagingParams
     {
         /// <remarks>
-        /// Starting from 1
+        /// Starting from 1.
         /// </remarks>
         public int PageNumber { get; init; }
         public int PageSize { get; init; }
