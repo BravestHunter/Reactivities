@@ -23,8 +23,7 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   async (response) => {
-    //if (process.env.NODE_ENV === "development") {
-    if (true) {
+    if (import.meta.env.NODE_ENV === 'development') {
       await sleep(1000)
     }
 
@@ -81,8 +80,7 @@ axios.interceptors.response.use(
   }
 )
 
-//axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.baseURL = 'https://localhost:6001/api'
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
 axios.defaults.withCredentials = true
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data
