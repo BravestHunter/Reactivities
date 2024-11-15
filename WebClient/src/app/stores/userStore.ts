@@ -1,108 +1,103 @@
-import { makeAutoObservable, runInAction } from "mobx";
-import User, { UserFormValues } from "../models/user";
-import agent from "../api/agent";
-import { store } from "./store";
-import { router } from "../router/Routes";
+import { makeAutoObservable, runInAction } from 'mobx'
+import User, { AccessToken } from '../models/user'
+import agent from '../api/agent'
+import { store } from './store'
+import { router } from '../router/Routes'
+import LoginRequest from '../models/loginRequest'
+import RegisterRequest from '../models/registerRequest'
 
 export default class UserStore {
-  user: User | null = null;
-  refreshTokenTimeout: any;
+  user: User | null = null
+  refreshTokenTimeout: any
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 
   get isLoggedIn() {
-    return !!this.user;
+    return !!this.user
   }
 
-  login = async (creds: UserFormValues) => {
+  login = async (request: LoginRequest) => {
     try {
-      const user = await agent.Account.login(creds);
+      const user = await agent.Account.login(request)
+      runInAction(() => (this.user = user))
 
-      store.commonStore.setToken(user.accessToken);
+      await this.refreshToken()
 
-      runInAction(() => (this.user = user));
+      store.modalStore.closeModal()
 
-      this.startRefreshTokenTimer(user);
-
-      store.modalStore.closeModal();
-
-      router.navigate("/activities");
+      router.navigate('/activities')
     } catch (error) {
-      throw error;
+      throw error
     }
-  };
+  }
 
-  register = async (creds: UserFormValues) => {
+  register = async (request: RegisterRequest) => {
     try {
-      const user = await agent.Account.register(creds);
+      const user = await agent.Account.register(request)
+      runInAction(() => (this.user = user))
 
-      store.commonStore.setToken(user.accessToken);
+      await this.refreshToken()
 
-      runInAction(() => (this.user = user));
+      store.modalStore.closeModal()
 
-      this.startRefreshTokenTimer(user);
-
-      store.modalStore.closeModal();
-
-      router.navigate("/activities");
+      router.navigate('/activities')
     } catch (error) {
-      throw error;
+      throw error
     }
-  };
+  }
 
   logout = () => {
-    store.commonStore.setToken(null);
+    store.commonStore.setToken(null)
 
-    this.user = null;
+    this.user = null
 
-    router.navigate("/");
-  };
+    router.navigate('/')
+  }
 
   getUser = async () => {
     try {
-      const user = await agent.Account.current();
-      runInAction(() => (this.user = user));
-      this.startRefreshTokenTimer(user);
+      const user = await agent.Account.current()
+      runInAction(() => (this.user = user))
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
-  setImage = (image: string) => {
+  setPhoto = (photoUrl: string) => {
     if (this.user) {
-      this.user.image = image;
+      this.user.profilePhotoUrl = photoUrl
     }
-  };
+  }
 
   setDisplayName = (name: string) => {
     if (this.user) {
-      this.user.displayName = name;
+      this.user.displayName = name
     }
-  };
+  }
 
   refreshToken = async () => {
-    this.stopRefreshTokenTimer();
+    this.stopRefreshTokenTimer()
 
     try {
-      const user = await agent.Account.refreshToken();
-      runInAction(() => (this.user = user));
-      store.commonStore.setToken(user.accessToken);
-      this.startRefreshTokenTimer(user);
+      const accessToken = await agent.Account.refreshToken()
+      store.commonStore.setToken(accessToken.accessToken)
+      this.startRefreshTokenTimer(accessToken)
     } catch (error) {
-      console.log(error);
+      console.log(error)
+      this.logout()
     }
-  };
+  }
 
-  private startRefreshTokenTimer(user: User) {
-    const jwtToken = JSON.parse(atob(user.accessToken.split(".")[1]));
-    const expires = new Date(jwtToken.exp * 1000);
-    const timeout = expires.getTime() - Date.now() - 60 * 1000;
-    this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
+  private startRefreshTokenTimer(accessToken: AccessToken) {
+    const jwtToken = JSON.parse(atob(accessToken.accessToken.split('.')[1]))
+    const expires = new Date(jwtToken.exp * 1000)
+    const timeout = expires.getTime() - Date.now() - 60 * 1000
+    this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout)
   }
 
   private stopRefreshTokenTimer() {
-    clearTimeout(this.refreshTokenTimeout);
+    clearTimeout(this.refreshTokenTimeout)
   }
 }

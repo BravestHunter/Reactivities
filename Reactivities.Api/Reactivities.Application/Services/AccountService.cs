@@ -128,9 +128,10 @@ namespace Reactivities.Application.Services
 
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
                 Expires = refreshToken.Expires,
-                Secure = true
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                HttpOnly = true
             };
 
             _httpContextAccessor.HttpContext?.Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);

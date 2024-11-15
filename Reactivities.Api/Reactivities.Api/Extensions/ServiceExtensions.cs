@@ -23,9 +23,9 @@ namespace Reactivities.Api.Extensions
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
                     policy
+                        .AllowCredentials()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
                         .WithExposedHeaders("WWW-Authenticate", "Pagination")
                         .WithOrigins("http://localhost:3000", "https://localhost:3000");
                 });

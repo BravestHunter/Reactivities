@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dev:
+  reacrtivities-web-client-dev:
     image: node:23
     volumes:
       - ./../..:/usr/src/app

@@ -1,22 +1,21 @@
-import { ErrorMessage, Form, Formik } from "formik";
-import React from "react";
-import CustomTextInput from "../../app/common/form/CustomTextInput";
-import { Button, Header } from "semantic-ui-react";
-import { useStore } from "../../app/stores/store";
-import { observer } from "mobx-react-lite";
-import * as Yup from "yup";
-import ValidationErrors from "../errors/ValidationErrors";
+import { ErrorMessage, Form, Formik } from 'formik'
+import CustomTextInput from '../../app/common/form/CustomTextInput'
+import { Button, Header } from 'semantic-ui-react'
+import { useStore } from '../../app/stores/store'
+import { observer } from 'mobx-react-lite'
+import * as Yup from 'yup'
+import ValidationErrors from '../errors/ValidationErrors'
 
 export default observer(function RegisterForm() {
-  const { userStore } = useStore();
+  const { userStore } = useStore()
 
   return (
     <Formik
       initialValues={{
-        username: "",
-        displayname: "",
-        email: "",
-        password: "",
+        username: '',
+        displayName: '',
+        email: '',
+        password: '',
         error: null,
       }}
       onSubmit={(values, { setErrors }) =>
@@ -64,5 +63,5 @@ export default observer(function RegisterForm() {
         </Form>
       )}
     </Formik>
-  );
-});
+  )
+})
