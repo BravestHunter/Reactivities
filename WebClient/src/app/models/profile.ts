@@ -1,38 +1,26 @@
-import User from "./user";
+import Photo from './photo'
+import User from './user'
 
 export interface Profile {
-  username: string;
-  displayName: string;
-  image?: string;
-  bio?: string;
-  followersCount: number;
-  followingCount: number;
-  following: boolean;
-  photos?: Photo[];
+  username: string
+  displayName: string
+  bio?: string
+  profilePhotoUrl?: string
+  following: boolean
+  followersCount: number
+  followingCount: number
+  photos: Photo[]
 }
 
 export class Profile implements Profile {
-  username: string;
-  displayName: string;
-  image?: string | undefined;
-  bio?: string | undefined;
+  username: string
+  displayName: string
+  bio?: string
+  profilePhotoUrl?: string
 
   constructor(user: User) {
-    this.username = user.username;
-    this.displayName = user.displayName;
-    this.image = user.image;
+    this.username = user.username
+    this.displayName = user.displayName
+    this.profilePhotoUrl = user.profilePhotoUrl
   }
-}
-
-export interface Photo {
-  id: string;
-  url: string;
-  isMain: boolean;
-}
-
-export interface UserActivity {
-  id: string;
-  title: string;
-  category: string;
-  date: Date;
 }

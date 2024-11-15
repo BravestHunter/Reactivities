@@ -1,45 +1,42 @@
-import { Profile } from "./profile";
+import Attendee from './attendee'
 
 export interface Activity {
-  id: string;
-  title: string;
-  date: Date | null;
-  description: string;
-  category: string;
-  city: string;
-  venue: string;
-  hostUsername: string;
-  isCancelled?: boolean;
-  isGoing?: boolean;
-  isHost?: boolean;
-  host?: Profile;
-  attendees: Profile[];
+  id: number
+  title: string
+  date: Date
+  description?: string
+  category: string
+  city: string
+  venue: string
+  isCancelled: boolean
+  host: Attendee
+  attendees: Attendee[]
 }
 
 export class Activity implements Activity {
   constructor(init?: ActivityFormValues) {
-    Object.assign(this, init);
+    Object.assign(this, init)
   }
 }
 
 export class ActivityFormValues {
-  id?: string = undefined;
-  title: string = "";
-  category: string = "";
-  description: string = "";
-  date: Date | null = null;
-  city: string = "";
-  venue: string = "";
+  id?: number = undefined
+  title: string = ''
+  date: Date | null = null
+  description?: string = undefined
+  category: string = ''
+  city: string = ''
+  venue: string = ''
 
   constructor(activity?: ActivityFormValues) {
     if (activity) {
-      this.id = activity.id;
-      this.title = activity.title;
-      this.category = activity.category;
-      this.description = activity.description;
-      this.date = activity.date;
-      this.city = activity.city;
-      this.venue = activity.venue;
+      this.id = activity.id
+      this.title = activity.title
+      this.date = activity.date
+      this.description = activity.description
+      this.category = activity.category
+      this.city = activity.city
+      this.venue = activity.venue
     }
   }
 }

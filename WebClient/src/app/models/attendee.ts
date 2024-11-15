@@ -3,7 +3,7 @@ export default interface Attendee {
   displayName: string
   bio?: string
   profilePhotoUrl?: string
+  following: boolean
   followersCount: number
   followingCount: number
-  following: boolean
 }
