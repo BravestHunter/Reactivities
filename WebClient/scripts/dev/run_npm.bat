@@ -1,0 +1,1 @@
+docker-compose -f docker-compose.npm.yml run --rm reactivities-webclient-npm bash

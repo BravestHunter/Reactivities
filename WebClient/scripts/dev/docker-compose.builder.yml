@@ -3,20 +3,25 @@ services:
   base:
     image: node:23
     volumes:
+      - reactivities-nodemodules:/usr/src/app/node_modules
       - ./../..:/usr/src/app
     working_dir: /usr/src/app
 
-  install:
+  reactivities-webclient-install:
     extends:
       service: base
     command: npm i
-  build:
+  reactivities-webclient-build:
     extends:
       service: base
     command: npm run build
-  create-bundles:
+  reactivities-webclient-create-bundles:
     extends:
       service: base
     command: npm run create-bundles
+
+volumes:
+  reactivities-nodemodules:
+    external: true
 
 # Based on https://medium.com/hackernoon/a-better-way-to-develop-node-js-with-docker-cd29d3a0093

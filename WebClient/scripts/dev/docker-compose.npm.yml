@@ -1,15 +1,13 @@
 version: '3'
 services:
-  reactivities-webclient-dev:
+  reactivities-webclient-npm:
     image: node:23
     volumes:
       - reactivities-nodemodules:/usr/src/app/node_modules
       - ./../..:/usr/src/app
     working_dir: /usr/src/app
-    command: npm run dev
-    ports:
-      - 3000:3000
-      - 3001:3001
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
 
 volumes:
   reactivities-nodemodules:
