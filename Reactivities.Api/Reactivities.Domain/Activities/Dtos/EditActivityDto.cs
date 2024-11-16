@@ -9,6 +9,6 @@ namespace Reactivities.Domain.Activities.Dtos
         public required string Category { get; set; }
         public required string City { get; set; }
         public required string Venue { get; set; }
-        public required bool IsCancelled { get; set; }
+        public bool? IsCancelled { get; set; }
     }
 }

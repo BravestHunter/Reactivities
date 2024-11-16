@@ -35,15 +35,12 @@ export default class ActivityStore {
 
   private setActivity = (activity: Activity) => {
     const user = store.userStore.user
-    //if (user) {
-    //  activity.isGoing = activity.attendees!.some(
-    //    (a) => a.username === user.username
-    //  )
-    //  activity.isHost = activity.hostUsername === user.username
-    //  activity.host = activity.attendees?.find(
-    //    (x) => x.username === activity.hostUsername
-    //  )
-    //}
+    if (user) {
+      activity.isGoing = activity.attendees!.some(
+        (a) => a.username === user.username
+      )
+      activity.isHost = activity.host.username === user.username
+    }
 
     activity.date = new Date(activity.date!)
     this.activityRegistry.set(activity.id, activity)
@@ -186,9 +183,9 @@ export default class ActivityStore {
     }
   }
 
-  updateActivity = async (activity: ActivityFormValues) => {
+  updateActivity = async (ActivityFormValues: ActivityFormValues) => {
     try {
-      await agent.Activities.update(activity)
+      var activity = await agent.Activities.update(ActivityFormValues)
 
       runInAction(() => {
         if (activity.id) {

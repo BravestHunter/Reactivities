@@ -1,28 +1,28 @@
-import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
-import { Segment, Comment, Header, Loader } from "semantic-ui-react";
-import { useStore } from "../../../app/stores/store";
-import { Link } from "react-router-dom";
-import { Field, FieldProps, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { formatDistanceToNow } from "date-fns";
+import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { Segment, Comment, Header, Loader } from 'semantic-ui-react'
+import { useStore } from '../../../app/stores/store'
+import { Link } from 'react-router-dom'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import { formatDistanceToNow } from 'date-fns'
 
 interface Props {
-  activityId: string;
+  activityId: number
 }
 
 export default observer(function ActivityDetailedChat(props: Props) {
-  const { activityId } = props;
-  const { commentStore } = useStore();
+  const { activityId } = props
+  const { commentStore } = useStore()
 
   useEffect(() => {
     if (activityId) {
-      commentStore.createHubConnection(activityId);
+      commentStore.createHubConnection(activityId)
     }
     return () => {
-      commentStore.clearComments();
-    };
-  }, [commentStore, activityId]);
+      commentStore.clearComments()
+    }
+  }, [commentStore, activityId])
 
   return (
     <>
@@ -31,7 +31,7 @@ export default observer(function ActivityDetailedChat(props: Props) {
         attached="top"
         inverted
         color="teal"
-        style={{ border: "none" }}
+        style={{ border: 'none' }}
       >
         <Header>Chat about this event</Header>
       </Segment>
@@ -40,7 +40,7 @@ export default observer(function ActivityDetailedChat(props: Props) {
           onSubmit={(values, { resetForm }) =>
             commentStore.addComment(values).then(() => resetForm())
           }
-          initialValues={{ body: "" }}
+          initialValues={{ body: '' }}
           validationSchema={Yup.object({
             body: Yup.string().required(),
           })}
@@ -49,18 +49,18 @@ export default observer(function ActivityDetailedChat(props: Props) {
             <Form className="ui form">
               <Field name="body">
                 {(props: FieldProps) => (
-                  <div style={{ position: "relative" }}>
+                  <div style={{ position: 'relative' }}>
                     <Loader active={isSubmitting} />
                     <textarea
                       placeholder="Enter your comment (Enter to submit, SHIFT + enter for new line)"
                       rows={2}
                       {...props.field}
                       onKeyPress={(e) => {
-                        if (e.key === "Enter" && e.shiftKey) {
-                          return;
-                        } else if (e.key === "Enter") {
-                          e.preventDefault();
-                          isValid && handleSubmit();
+                        if (e.key === 'Enter' && e.shiftKey) {
+                          return
+                        } else if (e.key === 'Enter') {
+                          e.preventDefault()
+                          isValid && handleSubmit()
                         }
                       }}
                     />
@@ -74,7 +74,7 @@ export default observer(function ActivityDetailedChat(props: Props) {
         <Comment.Group>
           {commentStore.comments.map((comment) => (
             <Comment key={comment.id}>
-              <Comment.Avatar src={comment.image || "/assets/user.png"} />
+              <Comment.Avatar src={comment.image || '/assets/user.png'} />
               <Comment.Content>
                 <Comment.Author as={Link} to={`/profiles/${comment.username}`}>
                   {comment.displayName}
@@ -82,7 +82,7 @@ export default observer(function ActivityDetailedChat(props: Props) {
                 <Comment.Metadata>
                   <div>{formatDistanceToNow(comment.createdAt)} ago</div>
                 </Comment.Metadata>
-                <Comment.Text style={{ whiteSpace: "pre-wrap" }}>
+                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>
                   {comment.body}
                 </Comment.Text>
               </Comment.Content>
@@ -91,5 +91,5 @@ export default observer(function ActivityDetailedChat(props: Props) {
         </Comment.Group>
       </Segment>
     </>
-  );
-});
+  )
+})

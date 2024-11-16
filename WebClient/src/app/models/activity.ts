@@ -11,6 +11,9 @@ export interface Activity {
   isCancelled: boolean
   host: Attendee
   attendees: Attendee[]
+
+  isHost: boolean
+  isGoing: boolean
 }
 
 export class Activity implements Activity {

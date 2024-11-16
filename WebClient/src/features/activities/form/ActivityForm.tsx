@@ -1,59 +1,59 @@
-import { useEffect, useState } from "react";
-import { Button, Header, Segment } from "semantic-ui-react";
-import { useStore } from "../../../app/stores/store";
-import { observer } from "mobx-react-lite";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { ActivityFormValues } from "../../../app/models/activity";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { v4 as uuid } from "uuid";
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import CustomTextInput from "../../../app/common/form/CustomTextInput";
-import CustomTextArea from "../../../app/common/form/CustomTextArea";
-import CustomSelectInput from "../../../app/common/form/CustomSelectInput";
-import { categoryOptions } from "../../../app/common/options/categoryOptions";
-import CustomDateInput from "../../../app/common/form/CustomDateInput";
+import { useEffect, useState } from 'react'
+import { Button, Header, Segment } from 'semantic-ui-react'
+import { useStore } from '../../../app/stores/store'
+import { observer } from 'mobx-react-lite'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ActivityFormValues } from '../../../app/models/activity'
+import LoadingComponent from '../../../app/layout/LoadingComponent'
+import { v4 as uuid } from 'uuid'
+import { Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import CustomTextInput from '../../../app/common/form/CustomTextInput'
+import CustomTextArea from '../../../app/common/form/CustomTextArea'
+import CustomSelectInput from '../../../app/common/form/CustomSelectInput'
+import { categoryOptions } from '../../../app/common/options/categoryOptions'
+import CustomDateInput from '../../../app/common/form/CustomDateInput'
 
 export default observer(function ActivityForm() {
-  const { activityStore } = useStore();
+  const { activityStore } = useStore()
   const { loadActivity, createActivity, updateActivity, loadingInitial } =
-    activityStore;
-  const { id } = useParams();
-  const navigate = useNavigate();
+    activityStore
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const [activity, setActivity] = useState<ActivityFormValues>(
     new ActivityFormValues()
-  );
+  )
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("The activity title is required"),
-    description: Yup.string().required("The activity description is required"),
+    title: Yup.string().required('The activity title is required'),
+    description: Yup.string().required('The activity description is required'),
     category: Yup.string().required(),
-    date: Yup.string().required("Date is required"),
+    date: Yup.string().required('Date is required'),
     venue: Yup.string().required(),
     city: Yup.string().required(),
-  });
+  })
 
   useEffect(() => {
     if (id)
       loadActivity(id).then((activity) =>
         setActivity(new ActivityFormValues(activity))
-      );
-  }, [id, loadActivity]);
+      )
+  }, [id, loadActivity])
 
   async function handleFormSubmit(activity: ActivityFormValues) {
     if (!activity.id) {
-      activity.id = uuid();
+      activity.id = uuid()
 
-      await createActivity(activity);
+      await createActivity(activity)
     } else {
-      await updateActivity(activity);
+      await updateActivity(activity)
     }
 
-    navigate(`/activities/${activity.id}`);
+    navigate(`/activities/${activity.id}`)
   }
 
-  if (loadingInitial) return <LoadingComponent content="Loading activity..." />;
+  if (loadingInitial) return <LoadingComponent content="Loading activity..." />
 
   return (
     <Segment clearing>
@@ -105,5 +105,5 @@ export default observer(function ActivityForm() {
         )}
       </Formik>
     </Segment>
-  );
-});
+  )
+})

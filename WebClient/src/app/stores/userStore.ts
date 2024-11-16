@@ -3,8 +3,8 @@ import User, { AccessToken } from '../models/user'
 import agent from '../api/agent'
 import { store } from './store'
 import { router } from '../router/Routes'
-import LoginRequest from '../models/loginRequest'
-import RegisterRequest from '../models/registerRequest'
+import LoginRequest from '../api/models/loginRequest'
+import RegisterRequest from '../api/models/registerRequest'
 
 export default class UserStore {
   user: User | null = null
