@@ -1,1 +1,1 @@
-docker-compose run --rm reactivities-webclient-dev
+docker-compose up
