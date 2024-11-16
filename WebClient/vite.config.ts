@@ -9,6 +9,9 @@ export default defineConfig({
     hmr: {
       port: 3001,
     },
+    watch: {
+      usePolling: true,
+    },
   },
   plugins: [react()],
 })
