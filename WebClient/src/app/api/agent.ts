@@ -5,12 +5,12 @@ import { router } from '../router/Routes'
 import { store } from '../stores/store'
 import User, { AccessToken } from '../models/user'
 import { Profile } from '../models/profile'
-import { PaginatedResult } from '../models/pagination'
 import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
 import LoginRequest from '../models/loginRequest'
 import RegisterRequest from '../models/registerRequest'
 import { sleep } from '../utils'
+import PagedList from '../models/pagedist'
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token
@@ -24,13 +24,8 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   async (response) => {
     if (import.meta.env.NODE_ENV === 'development') {
+      // Fake delay
       await sleep(1000)
-    }
-
-    const pagination = response.headers['pagination']
-    if (pagination) {
-      response.data = new PaginatedResult(response.data, JSON.parse(pagination))
-      return response as AxiosResponse<PaginatedResult<any>>
     }
 
     return response
@@ -128,15 +123,16 @@ const Profiles = {
 const Activities = {
   list: (params: URLSearchParams) =>
     axios
-      .get<PaginatedResult<Activity>>('/activities', { params })
+      .get<PagedList<Activity>>('/activities', { params })
       .then(responseBody),
-  details: (id: string) => requests.get<Activity>(`/activities/${id}`),
+  details: (id: number) => requests.get<Activity>(`/activities/${id}`),
   create: (activity: ActivityFormValues) =>
-    requests.post<void>('/activities', activity),
+    requests.post<Activity>('/activities', activity),
   update: (activity: ActivityFormValues) =>
-    requests.put<void>(`/activities/${activity.id}`, activity),
-  delete: (id: string) => requests.delete<void>(`/activities/${id}`),
-  attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
+    requests.put<Activity>(`/activities/${activity.id}`, activity),
+  delete: (id: number) => requests.delete<void>(`/activities/${id}`),
+  attend: (id: number, attend: boolean) =>
+    requests.post<void>(`/activities/${id}/attend?attend=${attend}`, {}),
 }
 
 const agent = {
