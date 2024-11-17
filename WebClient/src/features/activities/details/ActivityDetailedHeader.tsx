@@ -3,7 +3,7 @@ import { Activity } from '../../../app/models/activity'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-import { useStore } from '../../../app/stores/store'
+import { useMainStore } from '../../../app/stores/mainStore'
 
 const activityImageStyle = {
   filter: 'brightness(30%)',
@@ -26,7 +26,7 @@ export default observer(function ActivityDetailedHeader(props: Props) {
   const { activity } = props
   const {
     activityStore: { updateAttendance, loading, cancelActivityToggle },
-  } = useStore()
+  } = useMainStore()
 
   return (
     <Segment.Group>

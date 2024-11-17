@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { useStore } from '../../../app/stores/store'
+import { useMainStore } from '../../../app/stores/mainStore'
 import { observer } from 'mobx-react-lite'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
@@ -14,7 +14,7 @@ import FormDateInput from '../../../app/common/form/FormDateInput'
 import ActivityFormValues from '../../../app/models/forms/activityFormValues'
 
 export default observer(function ActivityForm() {
-  const { activityStore } = useStore()
+  const { activityStore } = useMainStore()
   const { loadActivity, createActivity, updateActivity, loadingInitial } =
     activityStore
   const params = useParams<{ id: string }>()

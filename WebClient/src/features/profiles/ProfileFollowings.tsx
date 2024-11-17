@@ -1,11 +1,11 @@
-import { observer } from "mobx-react-lite";
-import { useStore } from "../../app/stores/store";
-import { Card, Grid, Header, Tab } from "semantic-ui-react";
-import ProfileCard from "./ProfileCard";
+import { observer } from 'mobx-react-lite'
+import { useMainStore } from '../../app/stores/mainStore'
+import { Card, Grid, Header, Tab } from 'semantic-ui-react'
+import ProfileCard from './ProfileCard'
 
 export default observer(function ProfileFollowings() {
-  const { profileStore } = useStore();
-  const { profile, followings, loadingFollowings, activeTab } = profileStore;
+  const { profileStore } = useMainStore()
+  const { profile, followings, loadingFollowings, activeTab } = profileStore
 
   return (
     <Tab.Pane loading={loadingFollowings}>
@@ -30,5 +30,5 @@ export default observer(function ProfileFollowings() {
         </Grid.Column>
       </Grid>
     </Tab.Pane>
-  );
-});
+  )
+})

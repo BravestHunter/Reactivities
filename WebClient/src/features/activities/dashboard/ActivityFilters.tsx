@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import Calendar from 'react-calendar'
 import { Header, Menu } from 'semantic-ui-react'
-import { useStore } from '../../../app/stores/store'
+import { useMainStore } from '../../../app/stores/mainStore'
 
 export default observer(function ActivityFilters() {
-  const { activityStore } = useStore()
+  const { activityStore } = useMainStore()
   const { predicate, setPredicate } = activityStore
 
   return (

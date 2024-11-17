@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
-import { useStore } from '../../app/stores/store'
+import { useMainStore } from '../../app/stores/mainStore'
 import { Button } from 'semantic-ui-react'
 import { Profile } from '../../app/models/profile'
 import * as Yup from 'yup'
@@ -13,7 +13,7 @@ interface Props {
 
 export default observer(function ProfileEditForm(props: Props) {
   const { setEditMode } = props
-  const { profileStore } = useStore()
+  const { profileStore } = useMainStore()
   const { profile, updateProfile } = profileStore
 
   const validationSchema = Yup.object({

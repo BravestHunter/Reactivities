@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { Segment, Comment, Header, Loader } from 'semantic-ui-react'
-import { useStore } from '../../../app/stores/store'
+import { useMainStore } from '../../../app/stores/mainStore'
 import { Link } from 'react-router-dom'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import * as Yup from 'yup'
@@ -13,7 +13,7 @@ interface Props {
 
 export default observer(function ActivityDetailedChat(props: Props) {
   const { activityId } = props
-  const { commentStore } = useStore()
+  const { commentStore } = useMainStore()
 
   useEffect(() => {
     if (activityId) {

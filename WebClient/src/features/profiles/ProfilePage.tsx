@@ -1,31 +1,31 @@
-import { Grid } from "semantic-ui-react";
-import ProfileHeader from "./ProfileHeader";
-import ProfileContent from "./ProfileContent";
-import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
-import { useStore } from "../../app/stores/store";
-import { useEffect } from "react";
-import LoadingComponent from "../../app/layout/LoadingComponent";
+import { Grid } from 'semantic-ui-react'
+import ProfileHeader from './ProfileHeader'
+import ProfileContent from './ProfileContent'
+import { observer } from 'mobx-react-lite'
+import { useParams } from 'react-router-dom'
+import { useMainStore } from '../../app/stores/mainStore'
+import { useEffect } from 'react'
+import LoadingComponent from '../../app/layout/LoadingComponent'
 
 export default observer(function ProfilePage() {
-  const { username } = useParams<{ username: string }>();
-  const { profileStore } = useStore();
-  const { profile, loadingProfile, loadProfile, setActiveTab } = profileStore;
+  const { username } = useParams<{ username: string }>()
+  const { profileStore } = useMainStore()
+  const { profile, loadingProfile, loadProfile, setActiveTab } = profileStore
 
   useEffect(() => {
     if (!username) {
-      return;
+      return
     }
 
-    loadProfile(username);
+    loadProfile(username)
 
     return () => {
-      setActiveTab(0);
-    };
-  }, [username, loadProfile, setActiveTab]);
+      setActiveTab(0)
+    }
+  }, [username, loadProfile, setActiveTab])
 
   if (loadingProfile) {
-    return <LoadingComponent content="Loading profile..." />;
+    return <LoadingComponent content="Loading profile..." />
   }
 
   return (
@@ -39,5 +39,5 @@ export default observer(function ProfilePage() {
         )}
       </Grid.Column>
     </Grid>
-  );
-});
+  )
+})

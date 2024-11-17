@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import { Profile } from '../models/profile'
 import agent from '../api/agent'
-import { store } from './store'
+import { mainStore } from './mainStore'
 import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
 import { globalStore } from './globalStore'
@@ -167,7 +167,7 @@ export default class ProfileStore {
     try {
       await agent.Profiles.updateFollowing(username)
 
-      store.activityStore.updateAttendeeFollowing(username)
+      mainStore.activityStore.updateAttendeeFollowing(username)
 
       runInAction(() => {
         if (

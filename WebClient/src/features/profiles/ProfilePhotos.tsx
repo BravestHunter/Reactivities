@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { SyntheticEvent, useState } from 'react'
 import { Button, Card, Grid, Header, Image, Tab } from 'semantic-ui-react'
 import { Profile } from '../../app/models/profile'
-import { useStore } from '../../app/stores/store'
+import { useMainStore } from '../../app/stores/mainStore'
 import PhotoUploadWidget from '../../app/common/imageUpload/PhotoUploadWidget'
 import Photo from '../../app/models/photo'
 
@@ -12,7 +12,7 @@ interface Props {
 
 export default observer(function ProfilePhotos(props: Props) {
   const { profile } = props
-  const { profileStore } = useStore()
+  const { profileStore } = useMainStore()
   const {
     isCurrentUser,
     uploadPhoto,

@@ -4,7 +4,7 @@ import {
   LogLevel,
 } from '@microsoft/signalr'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { store } from './store'
+import { mainStore } from './mainStore'
 import ChatComment from '../models/comment'
 import { globalStore } from './globalStore'
 
@@ -17,7 +17,7 @@ export default class CommentStore {
   }
 
   createHubConnection = (activityId: number) => {
-    if (store.activityStore.selectedActivity) {
+    if (mainStore.activityStore.selectedActivity) {
       this.hubConnection = new HubConnectionBuilder()
         .withUrl(import.meta.env.VITE_CHAT_URL + '?activityId=' + activityId, {
           accessTokenFactory: () => globalStore.commonStore.token!,
@@ -56,7 +56,7 @@ export default class CommentStore {
   }
 
   addComment = async (values: any) => {
-    values.activityId = store.activityStore.selectedActivity?.id
+    values.activityId = mainStore.activityStore.selectedActivity?.id
 
     try {
       await this.hubConnection?.invoke('SendComment', values)

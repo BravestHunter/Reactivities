@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Tab, Grid, Header, Card, Image, TabProps } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-import { useStore } from '../../app/stores/store'
+import { useMainStore } from '../../app/stores/mainStore'
 import UserActivity from '../../app/models/userActivity'
 
 const panes = [
@@ -13,7 +13,7 @@ const panes = [
 ]
 
 export default observer(function ProfileActivities() {
-  const { profileStore } = useStore()
+  const { profileStore } = useMainStore()
   const { loadUserActivities, profile, loadingActivities, userActivities } =
     profileStore
   useEffect(() => {

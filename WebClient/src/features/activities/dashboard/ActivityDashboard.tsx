@@ -1,6 +1,6 @@
 import { Grid, Loader } from 'semantic-ui-react'
 import ActivityList from './ActivityList'
-import { useStore } from '../../../app/stores/store'
+import { useMainStore } from '../../../app/stores/mainStore'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
 import ActivityFilters from './ActivityFilters'
@@ -9,7 +9,7 @@ import ActivityListItemPlaceholder from './ActivityListItemPlaceholder'
 import PagingParams from '../../../app/models/pagingParams'
 
 export default observer(function ActivityDashboard() {
-  const { activityStore } = useStore()
+  const { activityStore } = useMainStore()
   const { loadActivities, activityRegistry, setPagingParams, pageParams } =
     activityStore
   const [loadingNext, setLoadingNext] = useState(false)

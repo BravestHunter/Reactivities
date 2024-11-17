@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Grid, GridColumn } from 'semantic-ui-react'
-import { useStore } from '../../../app/stores/store'
+import { useMainStore } from '../../../app/stores/mainStore'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
@@ -10,7 +10,7 @@ import ActivityDetailedChat from './ActivityDetailedChat'
 import ActivityDetailedSidebar from './ActivityDetailedSidebar'
 
 export default observer(function ActivityDetails() {
-  const { activityStore } = useStore()
+  const { activityStore } = useMainStore()
   const {
     selectedActivity: activity,
     loadActivity,

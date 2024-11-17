@@ -3,20 +3,20 @@ import ActivityStore from './activityStore'
 import ProfileStore from './profileStore'
 import CommentStore from './commentsStore'
 
-interface Store {
+interface MainStore {
   profileStore: ProfileStore
   activityStore: ActivityStore
   commentStore: CommentStore
 }
 
-export const store: Store = {
+export const mainStore: MainStore = {
   profileStore: new ProfileStore(),
   activityStore: new ActivityStore(),
   commentStore: new CommentStore(),
 }
 
-export const StoreContext = createContext(store)
+export const MainStoreContext = createContext(mainStore)
 
-export function useStore() {
-  return useContext(StoreContext)
+export function useMainStore() {
+  return useContext(MainStoreContext)
 }
