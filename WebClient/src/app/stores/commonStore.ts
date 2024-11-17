@@ -21,7 +21,7 @@ export default class CommonStore {
     )
   }
 
-  setServerError(error: ServerError) {
+  setServerError = (error: ServerError) => {
     this.error = error
   }
 

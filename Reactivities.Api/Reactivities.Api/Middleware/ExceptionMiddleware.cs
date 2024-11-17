@@ -6,6 +6,11 @@ namespace Reactivities.Api.Middleware
 {
     public class ExceptionMiddleware
     {
+        private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
         private readonly RequestDelegate _next;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly ILogger<ExceptionMiddleware> _logger;
@@ -53,7 +58,7 @@ namespace Reactivities.Api.Middleware
                     };
                 }
 
-                var jsonResponse = JsonSerializer.Serialize(response);
+                var jsonResponse = JsonSerializer.Serialize(response, JsonSerializerOptions);
                 await context.Response.WriteAsync(jsonResponse);
             }
         }

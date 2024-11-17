@@ -13,6 +13,12 @@ import RegisterRequest from '../models/requests/registerRequest'
 import LoginRequest from '../models/requests/loginRequest'
 import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from '../stores/globalStore'
+import ServerError from '../models/serverError'
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
+axios.defaults.withCredentials = true
+
+const responseBody = <T>(response: AxiosResponse<T>) => response.data
 
 axios.interceptors.request.use((config) => {
   const token = globalStore.commonStore.token
@@ -33,17 +39,18 @@ axios.interceptors.response.use(
     return response
   },
   (error: AxiosError) => {
-    const { data, status, config, headers } = error.response as AxiosResponse
+    const response = error.response as AxiosResponse
+    const { data, status, config, headers } = response
 
     switch (status) {
       case 400:
-        if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
-          router.navigate('/notfound')
-        }
         if (data.errors) {
-          const modalStateErrors = Object.values(data.errors)
-
-          throw modalStateErrors.flat()
+          if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
+            router.navigate('/notfound')
+          } else {
+            const modalStateErrors = Object.values(data.errors)
+            throw modalStateErrors.flat()
+          }
         } else {
           toast.error(data)
         }
@@ -51,7 +58,9 @@ axios.interceptors.response.use(
 
       case 401:
         if (
-          headers['www-authenticate'].startsWith('Bearer error="invalid_token"')
+          headers['www-authenticate']?.startsWith(
+            'Bearer error="invalid_token"'
+          )
         ) {
           globalStore.userStore.logout()
           toast.error('Session Expired')
@@ -68,7 +77,10 @@ axios.interceptors.response.use(
         break
 
       case 500:
-        globalStore.commonStore.setServerError(data)
+        const serverError = responseBody<ServerError>(response)
+        if (serverError) {
+          globalStore.commonStore.setServerError(serverError)
+        }
         router.navigate('/servererror')
         break
     }
@@ -76,11 +88,6 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
-axios.defaults.baseURL = import.meta.env.VITE_API_URL
-axios.defaults.withCredentials = true
-
-const responseBody = <T>(response: AxiosResponse<T>) => response.data
 
 const requests = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),

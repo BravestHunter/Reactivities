@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Api.Attributes;
 using Reactivities.Api.Exceptions;
 
 namespace Reactivities.Api.Controllers
 {
+    [AllowAnonymous]
+    [Route("api/[controller]")]
     public class BuggyController : ControllerBase
     {
         [HttpGet("not-found")]
