@@ -6,19 +6,21 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-import CustomTextInput from '../../../app/common/form/CustomTextInput'
-import CustomTextArea from '../../../app/common/form/CustomTextArea'
-import CustomSelectInput from '../../../app/common/form/CustomSelectInput'
+import FormTextInput from '../../../app/common/form/FormTextInput'
+import FormTextArea from '../../../app/common/form/FormTextArea'
+import FormSelectInput from '../../../app/common/form/FormSelectInput'
 import { categoryOptions } from '../../../app/common/options/categoryOptions'
-import CustomDateInput from '../../../app/common/form/CustomDateInput'
+import FormDateInput from '../../../app/common/form/FormDateInput'
 import ActivityFormValues from '../../../app/models/forms/activityFormValues'
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore()
   const { loadActivity, createActivity, updateActivity, loadingInitial } =
     activityStore
-  const { id } = useParams()
+  const params = useParams<{ id: string }>()
   const navigate = useNavigate()
+
+  const id = Number(params.id)
 
   const [activity, setActivity] = useState<ActivityFormValues>(
     new ActivityFormValues()
@@ -63,26 +65,26 @@ export default observer(function ActivityForm() {
       >
         {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
-            <CustomTextInput name="title" placeholder="Title" />
-            <CustomTextArea
+            <FormTextInput name="title" placeholder="Title" />
+            <FormTextArea
               name="description"
               placeholder="Description"
               rows={3}
             />
-            <CustomSelectInput
+            <FormSelectInput
               name="category"
               placeholder="Category"
               options={categoryOptions}
             />
-            <CustomDateInput
+            <FormDateInput
               name="date"
               placeholderText="Date"
               showTimeSelect
               dateFormat="MMMM d, yyyy h:mm aa"
             />
             <Header content="Location Details" sub color="teal" />
-            <CustomTextInput name="city" placeholder="City" />
-            <CustomTextInput name="venue" placeholder="Venue" />
+            <FormTextInput name="city" placeholder="City" />
+            <FormTextInput name="venue" placeholder="Venue" />
             <Button
               disabled={isSubmitting || !dirty || !isValid}
               loading={isSubmitting}

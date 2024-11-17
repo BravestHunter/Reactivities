@@ -1,4 +1,4 @@
-import ActivityRelationship from '../../../models/activityRelationship'
+import ActivityRelationship from '../activityRelationship'
 
 export default interface GetActivitiesRequest {
   pageNumber: number

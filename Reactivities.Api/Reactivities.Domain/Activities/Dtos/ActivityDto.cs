@@ -1,3 +1,5 @@
+using Reactivities.Domain.Users.Dtos;
+
 namespace Reactivities.Domain.Activities.Dtos
 {
     public class ActivityDto
@@ -10,7 +12,7 @@ namespace Reactivities.Domain.Activities.Dtos
         public required string City { get; set; }
         public required string Venue { get; set; }
         public required bool IsCancelled { get; set; }
-        public required AttendeeDto Host { get; set; }
-        public List<AttendeeDto> Attendees { get; set; } = new();
+        public required ProfileShortDto Host { get; set; }
+        public List<ProfileShortDto> Attendees { get; set; } = new();
     }
 }

@@ -1,12 +1,12 @@
-import { Button, Container, Dropdown, Image, Menu } from "semantic-ui-react";
-import { Link, NavLink } from "react-router-dom";
-import { useStore } from "../stores/store";
-import { observer } from "mobx-react-lite";
+import { Button, Container, Dropdown, Image, Menu } from 'semantic-ui-react'
+import { Link, NavLink } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
+import { useGlobalStore } from '../stores/globalStore'
 
 export default observer(function NavBar() {
   const {
     userStore: { user, logout },
-  } = useStore();
+  } = useGlobalStore()
 
   return (
     <Menu inverted fixed="top" className="top-navbar">
@@ -15,7 +15,7 @@ export default observer(function NavBar() {
           <img
             src="/assets/logo.png"
             alt="logo"
-            style={{ marginRight: "1rem" }}
+            style={{ marginRight: '1rem' }}
           />
           <span>Reactivities</span>
         </Menu.Item>
@@ -31,7 +31,7 @@ export default observer(function NavBar() {
         </Menu.Item>
         <Menu.Item position="right">
           <Image
-            src={user?.image || "/assets/user.png"}
+            src={user?.profilePhotoUrl || '/assets/user.png'}
             avatar
             spaced="right"
           />
@@ -49,5 +49,5 @@ export default observer(function NavBar() {
         </Menu.Item>
       </Container>
     </Menu>
-  );
-});
+  )
+})

@@ -1,6 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Button, Header, Icon, Segment } from "semantic-ui-react";
+import { Link } from 'react-router-dom'
+import { Button, Header, Icon, Segment } from 'semantic-ui-react'
 
 export default function NotFound() {
   return (
@@ -18,5 +17,5 @@ export default function NotFound() {
         </Button>
       </Segment.Inline>
     </Segment>
-  );
+  )
 }

@@ -8,7 +8,7 @@ interface Props {
   label?: string
 }
 
-export default function CustomTextArea(props: Props) {
+export default function FormTextArea(props: Props) {
   const [field, meta] = useField(props.name)
 
   return (

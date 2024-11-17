@@ -8,7 +8,7 @@ interface Props {
   type?: string
 }
 
-export default function CustomTextInput(props: Props) {
+export default function FormTextInput(props: Props) {
   const [field, meta] = useField(props.name)
 
   return (

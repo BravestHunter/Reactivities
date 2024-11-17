@@ -1,7 +1,8 @@
 import Photo from './photo'
+import ProfileShort from './profileShort'
 import User from './user'
 
-export interface Profile {
+export interface Profile extends ProfileShort {
   username: string
   displayName: string
   bio?: string

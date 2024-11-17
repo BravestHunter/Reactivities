@@ -1,9 +1,9 @@
-import { observer } from "mobx-react-lite";
-import { useStore } from "../../app/stores/store";
-import { Container, Header, Segment } from "semantic-ui-react";
+import { observer } from 'mobx-react-lite'
+import { Container, Header, Segment } from 'semantic-ui-react'
+import { useGlobalStore } from '../../app/stores/globalStore'
 
 export default observer(function ServerError() {
-  const { commonStore } = useStore();
+  const { commonStore } = useGlobalStore()
 
   return (
     <Container>
@@ -12,9 +12,9 @@ export default observer(function ServerError() {
       {commonStore?.error?.details && (
         <Segment>
           <Header as="h4" content="Stack trace" color="teal" />
-          <code style={{ marginTop: "10px" }}>{commonStore.error.details}</code>
+          <code style={{ marginTop: '10px' }}>{commonStore.error.details}</code>
         </Segment>
       )}
     </Container>
-  );
-});
+  )
+})

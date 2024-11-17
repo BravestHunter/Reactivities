@@ -6,17 +6,17 @@ import {
   Item,
   Segment,
   Statistic,
-} from "semantic-ui-react";
-import { Profile } from "../../app/models/profile";
-import { observer } from "mobx-react-lite";
-import FollowButton from "./FollowButton";
+} from 'semantic-ui-react'
+import { Profile } from '../../app/models/profile'
+import { observer } from 'mobx-react-lite'
+import FollowButton from './FollowButton'
 
 interface Props {
-  profile: Profile;
+  profile: Profile
 }
 
 export default observer(function ProfileHeader(props: Props) {
-  const { profile } = props;
+  const { profile } = props
 
   return (
     <Segment>
@@ -27,7 +27,7 @@ export default observer(function ProfileHeader(props: Props) {
               <Item.Image
                 avatar
                 size="small"
-                src={profile.image || "/assets/user.png"}
+                src={profile.profilePhotoUrl || '/assets/user.png'}
               />
               <Item.Content verticalAlign="middle">
                 <Header as="h1" content={profile.displayName} />
@@ -45,5 +45,5 @@ export default observer(function ProfileHeader(props: Props) {
         </GridColumn>
       </Grid>
     </Segment>
-  );
-});
+  )
+})

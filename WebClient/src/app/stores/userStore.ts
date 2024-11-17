@@ -1,11 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import User from '../models/user'
 import agent from '../api/agent'
-import { store } from './store'
 import { router } from '../router/Routes'
-import LoginRequest from '../api/models/requests/loginRequest'
-import RegisterRequest from '../api/models/requests/registerRequest'
 import AccessToken from '../models/accessToken'
+import LoginRequest from '../models/requests/loginRequest'
+import RegisterRequest from '../models/requests/registerRequest'
+import { globalStore } from './globalStore'
 
 export default class UserStore {
   user: User | null = null
@@ -26,7 +26,7 @@ export default class UserStore {
 
       await this.refreshToken()
 
-      store.modalStore.closeModal()
+      globalStore.modalStore.closeModal()
 
       router.navigate('/activities')
     } catch (error) {
@@ -41,7 +41,7 @@ export default class UserStore {
 
       await this.refreshToken()
 
-      store.modalStore.closeModal()
+      globalStore.modalStore.closeModal()
 
       router.navigate('/activities')
     } catch (error) {
@@ -50,7 +50,7 @@ export default class UserStore {
   }
 
   logout = () => {
-    store.commonStore.setToken(null)
+    globalStore.commonStore.setToken(null)
 
     this.user = null
 
@@ -83,7 +83,7 @@ export default class UserStore {
 
     try {
       const accessToken = await agent.Account.refreshToken()
-      store.commonStore.setToken(accessToken.accessToken)
+      globalStore.commonStore.setToken(accessToken.accessToken)
       this.startRefreshTokenTimer(accessToken)
     } catch (error) {
       console.log(error)

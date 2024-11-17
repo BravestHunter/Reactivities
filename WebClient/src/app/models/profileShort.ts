@@ -1,4 +1,4 @@
-export default interface Attendee {
+export default interface ProfileShort {
   username: string
   displayName: string
   bio?: string

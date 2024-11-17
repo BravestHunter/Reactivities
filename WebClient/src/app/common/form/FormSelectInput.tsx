@@ -8,7 +8,7 @@ interface Props {
   label?: string
 }
 
-export default function CustomSelectInput(props: Props) {
+export default function FormSelectInput(props: Props) {
   const [field, meta, helpers] = useField(props.name)
 
   return (

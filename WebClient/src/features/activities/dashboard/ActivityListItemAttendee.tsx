@@ -1,21 +1,20 @@
-import { observer } from "mobx-react-lite";
-import React from "react";
-import { Image, List, Popup } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import { Profile } from "../../../app/models/profile";
-import ProfileCard from "../../profiles/ProfileCard";
+import { observer } from 'mobx-react-lite'
+import { Image, List, Popup } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+import ProfileCard from '../../profiles/ProfileCard'
+import Attendee from '../../../app/models/profileShort'
 
 interface Props {
-  attendees: Profile[];
+  attendees: Attendee[]
 }
 
 export default observer(function ActivityListItemAttendee(props: Props) {
-  const { attendees } = props;
+  const { attendees } = props
 
   const styles = {
-    borderColor: "orange",
+    borderColor: 'orange',
     borderWidth: 2,
-  };
+  }
 
   return (
     <List horizontal>
@@ -32,7 +31,7 @@ export default observer(function ActivityListItemAttendee(props: Props) {
               <Image
                 size="mini"
                 circular
-                src={attendee.image || "/assets/user.png"}
+                src={attendee.profilePhotoUrl || '/assets/user.png'}
                 bordered
                 style={attendee.following ? styles : null}
               />
@@ -45,5 +44,5 @@ export default observer(function ActivityListItemAttendee(props: Props) {
         </Popup>
       ))}
     </List>
-  );
-});
+  )
+})

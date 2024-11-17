@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Container, Header, Segment, Image, Button } from 'semantic-ui-react'
-import { useStore } from '../../app/stores/store'
 import { observer } from 'mobx-react-lite'
 import LoginForm from '../users/LoginForm'
 import RegisterForm from '../users/RegisterForm'
+import { useGlobalStore } from '../../app/stores/globalStore'
 
 export default observer(function HomePage() {
-  const { userStore, modalStore } = useStore()
+  const { userStore, modalStore } = useGlobalStore()
 
   return (
     <Segment inverted textAlign="center" vertical className="masthead">

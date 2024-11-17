@@ -1,4 +1,4 @@
-import Attendee from '../../../models/attendee'
+import Attendee from '../profileShort'
 
 export default interface ActivityDto {
   id: number

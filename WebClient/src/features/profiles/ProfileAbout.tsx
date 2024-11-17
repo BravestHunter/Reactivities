@@ -1,13 +1,13 @@
-import { observer } from "mobx-react-lite";
-import React, { useState } from "react";
-import { Button, Grid, Header, Tab } from "semantic-ui-react";
-import { useStore } from "../../app/stores/store";
-import ProfileEditForm from "./ProfileEditForm";
+import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { Button, Grid, Header, Tab } from 'semantic-ui-react'
+import { useStore } from '../../app/stores/store'
+import ProfileEditForm from './ProfileEditForm'
 
 export default observer(function ProfileAbout() {
-  const { profileStore } = useStore();
-  const { isCurrentUser, profile } = profileStore;
-  const [editMode, setEditMode] = useState<boolean>(false);
+  const { profileStore } = useStore()
+  const { isCurrentUser, profile } = profileStore
+  const [editMode, setEditMode] = useState<boolean>(false)
 
   return (
     <Tab.Pane>
@@ -22,7 +22,7 @@ export default observer(function ProfileAbout() {
             <Button
               floated="right"
               basic
-              content={editMode ? "Cancel" : "EditProfile"}
+              content={editMode ? 'Cancel' : 'EditProfile'}
               onClick={() => setEditMode(!editMode)}
             />
           )}
@@ -31,10 +31,10 @@ export default observer(function ProfileAbout() {
           {editMode ? (
             <ProfileEditForm setEditMode={setEditMode} />
           ) : (
-            <span style={{ whiteSpace: "pre-wrap" }}>{profile?.bio}</span>
+            <span style={{ whiteSpace: 'pre-wrap' }}>{profile?.bio}</span>
           )}
         </Grid.Column>
       </Grid>
     </Tab.Pane>
-  );
-});
+  )
+})

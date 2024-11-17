@@ -1,17 +1,18 @@
-import { observer } from "mobx-react-lite";
-import React, { SyntheticEvent, useState } from "react";
-import { Button, Card, Grid, Header, Image, Tab } from "semantic-ui-react";
-import { Photo, Profile } from "../../app/models/profile";
-import { useStore } from "../../app/stores/store";
-import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
+import { observer } from 'mobx-react-lite'
+import { SyntheticEvent, useState } from 'react'
+import { Button, Card, Grid, Header, Image, Tab } from 'semantic-ui-react'
+import { Profile } from '../../app/models/profile'
+import { useStore } from '../../app/stores/store'
+import PhotoUploadWidget from '../../app/common/imageUpload/PhotoUploadWidget'
+import Photo from '../../app/models/photo'
 
 interface Props {
-  profile: Profile;
+  profile: Profile
 }
 
 export default observer(function ProfilePhotos(props: Props) {
-  const { profile } = props;
-  const { profileStore } = useStore();
+  const { profile } = props
+  const { profileStore } = useStore()
   const {
     isCurrentUser,
     uploadPhoto,
@@ -19,30 +20,30 @@ export default observer(function ProfilePhotos(props: Props) {
     loading,
     setMainPhoto,
     deletePhoto,
-  } = profileStore;
+  } = profileStore
 
-  const [addPhotoMode, setAddPhotoMode] = useState<boolean>(false);
-  const [target, setTarget] = useState("");
+  const [addPhotoMode, setAddPhotoMode] = useState<boolean>(false)
+  const [target, setTarget] = useState<number>()
 
   async function handlePhotoUpload(file: Blob) {
-    await uploadPhoto(file);
-    setAddPhotoMode(false);
+    await uploadPhoto(file)
+    setAddPhotoMode(false)
   }
 
   function handleSetMainPhoto(
     photo: Photo,
     e: SyntheticEvent<HTMLButtonElement>
   ) {
-    setTarget(e.currentTarget.name);
-    setMainPhoto(photo);
+    setTarget(Number(e.currentTarget.name))
+    setMainPhoto(photo)
   }
 
   function handleDeletePhoto(
     photo: Photo,
     e: SyntheticEvent<HTMLButtonElement>
   ) {
-    setTarget(e.currentTarget.name);
-    deletePhoto(photo);
+    setTarget(Number(e.currentTarget.name))
+    deletePhoto(photo)
   }
 
   return (
@@ -54,7 +55,7 @@ export default observer(function ProfilePhotos(props: Props) {
             <Button
               floated="right"
               basic
-              content={addPhotoMode ? "Cancel" : "Add Photo"}
+              content={addPhotoMode ? 'Cancel' : 'Add Photo'}
               onClick={() => setAddPhotoMode(!addPhotoMode)}
             />
           )}
@@ -76,9 +77,9 @@ export default observer(function ProfilePhotos(props: Props) {
                         basic
                         color="green"
                         content="Set main"
-                        name={"main" + photo.id}
-                        disabled={photo.isMain || loading}
-                        loading={target === "main" + photo.id && loading}
+                        name={photo.id}
+                        disabled={loading}
+                        loading={target === photo.id && loading}
                         onClick={(e) => handleSetMainPhoto(photo, e)}
                       />
                       <Button
@@ -86,7 +87,7 @@ export default observer(function ProfilePhotos(props: Props) {
                         color="red"
                         icon="trash"
                         name={photo.id}
-                        disabled={photo.isMain || loading}
+                        disabled={loading}
                         loading={target === photo.id && loading}
                         onClick={(e) => handleDeletePhoto(photo, e)}
                       />
@@ -99,5 +100,5 @@ export default observer(function ProfilePhotos(props: Props) {
         </Grid.Column>
       </Grid>
     </Tab.Pane>
-  );
-});
+  )
+})

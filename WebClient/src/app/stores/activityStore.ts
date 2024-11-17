@@ -1,13 +1,13 @@
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import agent from '../api/agent'
 import { format } from 'date-fns'
-import { store } from './store'
 import { Profile } from '../models/profile'
 import PagingParams from '../models/pagingParams'
 import PageParams from '../models/pageParams'
 import { Activity } from '../models/activity'
 import ActivityFormValues from '../models/forms/activityFormValues'
 import ActivityDto from '../models/dtos/activityDto'
+import { globalStore } from './globalStore'
 
 export default class ActivityStore {
   activityRegistry: Map<number, Activity> = new Map<number, Activity>()
@@ -36,15 +36,11 @@ export default class ActivityStore {
   }
 
   private addActivity = (activityDto: ActivityDto) => {
-    const user = store.userStore.user
+    const user = globalStore.userStore.user
     const activity = new Activity(activityDto, user)
     this.activityRegistry.set(activity.id, activity)
 
     return activity
-  }
-
-  private removeActivity = (id: number) => {
-    this.activityRegistry.delete(id)
   }
 
   get activitiesByDate() {
@@ -99,7 +95,7 @@ export default class ActivityStore {
 
   setPredicate = (predicate: string, value: string | Date) => {
     const resetPredicate = () => {
-      this.predicate.forEach((value, key) => {
+      this.predicate.forEach((_, key) => {
         if (key !== 'startDate') {
           this.predicate.delete(key)
         }
@@ -215,7 +211,7 @@ export default class ActivityStore {
   }
 
   updateAttendance = async () => {
-    const user = store.userStore.user
+    const user = globalStore.userStore.user
     if (!this.selectedActivity || !user) {
       return
     }
@@ -228,6 +224,8 @@ export default class ActivityStore {
         this.selectedActivity.id,
         !isGoing
       )
+      this.selectedActivity.isGoing = !isGoing
+
       runInAction(() => {
         if (this.selectedActivity?.isGoing) {
           this.selectedActivity.attendees =
@@ -254,7 +252,7 @@ export default class ActivityStore {
   }
 
   cancelActivityToggle = async () => {
-    const user = store.userStore.user
+    const user = globalStore.userStore.user
     if (!this.selectedActivity || !user) {
       return
     }

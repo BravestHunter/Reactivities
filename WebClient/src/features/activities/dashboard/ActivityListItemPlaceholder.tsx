@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { Segment, Button, Placeholder } from "semantic-ui-react";
+import { Fragment } from 'react'
+import { Segment, Button, Placeholder } from 'semantic-ui-react'
 
 export default function ActivityListItemPlaceholder() {
   return (
@@ -30,5 +30,5 @@ export default function ActivityListItemPlaceholder() {
         </Segment.Group>
       </Placeholder>
     </Fragment>
-  );
+  )
 }

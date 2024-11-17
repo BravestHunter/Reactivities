@@ -6,6 +6,7 @@ import {
 import { makeAutoObservable, runInAction } from 'mobx'
 import { store } from './store'
 import ChatComment from '../models/comment'
+import { globalStore } from './globalStore'
 
 export default class CommentStore {
   comments: ChatComment[] = []
@@ -19,7 +20,7 @@ export default class CommentStore {
     if (store.activityStore.selectedActivity) {
       this.hubConnection = new HubConnectionBuilder()
         .withUrl(import.meta.env.VITE_CHAT_URL + '?activityId=' + activityId, {
-          accessTokenFactory: () => store.userStore.user?.token!,
+          accessTokenFactory: () => globalStore.commonStore.token!,
         })
         .withAutomaticReconnect()
         .configureLogging(LogLevel.Information)

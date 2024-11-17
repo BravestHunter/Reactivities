@@ -4,6 +4,7 @@ import agent from '../api/agent'
 import { store } from './store'
 import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
+import { globalStore } from './globalStore'
 
 export default class ProfileStore {
   profile: Profile | null = null
@@ -37,8 +38,8 @@ export default class ProfileStore {
   }
 
   get isCurrentUser() {
-    if (store.userStore.user && this.profile) {
-      return store.userStore.user.username === this.profile.username
+    if (globalStore.userStore.user && this.profile) {
+      return globalStore.userStore.user.username === this.profile.username
     }
 
     return false
@@ -89,9 +90,9 @@ export default class ProfileStore {
       runInAction(() => {
         if (
           profile.displayName &&
-          profile.displayName !== store.userStore.user?.displayName
+          profile.displayName !== globalStore.userStore.user?.displayName
         ) {
-          store.userStore.setDisplayName(profile.displayName)
+          globalStore.userStore.setDisplayName(profile.displayName)
         }
         this.profile = { ...this.profile, ...(profile as Profile) }
       })
@@ -126,7 +127,7 @@ export default class ProfileStore {
 
     try {
       await agent.Profiles.setMainPhoto(photo.id)
-      store.userStore.setPhoto(photo.url)
+      globalStore.userStore.setPhoto(photo.url)
 
       runInAction(() => {
         if (this.profile && this.profile.photos) {
@@ -171,7 +172,7 @@ export default class ProfileStore {
       runInAction(() => {
         if (
           this.profile &&
-          this.profile.username !== store.userStore.user?.username &&
+          this.profile.username !== globalStore.userStore.user?.username &&
           this.profile.username === username
         ) {
           following
@@ -182,7 +183,7 @@ export default class ProfileStore {
 
         if (
           this.profile &&
-          this.profile.username === store.userStore.user?.username
+          this.profile.username === globalStore.userStore.user?.username
         ) {
           this.profile.followingCount += following ? 1 : -1
         }

@@ -1,13 +1,13 @@
 import { ErrorMessage, Form, Formik } from 'formik'
-import CustomTextInput from '../../app/common/form/CustomTextInput'
+import FormTextInput from '../../app/common/form/FormTextInput'
 import { Button, Header } from 'semantic-ui-react'
-import { useStore } from '../../app/stores/store'
 import { observer } from 'mobx-react-lite'
 import * as Yup from 'yup'
 import ValidationErrors from '../errors/ValidationErrors'
+import { useGlobalStore } from '../../app/stores/globalStore'
 
 export default observer(function RegisterForm() {
-  const { userStore } = useStore()
+  const { userStore } = useGlobalStore()
 
   return (
     <Formik
@@ -40,10 +40,10 @@ export default observer(function RegisterForm() {
             color="teal"
             textAlign="center"
           />
-          <CustomTextInput name="username" placeholder="Username" />
-          <CustomTextInput name="displayName" placeholder="Display Name" />
-          <CustomTextInput name="email" placeholder="Email" />
-          <CustomTextInput
+          <FormTextInput name="username" placeholder="Username" />
+          <FormTextInput name="displayName" placeholder="Display Name" />
+          <FormTextInput name="email" placeholder="Email" />
+          <FormTextInput
             name="password"
             placeholder="Password"
             type="password"
