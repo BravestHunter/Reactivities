@@ -1,16 +1,15 @@
-import { useField } from "formik";
-import React from "react";
-import { Form, Label } from "semantic-ui-react";
+import { useField } from 'formik'
+import { Form, Label } from 'semantic-ui-react'
 
 interface Props {
-  placeholder: string;
-  name: string;
-  label?: string;
-  type?: string;
+  placeholder: string
+  name: string
+  label?: string
+  type?: string
 }
 
 export default function CustomTextInput(props: Props) {
-  const [field, meta] = useField(props.name);
+  const [field, meta] = useField(props.name)
 
   return (
     <Form.Field error={meta.touched && !!meta.error}>
@@ -22,5 +21,5 @@ export default function CustomTextInput(props: Props) {
         </Label>
       ) : null}
     </Form.Field>
-  );
+  )
 }
