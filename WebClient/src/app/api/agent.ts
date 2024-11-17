@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'react-toastify'
 import { router } from '../router/Routes'
-import { store } from '../stores/store'
 import User from '../models/user'
 import { Profile } from '../models/profile'
 import UserActivity from '../models/userActivity'
@@ -13,9 +12,10 @@ import ActivityFormValues from '../models/forms/activityFormValues'
 import RegisterRequest from '../models/requests/registerRequest'
 import LoginRequest from '../models/requests/loginRequest'
 import ActivityDto from '../models/dtos/activityDto'
+import { globalStore } from '../stores/globalStore'
 
 axios.interceptors.request.use((config) => {
-  const token = store.commonStore.token
+  const token = globalStore.commonStore.token
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -53,7 +53,7 @@ axios.interceptors.response.use(
         if (
           headers['www-authenticate'].startsWith('Bearer error="invalid_token"')
         ) {
-          store.userStore.logout()
+          globalStore.userStore.logout()
           toast.error('Session Expired')
         }
         toast.error('Unauthorized')
@@ -68,7 +68,7 @@ axios.interceptors.response.use(
         break
 
       case 500:
-        store.commonStore.setServerError(data)
+        globalStore.commonStore.setServerError(data)
         router.navigate('/servererror')
         break
     }
