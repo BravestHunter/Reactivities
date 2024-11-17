@@ -1,40 +1,39 @@
-import React from "react";
-import { Button, Header, Image, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
-import { observer } from "mobx-react-lite";
-import { Link } from "react-router-dom";
-import { format } from "date-fns";
-import { useStore } from "../../../app/stores/store";
+import { Button, Header, Image, Item, Label, Segment } from 'semantic-ui-react'
+import { Activity } from '../../../app/models/activity'
+import { observer } from 'mobx-react-lite'
+import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
+import { useStore } from '../../../app/stores/store'
 
 const activityImageStyle = {
-  filter: "brightness(30%)",
-};
+  filter: 'brightness(30%)',
+}
 
 const activityImageTextStyle = {
-  position: "absolute",
-  bottom: "5%",
-  left: "5%",
-  width: "100%",
-  height: "auto",
-  color: "white",
-};
+  position: 'absolute',
+  bottom: '5%',
+  left: '5%',
+  width: '100%',
+  height: 'auto',
+  color: 'white',
+}
 
 interface Props {
-  activity: Activity;
+  activity: Activity
 }
 
 export default observer(function ActivityDetailedHeader(props: Props) {
-  const { activity } = props;
+  const { activity } = props
   const {
     activityStore: { updateAttendance, loading, cancelActivityToggle },
-  } = useStore();
+  } = useStore()
 
   return (
     <Segment.Group>
-      <Segment basic attached="top" style={{ padding: "0" }}>
+      <Segment basic attached="top" style={{ padding: '0' }}>
         {activity.isCancelled && (
           <Label
-            style={{ position: "absolute", zIndex: 1000, left: -14, top: 20 }}
+            style={{ position: 'absolute', zIndex: 1000, left: -14, top: 20 }}
             ribbon
             color="red"
             content="Cancelled"
@@ -52,11 +51,11 @@ export default observer(function ActivityDetailedHeader(props: Props) {
                 <Header
                   size="huge"
                   content={activity.title}
-                  style={{ color: "white" }}
+                  style={{ color: 'white' }}
                 />
-                <p>{format(activity.date!, "dd MMM yyyy")}</p>
+                <p>{format(activity.date!, 'dd MMM yyyy')}</p>
                 <p>
-                  Hosted by{" "}
+                  Hosted by{' '}
                   <strong>
                     <Link to={`/profiles/${activity.host?.username}`}>
                       {activity.host?.displayName}
@@ -72,10 +71,10 @@ export default observer(function ActivityDetailedHeader(props: Props) {
         {activity.isHost ? (
           <>
             <Button
-              color={activity.isCancelled ? "green" : "red"}
+              color={activity.isCancelled ? 'green' : 'red'}
               floated="left"
               basic
-              content={activity.isCancelled ? "Re-activate" : "Cancel"}
+              content={activity.isCancelled ? 'Re-activate' : 'Cancel'}
               onClick={cancelActivityToggle}
               loading={loading}
             />
@@ -105,5 +104,5 @@ export default observer(function ActivityDetailedHeader(props: Props) {
         )}
       </Segment>
     </Segment.Group>
-  );
-});
+  )
+})

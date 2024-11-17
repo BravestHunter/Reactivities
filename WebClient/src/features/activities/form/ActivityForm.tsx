@@ -3,9 +3,7 @@ import { Button, Header, Segment } from 'semantic-ui-react'
 import { useStore } from '../../../app/stores/store'
 import { observer } from 'mobx-react-lite'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ActivityFormValues } from '../../../app/models/activity'
 import LoadingComponent from '../../../app/layout/LoadingComponent'
-import { v4 as uuid } from 'uuid'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import CustomTextInput from '../../../app/common/form/CustomTextInput'
@@ -13,6 +11,7 @@ import CustomTextArea from '../../../app/common/form/CustomTextArea'
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput'
 import { categoryOptions } from '../../../app/common/options/categoryOptions'
 import CustomDateInput from '../../../app/common/form/CustomDateInput'
+import ActivityFormValues from '../../../app/models/forms/activityFormValues'
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore()
@@ -43,8 +42,6 @@ export default observer(function ActivityForm() {
 
   async function handleFormSubmit(activity: ActivityFormValues) {
     if (!activity.id) {
-      activity.id = uuid()
-
       await createActivity(activity)
     } else {
       await updateActivity(activity)

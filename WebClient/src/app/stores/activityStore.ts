@@ -1,11 +1,13 @@
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
-import { Activity, ActivityFormValues } from '../models/activity'
 import agent from '../api/agent'
 import { format } from 'date-fns'
 import { store } from './store'
 import { Profile } from '../models/profile'
 import PagingParams from '../models/pagingParams'
 import PageParams from '../models/pageParams'
+import { Activity } from '../models/activity'
+import ActivityFormValues from '../models/forms/activityFormValues'
+import ActivityDto from '../models/dtos/activityDto'
 
 export default class ActivityStore {
   activityRegistry: Map<number, Activity> = new Map<number, Activity>()
@@ -33,17 +35,16 @@ export default class ActivityStore {
     return this.activityRegistry.get(id)
   }
 
-  private setActivity = (activity: Activity) => {
+  private addActivity = (activityDto: ActivityDto) => {
     const user = store.userStore.user
-    if (user) {
-      activity.isGoing = activity.attendees!.some(
-        (a) => a.username === user.username
-      )
-      activity.isHost = activity.host.username === user.username
-    }
-
-    activity.date = new Date(activity.date!)
+    const activity = new Activity(activityDto, user)
     this.activityRegistry.set(activity.id, activity)
+
+    return activity
+  }
+
+  private removeActivity = (id: number) => {
+    this.activityRegistry.delete(id)
   }
 
   get activitiesByDate() {
@@ -135,7 +136,7 @@ export default class ActivityStore {
       const result = await agent.Activities.list(this.axiosParams)
 
       result.items.forEach((a) => {
-        this.setActivity(a)
+        this.addActivity(a)
       })
       this.setPageParams(result.params)
     } catch (error) {
@@ -152,8 +153,8 @@ export default class ActivityStore {
       this.setLoadingInitial(true)
 
       try {
-        activity = await agent.Activities.details(id)
-        this.setActivity(activity)
+        const activityDto = await agent.Activities.details(id)
+        activity = this.addActivity(activityDto)
       } catch (error) {
         console.log(error)
       } finally {
@@ -165,27 +166,22 @@ export default class ActivityStore {
     return activity
   }
 
-  createActivity = async (activity: ActivityFormValues) => {
-    const user = store.userStore.user
-    //const attendee = new Profile(user!)
-
+  createActivity = async (formValues: ActivityFormValues) => {
     try {
-      const newActivity = await agent.Activities.create(activity)
-      //newActivity.hostUsername = user!.username
-      //newActivity.attendees = [attendee]
-      this.setActivity(newActivity)
+      const activityDto = await agent.Activities.create(formValues)
+      const activity = this.addActivity(activityDto)
 
       runInAction(() => {
-        this.selectedActivity = newActivity
+        this.selectedActivity = activity
       })
     } catch (error) {
       console.log(error)
     }
   }
 
-  updateActivity = async (ActivityFormValues: ActivityFormValues) => {
+  updateActivity = async (formValues: ActivityFormValues) => {
     try {
-      var activity = await agent.Activities.update(ActivityFormValues)
+      var activity = await agent.Activities.update(formValues)
 
       runInAction(() => {
         if (activity.id) {
@@ -227,7 +223,11 @@ export default class ActivityStore {
     this.setLoading(true)
 
     try {
-      await agent.Activities.attend(this.selectedActivity.id)
+      const isGoing = this.selectedActivity.isGoing
+      await agent.Activities.updateAttendance(
+        this.selectedActivity.id,
+        !isGoing
+      )
       runInAction(() => {
         if (this.selectedActivity?.isGoing) {
           this.selectedActivity.attendees =
@@ -254,10 +254,19 @@ export default class ActivityStore {
   }
 
   cancelActivityToggle = async () => {
+    const user = store.userStore.user
+    if (!this.selectedActivity || !user) {
+      return
+    }
+
     this.setLoading(true)
 
     try {
-      await agent.Activities.attend(this.selectedActivity!.id)
+      const isGoing = this.selectedActivity.isGoing
+      await agent.Activities.updateAttendance(
+        this.selectedActivity!.id,
+        !isGoing
+      )
 
       runInAction(() => {
         this.selectedActivity!.isCancelled = !this.selectedActivity?.isCancelled

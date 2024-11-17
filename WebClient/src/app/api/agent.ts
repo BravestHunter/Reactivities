@@ -1,16 +1,18 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { Activity, ActivityFormValues } from '../models/activity'
 import { toast } from 'react-toastify'
 import { router } from '../router/Routes'
 import { store } from '../stores/store'
-import User, { AccessToken } from '../models/user'
+import User from '../models/user'
 import { Profile } from '../models/profile'
 import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
-import LoginRequest from './models/loginRequest'
-import RegisterRequest from './models/registerRequest'
 import { sleep } from '../utils'
 import PagedList from '../models/pagedist'
+import AccessToken from '../models/accessToken'
+import ActivityFormValues from '../models/forms/activityFormValues'
+import RegisterRequest from '../models/requests/registerRequest'
+import LoginRequest from '../models/requests/loginRequest'
+import ActivityDto from '../models/dtos/activityDto'
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token
@@ -123,16 +125,19 @@ const Profiles = {
 const Activities = {
   list: (params: URLSearchParams) =>
     axios
-      .get<PagedList<Activity>>('/activities', { params })
+      .get<PagedList<ActivityDto>>('/activities', { params })
       .then(responseBody),
-  details: (id: number) => requests.get<Activity>(`/activities/${id}`),
+  details: (id: number) => requests.get<ActivityDto>(`/activities/${id}`),
   create: (activity: ActivityFormValues) =>
-    requests.post<Activity>('/activities', activity),
+    requests.post<ActivityDto>('/activities', activity),
   update: (activity: ActivityFormValues) =>
-    requests.put<Activity>(`/activities/${activity.id}`, activity),
+    requests.put<ActivityDto>(`/activities/${activity.id}`, activity),
   delete: (id: number) => requests.delete<void>(`/activities/${id}`),
-  attend: (id: number, attend: boolean) =>
-    requests.post<void>(`/activities/${id}/attend?attend=${attend}`, {}),
+  updateAttendance: (id: number, attend: boolean) =>
+    requests.post<void>(
+      `/activities/${id}/updateAttendance?attend=${attend}`,
+      {}
+    ),
 }
 
 const agent = {

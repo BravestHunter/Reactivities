@@ -1,4 +1,6 @@
 import Attendee from './attendee'
+import ActivityDto from './dtos/activityDto'
+import User from './user'
 
 export interface Activity {
   id: number
@@ -17,29 +19,14 @@ export interface Activity {
 }
 
 export class Activity implements Activity {
-  constructor(init?: ActivityFormValues) {
+  constructor(init: ActivityDto, user: User | null) {
     Object.assign(this, init)
-  }
-}
 
-export class ActivityFormValues {
-  id?: number = undefined
-  title: string = ''
-  date: Date | null = null
-  description?: string = undefined
-  category: string = ''
-  city: string = ''
-  venue: string = ''
-
-  constructor(activity?: ActivityFormValues) {
-    if (activity) {
-      this.id = activity.id
-      this.title = activity.title
-      this.date = activity.date
-      this.description = activity.description
-      this.category = activity.category
-      this.city = activity.city
-      this.venue = activity.venue
+    if (user) {
+      this.isGoing = this.attendees!.some((a) => a.username === user.username)
+      this.isHost = this.host.username === user.username
     }
+
+    this.date = new Date(this.date!)
   }
 }

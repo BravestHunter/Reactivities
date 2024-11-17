@@ -4,10 +4,6 @@ export default interface User {
   profilePhotoUrl?: string
 }
 
-export interface AccessToken {
-  accessToken: string
-}
-
 export interface UserFormValues {
   email: string
   password: string

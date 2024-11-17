@@ -1,10 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import User, { AccessToken } from '../models/user'
+import User from '../models/user'
 import agent from '../api/agent'
 import { store } from './store'
 import { router } from '../router/Routes'
-import LoginRequest from '../api/models/loginRequest'
-import RegisterRequest from '../api/models/registerRequest'
+import LoginRequest from '../api/models/requests/loginRequest'
+import RegisterRequest from '../api/models/requests/registerRequest'
+import AccessToken from '../models/accessToken'
 
 export default class UserStore {
   user: User | null = null
