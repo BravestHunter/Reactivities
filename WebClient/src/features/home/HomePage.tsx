@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Container, Header, Segment, Image, Button } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite'
-import LoginForm from '../users/LoginForm'
-import RegisterForm from '../users/RegisterForm'
+import LoginForm from '../auth/LoginForm'
+import RegisterForm from '../auth/RegisterForm'
 import { useGlobalStore } from '../../app/stores/globalStore'
 
 export default observer(function HomePage() {

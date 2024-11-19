@@ -1,67 +1,66 @@
-import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
-import App from "../layout/App";
-import HomePage from "../../features/home/HomePage";
-import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
-import ActivityForm from "../../features/activities/form/ActivityForm";
-import ActivityDetails from "../../features/activities/details/ActivityDetails";
-import TestErrors from "../../features/errors/TestError";
-import NotFound from "../../features/errors/NotFound";
-import ServerError from "../../features/errors/ServerError";
-import ProfilePage from "../../features/profiles/ProfilePage";
-import RequireAuth from "./RequireAuth";
+import { Navigate, RouteObject, createBrowserRouter } from 'react-router-dom'
+import HomePage from '../../features/home/HomePage'
+import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard'
+import ActivityForm from '../../features/activities/form/ActivityForm'
+import ActivityDetails from '../../features/activities/details/ActivityDetails'
+import TestErrors from '../../features/errors/TestError'
+import NotFound from '../../features/errors/NotFound'
+import ServerError from '../../features/errors/ServerError'
+import ProfilePage from '../../features/profiles/ProfilePage'
+import RequireAuth from './RequireAuth'
+import MainLayout from '../layout/MainLayout'
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
-    element: <App />,
+    element: <MainLayout />,
     children: [
       {
         element: <RequireAuth />,
         children: [
           {
-            path: "activities",
+            path: 'activities',
             element: <ActivityDashboard />,
           },
           {
-            path: "activities/:id",
+            path: 'activities/:id',
             element: <ActivityDetails />,
           },
           {
-            path: "createActivity",
+            path: 'createActivity',
             element: <ActivityForm key="create" />,
           },
           {
-            path: "manage/:id",
+            path: 'manage/:id',
             element: <ActivityForm key="manage" />,
           },
           {
-            path: "profiles/:username",
+            path: 'profiles/:username',
             element: <ProfilePage />,
           },
           {
-            path: "errors",
+            path: 'errors',
             element: <TestErrors />,
           },
         ],
       },
       {
-        path: "",
-        element: <HomePage />,
-      },
-      {
-        path: "notfound",
+        path: 'notfound',
         element: <NotFound />,
       },
       {
-        path: "servererror",
+        path: 'servererror',
         element: <ServerError />,
       },
       {
-        path: "*",
+        path: '*',
         element: <Navigate replace to="/notfound" />,
       },
     ],
   },
-];
+  {
+    path: '',
+    element: <HomePage />,
+  },
+]
 
-export const router = createBrowserRouter(routes);
+export const router = createBrowserRouter(routes)

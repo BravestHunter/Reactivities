@@ -1,12 +1,16 @@
-import { RouterProvider } from 'react-router-dom'
-import { router } from './app/router/Routes'
 import { globalStore, GlobalStoreContext } from './app/stores/globalStore'
+import RouterRoot from './app/router/RouterRoot'
+import { ToastContainer } from 'react-toastify'
+import ModalContainer from './app/common/modals/ModalContainer'
 
 function App() {
   return (
     <>
+      <ModalContainer />
+      <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
+
       <GlobalStoreContext.Provider value={globalStore}>
-        <RouterProvider router={router} />
+        <RouterRoot />
       </GlobalStoreContext.Provider>
     </>
   )
