@@ -8,6 +8,8 @@ import { Activity } from '../models/activity'
 import ActivityFormValues from '../models/forms/activityFormValues'
 import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from './globalStore'
+import { ActivityListFilters } from '../models/activityListFilters'
+import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
 
 export default class ActivityStore {
   activityRegistry: Map<number, Activity> = new Map<number, Activity>()
@@ -15,20 +17,38 @@ export default class ActivityStore {
   loading: boolean = false
   loadingInitial: boolean = false
   pageParams: PageParams | null = null
-  pagingParams: PagingParams = new PagingParams()
-  predicate: Map<string, any> = new Map<string, any>().set('all', true)
+
+  listFilters: ActivityListFilters = new ActivityListFilters()
 
   constructor() {
     makeAutoObservable(this)
 
     reaction(
-      () => this.predicate.keys(),
-      () => {
-        this.pagingParams = new PagingParams()
-        this.activityRegistry.clear()
-        this.loadActivities()
-      }
+      () => ({
+        fromDate: this.listFilters.fromDate,
+        relationship: this.listFilters.relationship,
+      }),
+      this.resetActivitiesList
     )
+  }
+
+  get currentPage() {
+    return this.pageParams?.currentPage ?? 1
+  }
+
+  get hasMore() {
+    return (
+      (this.pageParams &&
+        this.pageParams.currentPage < this.pageParams.totalPages) ||
+      false
+    )
+  }
+
+  setListFilter = <K extends keyof ActivityListFilters>(
+    key: K,
+    value: ActivityListFilters[K]
+  ) => {
+    this.listFilters[key] = value
   }
 
   private getActivity = (id: number) => {
@@ -43,7 +63,13 @@ export default class ActivityStore {
     return activity
   }
 
-  get activitiesByDate() {
+  private resetActivitiesList = () => {
+    this.activityRegistry.clear()
+    this.selectedActivity = undefined
+    this.loadActivities(1)
+  }
+
+  private get activitiesByDate() {
     return Array.from(this.activityRegistry.values()).sort(
       (a, b) => a.date!.getTime() - b.date!.getTime()
     )
@@ -61,22 +87,6 @@ export default class ActivityStore {
     )
   }
 
-  get axiosParams() {
-    const params = new URLSearchParams()
-    params.append('pageNumber', this.pagingParams.pageNumber.toString())
-    params.append('pageSize', this.pagingParams.pageSize.toString())
-
-    this.predicate.forEach((value, key) => {
-      if (key === 'startDate') {
-        params.append('fromDate', (value as Date).toISOString())
-      } else {
-        params.append(key, value)
-      }
-    })
-
-    return params
-  }
-
   setLoadingInitial = (value: boolean) => {
     this.loadingInitial = value
   }
@@ -89,47 +99,13 @@ export default class ActivityStore {
     this.pageParams = params
   }
 
-  setPagingParams = (pagingParams: PagingParams) => {
-    this.pagingParams = pagingParams
-  }
-
-  setPredicate = (predicate: string, value: string | Date) => {
-    const resetPredicate = () => {
-      this.predicate.forEach((_, key) => {
-        if (key !== 'startDate') {
-          this.predicate.delete(key)
-        }
-      })
-    }
-
-    switch (predicate) {
-      case 'all':
-        resetPredicate()
-        this.predicate.set('all', true)
-        break
-
-      case 'isGoing':
-        resetPredicate()
-        this.predicate.set('isGoing', true)
-        break
-
-      case 'isHost':
-        resetPredicate()
-        this.predicate.set('isHost', true)
-        break
-
-      case 'startDate':
-        this.predicate.delete('startDate')
-        this.predicate.set('startDate', value)
-        break
-    }
-  }
-
-  loadActivities = async () => {
+  loadActivities = async (pageNumber: number) => {
     this.setLoadingInitial(true)
 
     try {
-      const result = await agent.Activities.list(this.axiosParams)
+      const pagingParams = new PagingParams(pageNumber)
+      const request = new GetActivitiesRequest(pagingParams, this.listFilters)
+      const result = await agent.Activities.list(request)
 
       result.items.forEach((a) => {
         this.addActivity(a)

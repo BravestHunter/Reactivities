@@ -6,22 +6,20 @@ import { useEffect, useState } from 'react'
 import ActivityFilters from './ActivityFilters'
 import InfiniteScroll from 'react-infinite-scroller'
 import ActivityListItemPlaceholder from './ActivityListItemPlaceholder'
-import PagingParams from '../../../app/models/pagingParams'
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useMainStore()
-  const { loadActivities, activityRegistry, setPagingParams, pageParams } =
+  const { loadActivities, activityRegistry, currentPage, hasMore } =
     activityStore
   const [loadingNext, setLoadingNext] = useState(false)
 
   function handleGetNext() {
     setLoadingNext(true)
-    setPagingParams(new PagingParams(pageParams!.currentPage + 1))
-    loadActivities().then(() => setLoadingNext(false))
+    loadActivities(currentPage + 1).then(() => setLoadingNext(false))
   }
 
   useEffect(() => {
-    if (activityRegistry.size <= 1) loadActivities()
+    if (activityRegistry.size <= 1) loadActivities(1)
   }, [activityRegistry.size, loadActivities])
 
   return (
@@ -36,11 +34,7 @@ export default observer(function ActivityDashboard() {
           <InfiniteScroll
             pageStart={0}
             loadMore={handleGetNext}
-            hasMore={
-              !loadingNext &&
-              !!pageParams &&
-              pageParams.currentPage < pageParams.totalPages
-            }
+            hasMore={!loadingNext && hasMore}
             initialLoad={false}
           >
             <ActivityList />

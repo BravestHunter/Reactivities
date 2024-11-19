@@ -5,7 +5,7 @@ import User from '../models/user'
 import { Profile } from '../models/profile'
 import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
-import { sleep } from '../utils'
+import { sleep, toURLSearchParams } from '../utils'
 import PagedList from '../models/pagedist'
 import AccessToken from '../models/accessToken'
 import ActivityFormValues from '../models/forms/activityFormValues'
@@ -14,6 +14,7 @@ import LoginRequest from '../models/requests/loginRequest'
 import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from '../stores/globalStore'
 import ServerError from '../models/serverError'
+import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL
 axios.defaults.withCredentials = true
@@ -64,6 +65,7 @@ axios.interceptors.response.use(
         ) {
           globalStore.userStore.logout()
           toast.error('Session Expired')
+          return
         }
         toast.error('Unauthorized')
         break
@@ -130,9 +132,11 @@ const Profiles = {
 }
 
 const Activities = {
-  list: (params: URLSearchParams) =>
+  list: (request: GetActivitiesRequest) =>
     axios
-      .get<PagedList<ActivityDto>>('/activities', { params })
+      .get<PagedList<ActivityDto>>('/activities', {
+        params: toURLSearchParams(request),
+      })
       .then(responseBody),
   details: (id: number) => requests.get<ActivityDto>(`/activities/${id}`),
   create: (activity: ActivityFormValues) =>

@@ -2,10 +2,11 @@ import { observer } from 'mobx-react-lite'
 import Calendar from 'react-calendar'
 import { Header, Menu } from 'semantic-ui-react'
 import { useMainStore } from '../../../app/stores/mainStore'
+import ActivityRelationship from '../../../app/models/activityRelationship'
 
 export default observer(function ActivityFilters() {
   const { activityStore } = useMainStore()
-  const { predicate, setPredicate } = activityStore
+  const { listFilters, setListFilter } = activityStore
 
   return (
     <>
@@ -13,24 +14,30 @@ export default observer(function ActivityFilters() {
         <Header icon="filter" attached color="teal" content="Filters" />
         <Menu.Item
           content="All Activities"
-          active={predicate.has('all')}
-          onClick={() => setPredicate('all', 'true')}
+          active={listFilters.relationship == ActivityRelationship.None}
+          onClick={() =>
+            setListFilter('relationship', ActivityRelationship.None)
+          }
         />
         <Menu.Item
           content="I'm going"
-          active={predicate.has('isGoing')}
-          onClick={() => setPredicate('isGoing', 'true')}
+          active={listFilters.relationship == ActivityRelationship.IsGoing}
+          onClick={() =>
+            setListFilter('relationship', ActivityRelationship.IsGoing)
+          }
         />
         <Menu.Item
           content="I'm hosting"
-          active={predicate.has('isHost')}
-          onClick={() => setPredicate('isHost', 'true')}
+          active={listFilters.relationship == ActivityRelationship.IsHost}
+          onClick={() =>
+            setListFilter('relationship', ActivityRelationship.IsHost)
+          }
         />
       </Menu>
       <Header />
       <Calendar
-        value={predicate.get('startDate') || new Date()}
-        onChange={(date) => setPredicate('startDate', date as Date)}
+        value={listFilters.fromDate}
+        onChange={(date) => setListFilter('fromDate', date as Date)}
       />
     </>
   )
