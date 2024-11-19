@@ -4,6 +4,7 @@ import App from './App.tsx'
 import 'semantic-ui-css/semantic.min.css'
 import 'react-toastify/dist/ReactToastify.min.css'
 import 'react-datepicker/dist/react-datepicker.min.css'
+import 'react-calendar/dist/Calendar.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
