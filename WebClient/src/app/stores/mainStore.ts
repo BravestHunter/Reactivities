@@ -4,19 +4,26 @@ import ProfileStore from './profileStore'
 import CommentStore from './commentsStore'
 
 interface MainStore {
-  profileStore: ProfileStore
   activityStore: ActivityStore
+  profileStore: ProfileStore
   commentStore: CommentStore
 }
 
-export const mainStore: MainStore = {
-  profileStore: new ProfileStore(),
-  activityStore: new ActivityStore(),
-  commentStore: new CommentStore(),
+export function createMainStore(): MainStore {
+  const activityStore = new ActivityStore()
+  return {
+    activityStore: activityStore,
+    profileStore: new ProfileStore(activityStore),
+    commentStore: new CommentStore(activityStore),
+  }
 }
 
-export const MainStoreContext = createContext(mainStore)
+export const MainStoreContext = createContext<MainStore | undefined>(undefined)
 
-export function useMainStore() {
-  return useContext(MainStoreContext)
+export const useMainStore = (): MainStore => {
+  const context = useContext(MainStoreContext)
+  if (!context) {
+    throw new Error('useMainStore must be used within a MainStoreProvider')
+  }
+  return context
 }

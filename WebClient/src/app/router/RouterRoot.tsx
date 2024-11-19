@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import LoadingComponent from '../layout/LoadingComponent'
 import { router } from './Routes'
-import { mainStore, MainStoreContext } from '../stores/mainStore'
 
 export default observer(function RouterRoot() {
   const { commonStore, userStore } = useGlobalStore()
@@ -21,11 +20,5 @@ export default observer(function RouterRoot() {
     return <LoadingComponent content="Loading app..." />
   }
 
-  return (
-    <>
-      <MainStoreContext.Provider value={mainStore}>
-        <RouterProvider router={router} />
-      </MainStoreContext.Provider>
-    </>
-  )
+  return <RouterProvider router={router} />
 })

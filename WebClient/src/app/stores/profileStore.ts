@@ -1,10 +1,10 @@
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import { Profile } from '../models/profile'
 import agent from '../api/agent'
-import { mainStore } from './mainStore'
 import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
 import { globalStore } from './globalStore'
+import ActivityStore from './activityStore'
 
 export default class ProfileStore {
   profile: Profile | null = null
@@ -17,7 +17,11 @@ export default class ProfileStore {
   userActivities: UserActivity[] = []
   loadingActivities: boolean = false
 
-  constructor() {
+  private readonly activityStore: ActivityStore
+
+  constructor(activityStore: ActivityStore) {
+    this.activityStore = activityStore
+
     makeAutoObservable(this)
 
     reaction(
@@ -167,7 +171,7 @@ export default class ProfileStore {
     try {
       await agent.Profiles.updateFollowing(username)
 
-      mainStore.activityStore.updateAttendeeFollowing(username)
+      this.activityStore.updateAttendeeFollowing(username)
 
       runInAction(() => {
         if (
