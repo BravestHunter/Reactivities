@@ -3,7 +3,7 @@ import { Button, Reveal } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite'
 import { useMainStore } from '../../app/stores/mainStore'
 import { useGlobalStore } from '../../app/stores/globalStore'
-import ProfileShort from '../../app/models/profileShort'
+import { ProfileShort } from '../../app/models/profileShort'
 
 interface Props {
   profile: ProfileShort

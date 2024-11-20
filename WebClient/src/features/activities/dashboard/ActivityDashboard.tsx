@@ -9,13 +9,7 @@ import ActivityListItemPlaceholder from './ActivityListItemPlaceholder'
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useMainStore()
-  const {
-    loadNextActivitiesPage,
-    activityRegistry,
-    hasMore,
-    loading,
-    isDirty,
-  } = activityStore
+  const { loadNextActivitiesPage, hasMore, loading, isDirty } = activityStore
   const [loadingNext, setLoadingNext] = useState(false)
 
   function handleGetNext() {

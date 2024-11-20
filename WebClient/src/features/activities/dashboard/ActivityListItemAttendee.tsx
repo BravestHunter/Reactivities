@@ -2,10 +2,10 @@ import { observer } from 'mobx-react-lite'
 import { Image, List, Popup } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import ProfileCard from '../../profiles/ProfileCard'
-import Attendee from '../../../app/models/profileShort'
+import { ProfileShort } from '../../../app/models/profileShort'
 
 interface Props {
-  attendees: Attendee[]
+  attendees: ProfileShort[]
 }
 
 export default observer(function ActivityListItemAttendee(props: Props) {

@@ -232,27 +232,10 @@ export default class ActivityStore {
       return
     }
 
-    this.setUpdating(true)
+    const formValues = new ActivityFormValues(this.selectedActivity)
+    formValues.isCancelled = !formValues.isCancelled
 
-    try {
-      const isGoing = this.selectedActivity.isGoing
-      await agent.Activities.updateAttendance(
-        this.selectedActivity!.id,
-        !isGoing
-      )
-
-      runInAction(() => {
-        this.selectedActivity!.isCancelled = !this.selectedActivity?.isCancelled
-        this.activityRegistry.set(
-          this.selectedActivity!.id,
-          this.selectedActivity!
-        )
-      })
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.setUpdating(false)
-    }
+    await this.updateActivity(formValues)
   }
 
   updateAttendeeFollowing = (username: string) => {

@@ -2,7 +2,7 @@ namespace Reactivities.Domain.Activities.Dtos
 {
     public class EditActivityDto
     {
-        public required long Id { get; set; }
+        public long Id { get; set; }
         public required string Title { get; set; }
         public required DateTime Date { get; set; }
         public string? Description { get; set; }

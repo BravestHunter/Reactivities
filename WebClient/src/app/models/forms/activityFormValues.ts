@@ -6,16 +6,18 @@ export default class ActivityFormValues {
   category: string = ''
   city: string = ''
   venue: string = ''
+  isCancelled: boolean = false
 
-  constructor(activity?: ActivityFormValues) {
-    if (activity) {
-      this.id = activity.id
-      this.title = activity.title
-      this.date = activity.date
-      this.description = activity.description
-      this.category = activity.category
-      this.city = activity.city
-      this.venue = activity.venue
+  constructor(other?: ActivityFormValues) {
+    if (other) {
+      this.id = other.id
+      this.title = other.title
+      this.date = other.date
+      this.description = other.description
+      this.category = other.category
+      this.city = other.city
+      this.venue = other.venue
+      this.isCancelled = other.isCancelled
     }
   }
 }

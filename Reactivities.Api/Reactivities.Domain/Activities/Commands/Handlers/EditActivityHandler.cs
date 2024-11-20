@@ -22,7 +22,7 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
         {
             try
             {
-                var existingActivity = await _activityRepository.GetById(request.Activity.Id);
+                var existingActivity = await _activityRepository.GetByIdWithAttendees(request.Activity.Id);
                 if (existingActivity == null)
                 {
                     return Result<ActivityDto>.Failure(new NotFoundException("Failed to find activity"));

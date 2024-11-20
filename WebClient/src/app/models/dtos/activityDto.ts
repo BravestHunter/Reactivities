@@ -1,4 +1,4 @@
-import Attendee from '../profileShort'
+import { ProfileShort } from '../profileShort'
 
 export default interface ActivityDto {
   id: number
@@ -9,6 +9,6 @@ export default interface ActivityDto {
   city: string
   venue: string
   isCancelled: boolean
-  host: Attendee
-  attendees: Attendee[]
+  host: ProfileShort
+  attendees: ProfileShort[]
 }
