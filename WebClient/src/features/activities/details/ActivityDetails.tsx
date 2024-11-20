@@ -14,7 +14,7 @@ export default observer(function ActivityDetails() {
   const {
     selectedActivity: activity,
     loadActivity,
-    loadingInitial,
+    loading,
     clearSelectedActivity,
   } = activityStore
   const params = useParams<{ id: string }>()
@@ -25,7 +25,7 @@ export default observer(function ActivityDetails() {
     return () => clearSelectedActivity()
   }, [id, loadActivity, clearSelectedActivity])
 
-  if (loadingInitial || !activity) return <LoadingComponent />
+  if (loading || !activity) return <LoadingComponent />
 
   return (
     <Grid>

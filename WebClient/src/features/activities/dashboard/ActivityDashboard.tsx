@@ -9,23 +9,23 @@ import ActivityListItemPlaceholder from './ActivityListItemPlaceholder'
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useMainStore()
-  const { loadActivities, activityRegistry, currentPage, hasMore } =
+  const { loadNextActivitiesPage, activityRegistry, hasMore, loading } =
     activityStore
   const [loadingNext, setLoadingNext] = useState(false)
 
   function handleGetNext() {
     setLoadingNext(true)
-    loadActivities(currentPage + 1).then(() => setLoadingNext(false))
+    loadNextActivitiesPage().then(() => setLoadingNext(false))
   }
 
   useEffect(() => {
-    if (activityRegistry.size <= 1) loadActivities(1)
-  }, [activityRegistry.size, loadActivities])
+    if (activityRegistry.size == 0) loadNextActivitiesPage()
+  }, [activityRegistry.size, loadNextActivitiesPage])
 
   return (
     <Grid>
       <Grid.Column width="10">
-        {activityStore.loadingInitial && !loadingNext ? (
+        {loading && !loadingNext ? (
           <>
             <ActivityListItemPlaceholder />
             <ActivityListItemPlaceholder />

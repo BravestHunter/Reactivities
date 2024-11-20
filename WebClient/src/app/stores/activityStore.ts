@@ -12,11 +12,12 @@ import { ActivityListFilters } from '../models/activityListFilters'
 import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
 
 export default class ActivityStore {
-  activityRegistry: Map<number, Activity> = new Map<number, Activity>()
-  selectedActivity: Activity | undefined = undefined
+  updating: boolean = false
   loading: boolean = false
-  loadingInitial: boolean = false
-  pageParams: PageParams | null = null
+
+  activityRegistry: Map<number, Activity> = new Map<number, Activity>()
+  private pageParams: PageParams | null = null
+  selectedActivity: Activity | undefined = undefined
 
   listFilters: ActivityListFilters = new ActivityListFilters()
 
@@ -28,12 +29,8 @@ export default class ActivityStore {
         fromDate: this.listFilters.fromDate,
         relationship: this.listFilters.relationship,
       }),
-      this.resetActivitiesList
+      this.reset
     )
-  }
-
-  get currentPage() {
-    return this.pageParams?.currentPage ?? 1
   }
 
   get hasMore() {
@@ -41,37 +38,6 @@ export default class ActivityStore {
       (this.pageParams &&
         this.pageParams.currentPage < this.pageParams.totalPages) ||
       false
-    )
-  }
-
-  setListFilter = <K extends keyof ActivityListFilters>(
-    key: K,
-    value: ActivityListFilters[K]
-  ) => {
-    this.listFilters[key] = value
-  }
-
-  private getActivity = (id: number) => {
-    return this.activityRegistry.get(id)
-  }
-
-  private addActivity = (activityDto: ActivityDto) => {
-    const user = globalStore.userStore.user
-    const activity = new Activity(activityDto, user)
-    this.activityRegistry.set(activity.id, activity)
-
-    return activity
-  }
-
-  private resetActivitiesList = () => {
-    this.activityRegistry.clear()
-    this.selectedActivity = undefined
-    this.loadActivities(1)
-  }
-
-  private get activitiesByDate() {
-    return Array.from(this.activityRegistry.values()).sort(
-      (a, b) => a.date!.getTime() - b.date!.getTime()
     )
   }
 
@@ -87,34 +53,49 @@ export default class ActivityStore {
     )
   }
 
-  setLoadingInitial = (value: boolean) => {
-    this.loadingInitial = value
+  setListFilter = <K extends keyof ActivityListFilters>(
+    key: K,
+    value: ActivityListFilters[K]
+  ) => {
+    this.listFilters[key] = value
   }
 
-  setLoading = (value: boolean) => {
+  private get currentPage() {
+    return this.pageParams?.currentPage ?? 0
+  }
+
+  private get activitiesByDate() {
+    return Array.from(this.activityRegistry.values()).sort(
+      (a, b) => a.date!.getTime() - b.date!.getTime()
+    )
+  }
+
+  private setLoading = (value: boolean) => {
     this.loading = value
   }
 
-  setPageParams = (params: PageParams) => {
-    this.pageParams = params
+  private setUpdating = (value: boolean) => {
+    this.updating = value
   }
 
-  loadActivities = async (pageNumber: number) => {
-    this.setLoadingInitial(true)
+  loadNextActivitiesPage = async () => {
+    this.setLoading(true)
 
     try {
-      const pagingParams = new PagingParams(pageNumber)
+      const pagingParams = new PagingParams(this.currentPage + 1)
       const request = new GetActivitiesRequest(pagingParams, this.listFilters)
       const result = await agent.Activities.list(request)
 
-      result.items.forEach((a) => {
-        this.addActivity(a)
+      runInAction(() => {
+        result.items.forEach((a) => {
+          this.addActivity(a)
+        })
+        this.pageParams = result.params
       })
-      this.setPageParams(result.params)
     } catch (error) {
       console.log(error)
     } finally {
-      this.setLoadingInitial(false)
+      this.setLoading(false)
     }
   }
 
@@ -122,7 +103,7 @@ export default class ActivityStore {
     let activity = this.getActivity(id)
 
     if (!activity) {
-      this.setLoadingInitial(true)
+      this.setLoading(true)
 
       try {
         const activityDto = await agent.Activities.details(id)
@@ -130,7 +111,7 @@ export default class ActivityStore {
       } catch (error) {
         console.log(error)
       } finally {
-        this.setLoadingInitial(false)
+        this.setLoading(false)
       }
     }
 
@@ -171,7 +152,7 @@ export default class ActivityStore {
   }
 
   deleteActivity = async (id: number) => {
-    this.setLoading(true)
+    this.setUpdating(true)
 
     try {
       await agent.Activities.delete(id)
@@ -182,7 +163,7 @@ export default class ActivityStore {
     } catch (error) {
       console.log(error)
     } finally {
-      this.setLoading(false)
+      this.setUpdating(false)
     }
   }
 
@@ -192,7 +173,7 @@ export default class ActivityStore {
       return
     }
 
-    this.setLoading(true)
+    this.setUpdating(true)
 
     try {
       const isGoing = this.selectedActivity.isGoing
@@ -223,7 +204,7 @@ export default class ActivityStore {
     } catch (error) {
       console.log(error)
     } finally {
-      this.setLoading(false)
+      this.setUpdating(false)
     }
   }
 
@@ -233,7 +214,7 @@ export default class ActivityStore {
       return
     }
 
-    this.setLoading(true)
+    this.setUpdating(true)
 
     try {
       const isGoing = this.selectedActivity.isGoing
@@ -252,7 +233,7 @@ export default class ActivityStore {
     } catch (error) {
       console.log(error)
     } finally {
-      this.setLoading(false)
+      this.setUpdating(false)
     }
   }
 
@@ -271,5 +252,24 @@ export default class ActivityStore {
         }
       })
     })
+  }
+
+  private reset = () => {
+    this.activityRegistry.clear()
+    this.pageParams = null
+    this.selectedActivity = undefined
+    this.loadNextActivitiesPage()
+  }
+
+  private getActivity = (id: number) => {
+    return this.activityRegistry.get(id)
+  }
+
+  private addActivity = (activityDto: ActivityDto) => {
+    const user = globalStore.userStore.user
+    const activity = new Activity(activityDto, user)
+    this.activityRegistry.set(activity.id, activity)
+
+    return activity
   }
 }

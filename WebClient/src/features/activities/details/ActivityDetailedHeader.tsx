@@ -25,7 +25,7 @@ interface Props {
 export default observer(function ActivityDetailedHeader(props: Props) {
   const { activity } = props
   const {
-    activityStore: { updateAttendance, loading, cancelActivityToggle },
+    activityStore: { updateAttendance, updating, cancelActivityToggle },
   } = useMainStore()
 
   return (
@@ -76,7 +76,7 @@ export default observer(function ActivityDetailedHeader(props: Props) {
               basic
               content={activity.isCancelled ? 'Re-activate' : 'Cancel'}
               onClick={cancelActivityToggle}
-              loading={loading}
+              loading={updating}
             />
             <Button
               disabled={activity.isCancelled}
@@ -89,13 +89,13 @@ export default observer(function ActivityDetailedHeader(props: Props) {
             </Button>
           </>
         ) : activity.isGoing ? (
-          <Button loading={loading} onClick={updateAttendance}>
+          <Button loading={updating} onClick={updateAttendance}>
             Cancel attendance
           </Button>
         ) : (
           <Button
             disabled={activity.isCancelled}
-            loading={loading}
+            loading={updating}
             onClick={updateAttendance}
             color="teal"
           >

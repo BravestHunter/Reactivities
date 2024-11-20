@@ -15,7 +15,7 @@ import ActivityFormValues from '../../../app/models/forms/activityFormValues'
 
 export default observer(function ActivityForm() {
   const { activityStore } = useMainStore()
-  const { loadActivity, createActivity, updateActivity, loadingInitial } =
+  const { loadActivity, createActivity, updateActivity, loading } =
     activityStore
   const params = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -52,7 +52,7 @@ export default observer(function ActivityForm() {
     navigate(`/activities/${activity.id}`)
   }
 
-  if (loadingInitial) return <LoadingComponent content="Loading activity..." />
+  if (loading) return <LoadingComponent content="Loading activity..." />
 
   return (
     <Segment clearing>

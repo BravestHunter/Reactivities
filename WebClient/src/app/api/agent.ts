@@ -32,7 +32,7 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   async (response) => {
-    if (import.meta.env.NODE_ENV === 'development') {
+    if (import.meta.env.MODE === 'development') {
       // Fake delay
       await sleep(1000)
     }
