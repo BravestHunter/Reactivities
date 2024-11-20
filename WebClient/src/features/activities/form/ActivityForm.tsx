@@ -42,14 +42,14 @@ export default observer(function ActivityForm() {
       )
   }, [id, loadActivity])
 
-  async function handleFormSubmit(activity: ActivityFormValues) {
-    if (!activity.id) {
-      await createActivity(activity)
-    } else {
-      await updateActivity(activity)
-    }
+  async function handleFormSubmit(formValues: ActivityFormValues) {
+    const activity = formValues.id
+      ? await updateActivity(formValues)
+      : await createActivity(formValues)
 
-    navigate(`/activities/${activity.id}`)
+    if (activity) {
+      navigate(`/activities/${activity.id}`)
+    }
   }
 
   if (loading) return <LoadingComponent content="Loading activity..." />

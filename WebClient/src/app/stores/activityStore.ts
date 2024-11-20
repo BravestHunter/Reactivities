@@ -53,13 +53,6 @@ export default class ActivityStore {
     )
   }
 
-  setListFilter = <K extends keyof ActivityListFilters>(
-    key: K,
-    value: ActivityListFilters[K]
-  ) => {
-    this.listFilters[key] = value
-  }
-
   private get currentPage() {
     return this.pageParams?.currentPage ?? 0
   }
@@ -78,20 +71,33 @@ export default class ActivityStore {
     this.updating = value
   }
 
+  private setPageParams = (pageParams: PageParams) => {
+    this.pageParams = pageParams
+  }
+
+  private setSelectedActivity = (activity: Activity) => {
+    this.selectedActivity = activity
+  }
+
+  setListFilter = <K extends keyof ActivityListFilters>(
+    key: K,
+    value: ActivityListFilters[K]
+  ) => {
+    this.listFilters[key] = value
+  }
+
   loadNextActivitiesPage = async () => {
     this.setLoading(true)
 
     try {
       const pagingParams = new PagingParams(this.currentPage + 1)
       const request = new GetActivitiesRequest(pagingParams, this.listFilters)
-      const result = await agent.Activities.list(request)
+      const pagedActivityList = await agent.Activities.list(request)
 
-      runInAction(() => {
-        result.items.forEach((a) => {
-          this.addActivity(a)
-        })
-        this.pageParams = result.params
+      pagedActivityList.items.forEach((a) => {
+        this.addActivityInternal(a)
       })
+      this.setPageParams(pagedActivityList.params)
     } catch (error) {
       console.log(error)
     } finally {
@@ -100,14 +106,14 @@ export default class ActivityStore {
   }
 
   loadActivity = async (id: number) => {
-    let activity = this.getActivity(id)
+    let activity = this.getActivityInternal(id)
 
     if (!activity) {
       this.setLoading(true)
 
       try {
         const activityDto = await agent.Activities.details(id)
-        activity = this.addActivity(activityDto)
+        activity = this.addActivityInternal(activityDto)
       } catch (error) {
         console.log(error)
       } finally {
@@ -115,39 +121,45 @@ export default class ActivityStore {
       }
     }
 
-    runInAction(() => (this.selectedActivity = activity))
+    if (activity) {
+      this.setSelectedActivity(activity)
+    }
     return activity
+  }
+
+  clearSelectedActivity = () => {
+    this.selectedActivity = undefined
   }
 
   createActivity = async (formValues: ActivityFormValues) => {
     try {
       const activityDto = await agent.Activities.create(formValues)
-      const activity = this.addActivity(activityDto)
+      const activity = this.addActivityInternal(activityDto)
 
-      runInAction(() => {
-        this.selectedActivity = activity
-      })
+      this.setSelectedActivity(activity)
+
+      return activity
     } catch (error) {
       console.log(error)
     }
   }
 
   updateActivity = async (formValues: ActivityFormValues) => {
-    try {
-      var activity = await agent.Activities.update(formValues)
+    this.setUpdating(true)
 
-      runInAction(() => {
-        if (activity.id) {
-          let updatedActivity = {
-            ...this.getActivity(activity.id),
-            ...activity,
-          }
-          this.activityRegistry.set(activity.id, updatedActivity as Activity)
-          this.selectedActivity = updatedActivity as Activity
-        }
-      })
+    try {
+      var activityDto = await agent.Activities.update(formValues)
+
+      this.deleteActivityInternal(activityDto.id)
+      const activity = this.addActivityInternal(activityDto)
+
+      this.setSelectedActivity(activity)
+
+      return activity
     } catch (error) {
       console.log(error)
+    } finally {
+      this.setUpdating(false)
     }
   }
 
@@ -157,9 +169,7 @@ export default class ActivityStore {
     try {
       await agent.Activities.delete(id)
 
-      runInAction(() => {
-        this.activityRegistry.delete(id)
-      })
+      this.deleteActivityInternal(id)
     } catch (error) {
       console.log(error)
     } finally {
@@ -237,10 +247,6 @@ export default class ActivityStore {
     }
   }
 
-  clearSelectedActivity = () => {
-    this.selectedActivity = undefined
-  }
-
   updateAttendeeFollowing = (username: string) => {
     this.activityRegistry.forEach((activity) => {
       activity.attendees?.forEach((attendee) => {
@@ -261,15 +267,19 @@ export default class ActivityStore {
     this.loadNextActivitiesPage()
   }
 
-  private getActivity = (id: number) => {
+  private getActivityInternal = (id: number) => {
     return this.activityRegistry.get(id)
   }
 
-  private addActivity = (activityDto: ActivityDto) => {
+  private addActivityInternal = (activityDto: ActivityDto) => {
     const user = globalStore.userStore.user
     const activity = new Activity(activityDto, user)
     this.activityRegistry.set(activity.id, activity)
 
     return activity
+  }
+
+  private deleteActivityInternal = (id: number) => {
+    this.activityRegistry.delete(id)
   }
 }
