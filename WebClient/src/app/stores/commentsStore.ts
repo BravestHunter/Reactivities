@@ -10,7 +10,7 @@ import ActivityStore from './activityStore'
 
 export default class CommentStore {
   comments: ChatComment[] = []
-  hubConnection: HubConnection | null = null
+  private hubConnection: HubConnection | null = null
 
   private readonly activityStore: ActivityStore
 
@@ -50,10 +50,6 @@ export default class CommentStore {
     }
   }
 
-  stopHubConnection = () => {
-    this.hubConnection?.stop().catch((error) => console.log(error))
-  }
-
   clearComments = () => {
     this.comments = []
     this.stopHubConnection()
@@ -67,5 +63,9 @@ export default class CommentStore {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private stopHubConnection = () => {
+    this.hubConnection?.stop().catch((error) => console.log(error))
   }
 }

@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Reactivities.Application.Security;
-using Reactivities.Domain.Core.Interfaces;
 
 namespace Reactivities.Api.Extensions
 {
@@ -32,7 +30,6 @@ namespace Reactivities.Api.Extensions
             });
 
             services.AddHttpContextAccessor();
-            services.AddScoped<IUserAccessor, UserAccessor>();
 
             services.AddSignalR();
 

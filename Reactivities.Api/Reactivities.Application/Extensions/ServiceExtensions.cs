@@ -9,6 +9,7 @@ using Reactivities.Application.Configuration;
 using Reactivities.Application.Security;
 using Reactivities.Application.Services;
 using Reactivities.Domain.Account.Interfaces;
+using Reactivities.Domain.Core.Interfaces;
 using Reactivities.Domain.Users.Models;
 using Reactivities.Persistence.Extensions;
 
@@ -75,6 +76,7 @@ namespace Reactivities.Application.Extensions
             });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
+            services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<AccountService>();
 

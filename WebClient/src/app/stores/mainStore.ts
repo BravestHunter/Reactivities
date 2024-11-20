@@ -1,12 +1,10 @@
 import { createContext, useContext } from 'react'
 import ActivityStore from './activityStore'
 import ProfileStore from './profileStore'
-import CommentStore from './commentsStore'
 
 interface MainStore {
   activityStore: ActivityStore
   profileStore: ProfileStore
-  commentStore: CommentStore
 }
 
 export function createMainStore(): MainStore {
@@ -14,7 +12,6 @@ export function createMainStore(): MainStore {
   return {
     activityStore: activityStore,
     profileStore: new ProfileStore(activityStore),
-    commentStore: new CommentStore(activityStore),
   }
 }
 

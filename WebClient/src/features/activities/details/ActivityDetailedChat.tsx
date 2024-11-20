@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react-lite'
+import { observer, useLocalObservable } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { Segment, Comment, Header, Loader } from 'semantic-ui-react'
 import { useMainStore } from '../../../app/stores/mainStore'
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { formatDistanceToNow } from 'date-fns'
+import CommentStore from '../../../app/stores/commentsStore'
 
 interface Props {
   activityId: number
@@ -13,7 +14,8 @@ interface Props {
 
 export default observer(function ActivityDetailedChat(props: Props) {
   const { activityId } = props
-  const { commentStore } = useMainStore()
+  const { activityStore } = useMainStore()
+  const commentStore = useLocalObservable(() => new CommentStore(activityStore))
 
   useEffect(() => {
     if (activityId) {
