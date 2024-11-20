@@ -9,8 +9,13 @@ import ActivityListItemPlaceholder from './ActivityListItemPlaceholder'
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useMainStore()
-  const { loadNextActivitiesPage, activityRegistry, hasMore, loading } =
-    activityStore
+  const {
+    loadNextActivitiesPage,
+    activityRegistry,
+    hasMore,
+    loading,
+    isDirty,
+  } = activityStore
   const [loadingNext, setLoadingNext] = useState(false)
 
   function handleGetNext() {
@@ -19,8 +24,8 @@ export default observer(function ActivityDashboard() {
   }
 
   useEffect(() => {
-    if (activityRegistry.size == 0) loadNextActivitiesPage()
-  }, [activityRegistry.size, loadNextActivitiesPage])
+    if (isDirty) loadNextActivitiesPage()
+  }, [isDirty, loadNextActivitiesPage])
 
   return (
     <Grid>

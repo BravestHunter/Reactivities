@@ -1,6 +1,7 @@
 import ActivityDto from './dtos/activityDto'
 import User from './user'
-import ProfileShort from './profileShort'
+import { ProfileShort } from './profileShort'
+import { makeAutoObservable } from 'mobx'
 
 export interface Activity {
   id: number
@@ -28,5 +29,7 @@ export class Activity implements Activity {
     }
 
     this.date = new Date(this.date!)
+
+    makeAutoObservable(this)
   }
 }

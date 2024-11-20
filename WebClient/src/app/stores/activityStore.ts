@@ -1,7 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import agent from '../api/agent'
 import { format } from 'date-fns'
-import { Profile } from '../models/profile'
 import PagingParams from '../models/pagingParams'
 import PageParams from '../models/pageParams'
 import { Activity } from '../models/activity'
@@ -10,10 +9,12 @@ import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from './globalStore'
 import { ActivityListFilters } from '../models/activityListFilters'
 import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
+import { ProfileShort } from '../models/profileShort'
 
 export default class ActivityStore {
   updating: boolean = false
   loading: boolean = false
+  isDirty: boolean = true
 
   activityRegistry: Map<number, Activity> = new Map<number, Activity>()
   private pageParams: PageParams | null = null
@@ -29,16 +30,16 @@ export default class ActivityStore {
         fromDate: this.listFilters.fromDate,
         relationship: this.listFilters.relationship,
       }),
-      this.reset
+      this.handleFiltersChange
     )
   }
 
   get hasMore() {
-    return (
-      (this.pageParams &&
-        this.pageParams.currentPage < this.pageParams.totalPages) ||
-      false
-    )
+    if (!this.pageParams) {
+      return true
+    } else {
+      return this.pageParams.currentPage < this.pageParams.totalPages
+    }
   }
 
   get groupedActivities() {
@@ -71,6 +72,10 @@ export default class ActivityStore {
     this.updating = value
   }
 
+  private setDirty = (value: boolean) => {
+    this.isDirty = value
+  }
+
   private setPageParams = (pageParams: PageParams) => {
     this.pageParams = pageParams
   }
@@ -88,6 +93,10 @@ export default class ActivityStore {
 
   loadNextActivitiesPage = async () => {
     this.setLoading(true)
+
+    if (this.isDirty) {
+      this.reset()
+    }
 
     try {
       const pagingParams = new PagingParams(this.currentPage + 1)
@@ -123,6 +132,7 @@ export default class ActivityStore {
 
     if (activity) {
       this.setSelectedActivity(activity)
+      this.setDirty(true)
     }
     return activity
   }
@@ -137,6 +147,7 @@ export default class ActivityStore {
       const activity = this.addActivityInternal(activityDto)
 
       this.setSelectedActivity(activity)
+      this.setDirty(true)
 
       return activity
     } catch (error) {
@@ -170,6 +181,8 @@ export default class ActivityStore {
       await agent.Activities.delete(id)
 
       this.deleteActivityInternal(id)
+
+      this.setDirty(true)
     } catch (error) {
       console.log(error)
     } finally {
@@ -186,30 +199,25 @@ export default class ActivityStore {
     this.setUpdating(true)
 
     try {
-      const isGoing = this.selectedActivity.isGoing
-      await agent.Activities.updateAttendance(
-        this.selectedActivity.id,
-        !isGoing
-      )
-      this.selectedActivity.isGoing = !isGoing
+      const isGoing = !this.selectedActivity.isGoing
+      const id = this.selectedActivity.id
+      await agent.Activities.updateAttendance(id, isGoing)
 
       runInAction(() => {
-        if (this.selectedActivity?.isGoing) {
-          this.selectedActivity.attendees =
-            this.selectedActivity.attendees?.filter(
-              (a) => a.username !== user.username
-            )
-
-          this.selectedActivity.isGoing = false
-        } else {
-          const attendee = new Profile(user)
-          this.selectedActivity!.attendees?.push(attendee)
-          this.selectedActivity!.isGoing = true
+        const activity = this.getActivityInternal(id)
+        if (!activity) {
+          return
         }
-        this.activityRegistry.set(
-          this.selectedActivity!.id,
-          this.selectedActivity!
-        )
+
+        if (isGoing) {
+          const attendee = new ProfileShort(user)
+          activity.attendees.push(attendee)
+        } else {
+          activity.attendees = activity.attendees?.filter(
+            (a) => a.username !== user.username
+          )
+        }
+        activity.isGoing = isGoing
       })
     } catch (error) {
       console.log(error)
@@ -264,6 +272,11 @@ export default class ActivityStore {
     this.activityRegistry.clear()
     this.pageParams = null
     this.selectedActivity = undefined
+    this.setDirty(false)
+  }
+
+  private handleFiltersChange = () => {
+    this.reset()
     this.loadNextActivitiesPage()
   }
 
