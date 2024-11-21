@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { Button, Grid, Header, Tab } from 'semantic-ui-react'
-import { useMainStore } from '../../app/stores/mainStore'
 import ProfileEditForm from './ProfileEditForm'
+import { useProfileStore } from '../../app/stores/profileStore'
 
 export default observer(function ProfileAbout() {
-  const { profileStore } = useMainStore()
+  const profileStore = useProfileStore()
   const { isCurrentUser, profile } = profileStore
   const [editMode, setEditMode] = useState<boolean>(false)
 

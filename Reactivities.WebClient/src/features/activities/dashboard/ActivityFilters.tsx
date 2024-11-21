@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import Calendar from 'react-calendar'
 import { Header, Menu } from 'semantic-ui-react'
-import { useMainStore } from '../../../app/stores/mainStore'
 import ActivityRelationship from '../../../app/models/activityRelationship'
+import { useActivityStore } from '../../../app/stores/activityStore'
 
 export default observer(function ActivityFilters() {
-  const { activityStore } = useMainStore()
+  const activityStore = useActivityStore()
   const { listFilters, setListFilter } = activityStore
 
   return (

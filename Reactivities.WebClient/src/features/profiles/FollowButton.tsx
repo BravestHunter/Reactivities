@@ -1,9 +1,9 @@
 import { SyntheticEvent } from 'react'
 import { Button, Reveal } from 'semantic-ui-react'
 import { observer } from 'mobx-react-lite'
-import { useMainStore } from '../../app/stores/mainStore'
 import { useGlobalStore } from '../../app/stores/globalStore'
 import { ProfileShort } from '../../app/models/profileShort'
+import { useProfileStore } from '../../app/stores/profileStore'
 
 interface Props {
   profile: ProfileShort
@@ -12,7 +12,7 @@ interface Props {
 export default observer(function FollowButton(props: Props) {
   const { profile } = props
   const { userStore } = useGlobalStore()
-  const { profileStore } = useMainStore()
+  const profileStore = useProfileStore()
   const { updateFollowing, loading } = profileStore
 
   if (userStore.user?.username === profile.username) {

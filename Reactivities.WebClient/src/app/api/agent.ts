@@ -15,7 +15,6 @@ import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from '../stores/globalStore'
 import ServerError from '../models/serverError'
 import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
-import UpdateProfileRequest from '../models/requests/updateProfileRequest'
 import ProfileFormValues from '../models/forms/profileFormValues'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL

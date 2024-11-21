@@ -2,7 +2,7 @@ import { globalStore, GlobalStoreContext } from './app/stores/globalStore'
 import RouterRoot from './app/router/RouterRoot'
 import { ToastContainer } from 'react-toastify'
 import ModalContainer from './app/common/modals/ModalContainer'
-import { MainStoreProvider } from './app/stores/MainStoreProvider'
+import { ActivityStoreProvider } from './app/stores/ActivityStoreProvider'
 
 function App() {
   return (
@@ -11,9 +11,9 @@ function App() {
       <ToastContainer position="bottom-right" hideProgressBar theme="colored" />
 
       <GlobalStoreContext.Provider value={globalStore}>
-        <MainStoreProvider>
+        <ActivityStoreProvider>
           <RouterRoot />
-        </MainStoreProvider>
+        </ActivityStoreProvider>
       </GlobalStoreContext.Provider>
     </>
   )

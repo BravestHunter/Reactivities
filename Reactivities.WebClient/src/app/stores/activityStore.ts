@@ -10,6 +10,7 @@ import { globalStore } from './globalStore'
 import { ActivityListFilters } from '../models/activityListFilters'
 import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
 import { ProfileShort } from '../models/profileShort'
+import { createContext, useContext } from 'react'
 
 export default class ActivityStore {
   updating: boolean = false
@@ -278,4 +279,18 @@ export default class ActivityStore {
   private deleteActivityInternal = (id: number) => {
     this.activityRegistry.delete(id)
   }
+}
+
+export const ActivityStoreContext = createContext<ActivityStore | undefined>(
+  undefined
+)
+
+export const useActivityStore = (): ActivityStore => {
+  const context = useContext(ActivityStoreContext)
+  if (!context) {
+    throw new Error(
+      'useActivityStore must be used within a ActivityStoreProvider'
+    )
+  }
+  return context
 }
