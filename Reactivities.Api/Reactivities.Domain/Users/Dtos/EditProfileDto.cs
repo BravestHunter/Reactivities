@@ -3,6 +3,6 @@
     public class EditProfileDto
     {
         public required string DisplayName { get; set; }
-        public required string Bio { get; set; }
+        public string? Bio { get; set; }
     }
 }

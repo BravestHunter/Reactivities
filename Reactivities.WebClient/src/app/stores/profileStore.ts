@@ -5,6 +5,7 @@ import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
 import { globalStore } from './globalStore'
 import ActivityStore from './activityStore'
+import ProfileFormValues from '../models/forms/profileFormValues'
 
 export default class ProfileStore {
   profile: Profile | null = null
@@ -85,11 +86,11 @@ export default class ProfileStore {
     }
   }
 
-  updateProfile = async (profile: Partial<Profile>) => {
+  updateProfile = async (formValues: ProfileFormValues) => {
     this.setLoading(true)
 
     try {
-      await agent.Profiles.update(profile)
+      const profile = await agent.Profiles.update(formValues)
 
       runInAction(() => {
         if (
@@ -98,6 +99,20 @@ export default class ProfileStore {
         ) {
           globalStore.userStore.setDisplayName(profile.displayName)
         }
+
+        this.activityStore.activityRegistry.forEach((activity) => {
+          if (activity.isHost) {
+            activity.host.displayName = profile.displayName
+          } else if (activity.isGoing) {
+            const attendee = activity.attendees.find(
+              (a) => a.username == profile.username
+            )
+            if (attendee) {
+              attendee.displayName = profile.displayName
+            }
+          }
+        })
+
         this.profile = { ...this.profile, ...(profile as Profile) }
       })
     } catch (error) {

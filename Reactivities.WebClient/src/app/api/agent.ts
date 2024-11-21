@@ -15,6 +15,8 @@ import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from '../stores/globalStore'
 import ServerError from '../models/serverError'
 import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
+import UpdateProfileRequest from '../models/requests/updateProfileRequest'
+import ProfileFormValues from '../models/forms/profileFormValues'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL
 axios.defaults.withCredentials = true
@@ -110,7 +112,8 @@ const Account = {
 
 const Profiles = {
   get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
-  update: (profile: Partial<Profile>) => requests.put('/profiles', profile),
+  update: (profile: ProfileFormValues) =>
+    requests.put<Profile>('/profiles', profile),
   listActivities: (username: string, predicate: string) =>
     requests.get<UserActivity[]>(
       `/profiles/${username}/activities?predicate=${predicate}`

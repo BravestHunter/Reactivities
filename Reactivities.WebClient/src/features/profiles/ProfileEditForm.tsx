@@ -2,10 +2,10 @@ import { Form, Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
 import { useMainStore } from '../../app/stores/mainStore'
 import { Button } from 'semantic-ui-react'
-import { Profile } from '../../app/models/profile'
 import * as Yup from 'yup'
 import FormTextInput from '../../app/common/form/FormTextInput'
 import FormTextArea from '../../app/common/form/FormTextArea'
+import ProfileFormValues from '../../app/models/forms/profileFormValues'
 
 interface Props {
   setEditMode: (editMode: boolean) => void
@@ -20,7 +20,7 @@ export default observer(function ProfileEditForm(props: Props) {
     displayName: Yup.string().required(),
   })
 
-  async function handleSubmit(profile: Partial<Profile>) {
+  async function handleSubmit(profile: ProfileFormValues) {
     await updateProfile(profile)
     setEditMode(false)
   }
@@ -29,7 +29,7 @@ export default observer(function ProfileEditForm(props: Props) {
     <Formik
       validationSchema={validationSchema}
       initialValues={{
-        displayName: profile?.displayName,
+        displayName: profile?.displayName ?? '',
         bio: profile?.bio,
       }}
       onSubmit={handleSubmit}
