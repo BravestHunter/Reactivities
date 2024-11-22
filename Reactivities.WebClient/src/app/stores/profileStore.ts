@@ -6,7 +6,6 @@ import Photo from '../models/photo'
 import { globalStore } from './globalStore'
 import ActivityStore from './activityStore'
 import ProfileFormValues from '../models/forms/profileFormValues'
-import { createContext, useContext } from 'react'
 
 export default class ProfileStore {
   profile: Profile | null = null
@@ -261,18 +260,4 @@ export default class ProfileStore {
       this.setLoadingActivities(false)
     }
   }
-}
-
-export const ProfileStoreContext = createContext<ProfileStore | undefined>(
-  undefined
-)
-
-export const useProfileStore = (): ProfileStore => {
-  const context = useContext(ProfileStoreContext)
-  if (!context) {
-    throw new Error(
-      'useProfileStore must be used within a ProfileStoreProvider'
-    )
-  }
-  return context
 }

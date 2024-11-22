@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
+import { useMainStore } from '../../app/stores/mainStore'
 import { Card, Grid, Header, Tab } from 'semantic-ui-react'
 import ProfileCard from './ProfileCard'
-import { useProfileStore } from '../../app/stores/profileStore'
 
 export default observer(function ProfileFollowings() {
-  const profileStore = useProfileStore()
+  const { profileStore } = useMainStore()
   const { profile, followings, loadingFollowings, activeTab } = profileStore
 
   return (

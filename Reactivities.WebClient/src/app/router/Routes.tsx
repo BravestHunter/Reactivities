@@ -9,7 +9,6 @@ import ServerError from '../../features/errors/ServerError'
 import ProfilePage from '../../features/profiles/ProfilePage'
 import RequireAuth from './RequireAuth'
 import MainLayout from '../layout/MainLayout'
-import { ProfileStoreProvider } from '../stores/ProfileStoreProvider'
 
 export const routes: RouteObject[] = [
   {
@@ -36,11 +35,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: 'profiles/:username',
-            element: (
-              <ProfileStoreProvider>
-                <ProfilePage />
-              </ProfileStoreProvider>
-            ),
+            element: <ProfilePage />,
           },
           {
             path: 'errors',

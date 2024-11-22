@@ -1,14 +1,14 @@
 import { Grid, Loader } from 'semantic-ui-react'
 import ActivityList from './ActivityList'
+import { useMainStore } from '../../../app/stores/mainStore'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
 import ActivityFilters from './ActivityFilters'
 import InfiniteScroll from 'react-infinite-scroller'
 import ActivityListItemPlaceholder from './ActivityListItemPlaceholder'
-import { useActivityStore } from '../../../app/stores/activityStore'
 
 export default observer(function ActivityDashboard() {
-  const activityStore = useActivityStore()
+  const { activityStore } = useMainStore()
   const { loadNextActivitiesPage, hasMore, loading, isDirty } = activityStore
   const [loadingNext, setLoadingNext] = useState(false)
 

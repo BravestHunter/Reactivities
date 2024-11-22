@@ -3,13 +3,13 @@ import ProfileHeader from './ProfileHeader'
 import ProfileContent from './ProfileContent'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
+import { useMainStore } from '../../app/stores/mainStore'
 import { useEffect } from 'react'
 import LoadingComponent from '../../app/layout/LoadingComponent'
-import { useProfileStore } from '../../app/stores/profileStore'
 
 export default observer(function ProfilePage() {
   const { username } = useParams<{ username: string }>()
-  const profileStore = useProfileStore()
+  const { profileStore } = useMainStore()
   const { profile, loadingProfile, loadProfile, setActiveTab } = profileStore
 
   useEffect(() => {

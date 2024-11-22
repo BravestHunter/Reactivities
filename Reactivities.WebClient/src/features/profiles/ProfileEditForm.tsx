@@ -1,11 +1,11 @@
 import { Form, Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
+import { useMainStore } from '../../app/stores/mainStore'
 import { Button } from 'semantic-ui-react'
 import * as Yup from 'yup'
 import FormTextInput from '../../app/common/form/FormTextInput'
 import FormTextArea from '../../app/common/form/FormTextArea'
 import ProfileFormValues from '../../app/models/forms/profileFormValues'
-import { useProfileStore } from '../../app/stores/profileStore'
 
 interface Props {
   setEditMode: (editMode: boolean) => void
@@ -13,7 +13,7 @@ interface Props {
 
 export default observer(function ProfileEditForm(props: Props) {
   const { setEditMode } = props
-  const profileStore = useProfileStore()
+  const { profileStore } = useMainStore()
   const { profile, updateProfile } = profileStore
 
   const validationSchema = Yup.object({
