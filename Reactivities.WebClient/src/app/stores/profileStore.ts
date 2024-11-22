@@ -6,6 +6,14 @@ import Photo from '../models/photo'
 import { globalStore } from './globalStore'
 import ActivityStore from './activityStore'
 import ProfileFormValues from '../models/forms/profileFormValues'
+import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
+import {
+  ActivityListFilters,
+  maxDate,
+  minDate,
+} from '../models/activityListFilters'
+import ActivityRelationship from '../models/activityRelationship'
+import PagingParams from '../models/pagingParams'
 
 export default class ProfileStore {
   profile: Profile | null = null
@@ -245,14 +253,44 @@ export default class ProfileStore {
   loadUserActivities = async (username: string, predicate?: string) => {
     this.setLoadingActivities(true)
 
+    console.log(predicate)
+
     try {
-      const activities = await agent.Profiles.listActivities(
-        username,
-        predicate!
+      const pagingParams = new PagingParams(1, 100)
+
+      const filters = new ActivityListFilters()
+      switch (predicate) {
+        case 'future':
+          filters.fromDate = new Date()
+          filters.toDate = maxDate
+          filters.relationship = ActivityRelationship.IsGoing
+          break
+
+        case 'past':
+          filters.fromDate = minDate
+          filters.toDate = new Date()
+          filters.relationship = ActivityRelationship.IsGoing
+          break
+
+        case 'hosting':
+          filters.fromDate = minDate
+          filters.toDate = maxDate
+          filters.relationship = ActivityRelationship.IsHost
+          break
+      }
+
+      console.log(
+        'fromDate:' + filters.fromDate + ' | ' + filters.fromDate.toISOString()
+      )
+      console.log(
+        'toDate:' + filters.toDate + ' | ' + filters.toDate.toISOString()
       )
 
+      const request = new GetActivitiesRequest(pagingParams, filters)
+      const activities = await agent.Profiles.listActivities(username, request)
+
       runInAction(() => {
-        this.userActivities = activities
+        this.userActivities = activities.items
       })
     } catch (error) {
       console.log(error)

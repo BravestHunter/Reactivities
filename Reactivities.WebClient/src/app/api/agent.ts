@@ -3,7 +3,6 @@ import { toast } from 'react-toastify'
 import { router } from '../router/Routes'
 import User from '../models/user'
 import { Profile } from '../models/profile'
-import UserActivity from '../models/userActivity'
 import Photo from '../models/photo'
 import { sleep, toURLSearchParams } from '../utils'
 import PagedList from '../models/pagedist'
@@ -15,7 +14,6 @@ import ActivityDto from '../models/dtos/activityDto'
 import { globalStore } from '../stores/globalStore'
 import ServerError from '../models/serverError'
 import { GetActivitiesRequest } from '../models/requests/getActivitiesRequest'
-import UpdateProfileRequest from '../models/requests/updateProfileRequest'
 import ProfileFormValues from '../models/forms/profileFormValues'
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL
@@ -94,7 +92,10 @@ axios.interceptors.response.use(
 )
 
 const requests = {
-  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+  get: <T>(
+    url: string,
+    searchParams: URLSearchParams | undefined = undefined
+  ) => axios.get<T>(url, { params: searchParams }).then(responseBody),
   post: <T>(url: string, body: {}) =>
     axios.post<T>(url, body).then(responseBody),
   put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
@@ -114,9 +115,10 @@ const Profiles = {
   get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
   update: (profile: ProfileFormValues) =>
     requests.put<Profile>('/profiles', profile),
-  listActivities: (username: string, predicate: string) =>
-    requests.get<UserActivity[]>(
-      `/profiles/${username}/activities?predicate=${predicate}`
+  listActivities: (username: string, request: GetActivitiesRequest) =>
+    requests.get<PagedList<ActivityDto>>(
+      `/profiles/${username}/activities`,
+      toURLSearchParams(request)
     ),
   listFollowings: (username: string, predicate: string) =>
     requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
@@ -136,11 +138,10 @@ const Profiles = {
 
 const Activities = {
   list: (request: GetActivitiesRequest) =>
-    axios
-      .get<PagedList<ActivityDto>>('/activities', {
-        params: toURLSearchParams(request),
-      })
-      .then(responseBody),
+    requests.get<PagedList<ActivityDto>>(
+      '/activities',
+      toURLSearchParams(request)
+    ),
   details: (id: number) => requests.get<ActivityDto>(`/activities/${id}`),
   create: (activity: ActivityFormValues) =>
     requests.post<ActivityDto>('/activities', activity),

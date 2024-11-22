@@ -5,8 +5,8 @@ import PagingParams from '../pagingParams'
 export interface GetActivitiesRequest {
   pageNumber: number
   pageSize: number
-  fromDate?: Date
-  toDate?: Date
+  fromDate: Date
+  toDate: Date
   relationship: ActivityRelationship
 }
 
@@ -15,6 +15,7 @@ export class GetActivitiesRequest implements GetActivitiesRequest {
     this.pageNumber = pagingParams.pageNumber
     this.pageSize = pagingParams.pageSize
     this.fromDate = filters.fromDate
+    this.toDate = filters.toDate
     this.relationship = filters.relationship
   }
 }
