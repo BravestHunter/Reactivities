@@ -18,7 +18,7 @@ export default observer(function ProfilePhotos(props: Props) {
     uploadPhoto,
     uploadingFile,
     loading,
-    setMainPhoto,
+    setProfilePhoto,
     deletePhoto,
   } = profileStore
 
@@ -30,12 +30,12 @@ export default observer(function ProfilePhotos(props: Props) {
     setAddPhotoMode(false)
   }
 
-  function handleSetMainPhoto(
+  function handleSetProfilePhoto(
     photo: Photo,
     e: SyntheticEvent<HTMLButtonElement>
   ) {
     setTarget(Number(e.currentTarget.name))
-    setMainPhoto(photo)
+    setProfilePhoto(photo)
   }
 
   function handleDeletePhoto(
@@ -76,11 +76,11 @@ export default observer(function ProfilePhotos(props: Props) {
                       <Button
                         basic
                         color="green"
-                        content="Set main"
+                        content="Set as profile photo"
                         name={photo.id}
                         disabled={loading}
                         loading={target === photo.id && loading}
-                        onClick={(e) => handleSetMainPhoto(photo, e)}
+                        onClick={(e) => handleSetProfilePhoto(photo, e)}
                       />
                       <Button
                         basic

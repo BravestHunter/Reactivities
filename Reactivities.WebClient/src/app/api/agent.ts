@@ -132,7 +132,8 @@ const Profiles = {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
-  setMainPhoto: (id: number) => requests.post(`/photos/${id}/setmain`, {}),
+  setProfilePhoto: (id: number) =>
+    requests.post(`/photos/${id}/setProfile`, {}),
   deletePhoto: (id: number) => requests.delete(`/photos/${id}`),
 }
 

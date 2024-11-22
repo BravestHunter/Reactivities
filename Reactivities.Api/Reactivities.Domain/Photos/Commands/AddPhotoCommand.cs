@@ -7,6 +7,5 @@ namespace Reactivities.Domain.Photos.Commands
     public class AddPhotoCommand : IRequest<Result<PhotoDto>>
     {
         public required Stream Stream { get; set; }
-        public required string FileName { get; set; }
     }
 }

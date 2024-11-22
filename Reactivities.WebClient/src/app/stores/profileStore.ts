@@ -84,6 +84,12 @@ export default class ProfileStore {
     try {
       const profile = await agent.Profiles.get(username)
 
+      const user = globalStore.userStore.user
+      if (user && profile.username === user.username) {
+        user.displayName = profile.displayName
+        user.profilePhotoUrl = profile.profilePhotoUrl
+      }
+
       runInAction(() => {
         this.profile = profile
       })
@@ -149,11 +155,11 @@ export default class ProfileStore {
     }
   }
 
-  setMainPhoto = async (photo: Photo) => {
+  setProfilePhoto = async (photo: Photo) => {
     this.setLoading(true)
 
     try {
-      await agent.Profiles.setMainPhoto(photo.id)
+      await agent.Profiles.setProfilePhoto(photo.id)
       globalStore.userStore.setPhoto(photo.url)
 
       runInAction(() => {
@@ -174,13 +180,19 @@ export default class ProfileStore {
     try {
       await agent.Profiles.deletePhoto(photo.id)
 
-      runInAction(() => {
-        if (this.profile) {
-          this.profile.photos = this.profile.photos?.filter(
-            (p) => p.id !== photo.id
-          )
-        }
-      })
+      const user = globalStore.userStore.user
+      if (this.profile && user && this.profile?.username == user?.username) {
+        // Reload current user profile
+        this.loadProfile(user?.username)
+      } else {
+        runInAction(() => {
+          if (this.profile) {
+            this.profile.photos = this.profile.photos?.filter(
+              (p) => p.id !== photo.id
+            )
+          }
+        })
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -253,8 +265,6 @@ export default class ProfileStore {
   loadUserActivities = async (username: string, predicate?: string) => {
     this.setLoadingActivities(true)
 
-    console.log(predicate)
-
     try {
       const pagingParams = new PagingParams(1, 100)
 
@@ -278,13 +288,6 @@ export default class ProfileStore {
           filters.relationship = ActivityRelationship.IsHost
           break
       }
-
-      console.log(
-        'fromDate:' + filters.fromDate + ' | ' + filters.fromDate.toISOString()
-      )
-      console.log(
-        'toDate:' + filters.toDate + ' | ' + filters.toDate.toISOString()
-      )
 
       const request = new GetActivitiesRequest(pagingParams, filters)
       const activities = await agent.Profiles.listActivities(username, request)

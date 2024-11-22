@@ -41,7 +41,7 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                     return Result<PhotoDto>.Failure(new NotFoundException("Failed to find current user"));
                 }
 
-                var uploadResult = await _photoStorage.Add(request.Stream, request.FileName);
+                var uploadResult = await _photoStorage.Add(request.Stream);
                 var photo = new Photo
                 {
                     Url = uploadResult.Url,

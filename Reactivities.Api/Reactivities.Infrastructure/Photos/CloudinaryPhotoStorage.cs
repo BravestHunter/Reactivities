@@ -18,7 +18,7 @@ namespace Reactivities.Infrastructure.Photos
             _cloudinary = new Cloudinary(account);
         }
 
-        public async Task<PhotoUploadResult> Add(Stream stream, string fileName)
+        public async Task<PhotoUploadResult> Add(Stream stream)
         {
             if (stream.Length == 0)
             {
@@ -27,7 +27,7 @@ namespace Reactivities.Infrastructure.Photos
 
             var uploadParams = new ImageUploadParams
             {
-                File = new FileDescription(fileName, stream),
+                File = new FileDescription(Guid.NewGuid().ToString(), stream),
                 Folder = "Reactivities",
                 Transformation = new Transformation().Height(500).Width(500).Crop("fill")
             };
