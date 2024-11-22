@@ -84,13 +84,13 @@ export default class ProfileStore {
     try {
       const profile = await agent.Profiles.get(username)
 
-      const user = globalStore.userStore.user
-      if (user && profile.username === user.username) {
-        user.displayName = profile.displayName
-        user.profilePhotoUrl = profile.profilePhotoUrl
-      }
-
       runInAction(() => {
+        const user = globalStore.userStore.user
+        if (user && profile.username === user.username) {
+          user.displayName = profile.displayName
+          user.profilePhotoUrl = profile.profilePhotoUrl
+        }
+
         this.profile = profile
       })
     } catch (error) {
