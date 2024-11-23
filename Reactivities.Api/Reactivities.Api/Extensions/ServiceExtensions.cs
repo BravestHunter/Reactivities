@@ -16,6 +16,10 @@ namespace Reactivities.Api.Extensions
                 opt.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            var webClientAddresses = config.GetSection("WebClientAddress").GetChildren()
+                .Select(x => x.Value ?? string.Empty)
+                .Where(string.IsNullOrWhiteSpace)
+                .ToArray();
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
@@ -24,8 +28,8 @@ namespace Reactivities.Api.Extensions
                         .AllowCredentials()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .WithExposedHeaders("WWW-Authenticate", "Pagination")
-                        .WithOrigins("http://localhost:3000", "https://localhost:3000");
+                        .WithExposedHeaders("WWW-Authenticate")
+                        .WithOrigins(webClientAddresses);
                 });
             });
 
