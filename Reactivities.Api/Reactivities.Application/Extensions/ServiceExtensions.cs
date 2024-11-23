@@ -69,7 +69,7 @@ namespace Reactivities.Application.Extensions
 
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("IsActivityHost", policy =>
+                opt.AddPolicy(AuthorizePolicies.IsActivityHost, policy =>
                 {
                     policy.Requirements.Add(new IsHostRequirement());
                 });

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Reactivities.Api.Models;
+using Reactivities.Application.Security;
 using Reactivities.Domain.Activities.Commands;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Filters;
@@ -42,7 +43,7 @@ namespace Reactivities.Api.Controllers
             return HandleResult(await Mediator.Send(new CreateActivityCommand() { Activity = activity }));
         }
 
-        [Authorize(Policy = "IsActivityHost")]
+        [Authorize(AuthorizePolicies.IsActivityHost)]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivity(long id, EditActivityDto activity)
         {
@@ -50,7 +51,7 @@ namespace Reactivities.Api.Controllers
             return HandleResult(await Mediator.Send(new EditActivityCommand() { Activity = activity }));
         }
 
-        [Authorize(Policy = "IsActivityHost")]
+        [Authorize(AuthorizePolicies.IsActivityHost)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActivity(long id)
         {
