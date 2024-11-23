@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Comments.Interfaces;
+using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Users.Interfaces;
 using Reactivities.Persistence.Repositories;
 
@@ -19,7 +20,7 @@ namespace Reactivities.Persistence.Extensions
                 string? connectionString = configuration.GetConnectionString("PostgresDb");
                 if (string.IsNullOrEmpty(connectionString))
                 {
-                    throw new ApplicationException("Failed to retrieve PostgresDb connection string");
+                    throw new MissingConfigurationException("Failed to retrieve PostgresDb connection string");
                 }
 
                 options.UseNpgsql(connectionString);

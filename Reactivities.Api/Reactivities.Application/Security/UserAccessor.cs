@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Reactivities.Application.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
 
 namespace Reactivities.Application.Security
@@ -15,7 +16,7 @@ namespace Reactivities.Application.Security
 
         public string GetUsername()
         {
-            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ?? throw new NotAuthorizedException();
         }
     }
 }

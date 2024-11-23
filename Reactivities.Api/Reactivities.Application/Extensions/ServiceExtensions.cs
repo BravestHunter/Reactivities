@@ -71,10 +71,10 @@ namespace Reactivities.Application.Extensions
             {
                 opt.AddPolicy(AuthorizePolicies.IsActivityHost, policy =>
                 {
-                    policy.Requirements.Add(new IsHostRequirement());
+                    policy.Requirements.Add(new IsActivityHostRequirement());
                 });
             });
-            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+            services.AddTransient<IAuthorizationHandler, IsActivityHostRequirementHandler>();
 
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<ITokenService, TokenService>();
