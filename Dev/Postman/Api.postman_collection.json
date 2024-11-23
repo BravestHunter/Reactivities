@@ -1,0 +1,1059 @@
+{
+	"info": {
+		"_postman_id": "234246c1-f316-409d-b10e-1e56be447c61",
+		"name": "Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34993370"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "HealthCheck HTTP",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTP}}/healthCheck",
+							"host": [
+								"{{API_URL_HTTP}}"
+							],
+							"path": [
+								"healthCheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HealthCheck HTTPS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/healthCheck",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"healthCheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"vitalikvasv@gmail.com\",\r\n    \"password\": \"HelloWorld1!\",\r\n    \"Username\": \"vitalyvv\",\r\n    \"DisplayName\": \"BravestHunter\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/account/register",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const user = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Has properties\", function () {\r",
+									"    pm.expect(user).to.have.property('displayName');\r",
+									"    pm.expect(user).to.have.property('username');\r",
+									"    pm.expect(user).to.have.property('image');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bob@test.com\",\r\n    \"password\": \"Pa$$w0rd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/account/login",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const user = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Has properties\", function () {\r",
+									"    pm.expect(user).to.have.property('accessToken');\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set('accessToken', user.accessToken);\r",
+									"\r",
+									"pm.test(\"AccessToken has been set for environment\", function() {\r",
+									"    var accessToken = pm.collectionVariables.get('accessToken');\r",
+									"    pm.expect(accessToken).to.eql(user.accessToken);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/account/refreshToken",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"account",
+								"refreshToken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/account/",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"account",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activities",
+			"item": [
+				{
+					"name": "Get Activity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities/7",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=1&pageSize=5",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities Second Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=2&pageSize=3",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities Page Size",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=1&pageSize=4",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities IsHost",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=1&pageSize=10&relationship=1",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "relationship",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities IsGoing",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=1&pageSize=10&relationship=2",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "relationship",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities FromDate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=1&pageSize=10&fromDate=2023-01-01T00:00:00.150858Z",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "fromDate",
+									"value": "2023-01-01T00:00:00.150858Z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities ToDate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities?pageNumber=1&pageSize=10&toDate=2025-01-01T00:00:00.150858Z",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "toDate",
+									"value": "2025-01-01T00:00:00.150858Z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"MyTitle\",\r\n    \"date\": \"2025-10-20T00:00:00.000Z\",\r\n    \"description\": \"Some short description\",\r\n    \"category\": \"food\",\r\n    \"city\": \"London\",\r\n    \"venue\": \"Kings Cross Station\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities/",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Activity",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Edited title\",\r\n    \"date\": \"2025-10-20T00:00:00.000Z\",\r\n    \"description\": \"Edited Description\",\r\n    \"category\": \"xfood\",\r\n    \"city\": \"xLondon\",\r\n    \"venue\": \"xKings-Cross\",\r\n    \"isCancelled\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities/7",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Activity",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Edited title\",\r\n    \"date\": \"2025-10-20T00:00:00.000Z\",\r\n    \"description\": \"Edited Description\",\r\n    \"category\": \"xfood\",\r\n    \"city\": \"xLondon\",\r\n    \"venue\": \"xKings-Cross\",\r\n    \"isCancelled\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities/7",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Attendance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Edited title\",\r\n    \"date\": \"2025-10-20T00:00:00.000Z\",\r\n    \"description\": \"Edited Description\",\r\n    \"category\": \"xfood\",\r\n    \"city\": \"xLondon\",\r\n    \"venue\": \"xKings-Cross\",\r\n    \"isCancelled\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/activities/3/updateAttendance?attend=true",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"3",
+								"updateAttendance"
+							],
+							"query": [
+								{
+									"key": "attend",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Buggy",
+			"item": [
+				{
+					"name": "Not Found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/buggy/not-found",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"buggy",
+								"not-found"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bad Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/buggy/bad-request",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"buggy",
+								"bad-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Server Error",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/buggy/server-error",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"buggy",
+								"server-error"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unauthorized",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/buggy/unauthorised",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"buggy",
+								"unauthorised"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Follow",
+			"item": [
+				{
+					"name": "Follow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/follow/jane",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"follow",
+								"jane"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Followers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/follow/jane?predicate=followers",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"follow",
+								"jane"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "followers"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Following",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/follow/bob?predicate=following",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"follow",
+								"bob"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "following"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Photos",
+			"item": [
+				{
+					"name": "Upload Photo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const photo = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set('photoId', photo.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1ef9c6ab-1e6b-4cd0-8919-416388fe25c5"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/photos",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Photo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1ef9c6ab-1e6b-4cd0-8919-416388fe25c5"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/photos/{{photoId}}",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"photos",
+								"{{photoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Profile Photo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/photos/{{photoId}}/setProfile",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"photos",
+								"{{photoId}}",
+								"setProfile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profiles",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/profiles/bob",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"displayName\": \"Edited DisplayName\",\r\n    \"bio\": \"Edited Bio\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/profiles",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Host Activities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/profiles/bob/activities?pageNumber=1&pageSize=10&relationship=1",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "relationship",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Attendance Activities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/profiles/bob/activities?pageNumber=1&pageSize=10&relationship=2",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "relationship",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Get Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/comments/7",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\"This is new comment!\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL_HTTPS}}/api/comments/7",
+							"host": [
+								"{{API_URL_HTTPS}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "photoId",
+			"value": ""
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		}
+	]
+}
