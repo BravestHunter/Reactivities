@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Reactivities.Domain.Activities.Dtos;
 using Reactivities.Domain.Activities.Filters;
 using Reactivities.Domain.Activities.Interfaces;
@@ -7,13 +8,15 @@ using Reactivities.Domain.Core.Exceptions;
 
 namespace Reactivities.Domain.Activities.Queries.Handlers
 {
-    internal class GetUserActivitiesListHandler : IRequestHandler<GetUserActivitiesListQuery, Result<PagedList<UserActivityDto>>>
+    internal sealed class GetUserActivitiesListHandler : IRequestHandler<GetUserActivitiesListQuery, Result<PagedList<UserActivityDto>>>
     {
         private readonly IActivityRepository _activityRepository;
+        private readonly ILogger _logger;
 
-        public GetUserActivitiesListHandler(IActivityRepository activityRepository)
+        public GetUserActivitiesListHandler(IActivityRepository activityRepository, ILogger<GetUserActivitiesListHandler> logger)
         {
             _activityRepository = activityRepository;
+            _logger = logger;
         }
 
         public async Task<Result<PagedList<UserActivityDto>>> Handle(GetUserActivitiesListQuery request, CancellationToken cancellationToken)
@@ -31,6 +34,7 @@ namespace Reactivities.Domain.Activities.Queries.Handlers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to get user activities list");
                 return Result<PagedList<UserActivityDto>>.Failure(ex);
             }
         }

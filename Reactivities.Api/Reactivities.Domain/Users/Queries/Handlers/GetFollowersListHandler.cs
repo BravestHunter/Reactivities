@@ -7,7 +7,7 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Users.Queries.Handlers
 {
-    internal class GetFollowersListHandler : IRequestHandler<GetFollowersListQuery, Result<List<ProfileDto>>>
+    internal sealed class GetFollowersListHandler : IRequestHandler<GetFollowersListQuery, Result<List<ProfileDto>>>
     {
         private readonly IUserFollowingRepository _userFollowingRepository;
         private readonly IUserAccessor _userAccessor;

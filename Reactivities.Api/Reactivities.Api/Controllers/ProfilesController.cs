@@ -10,10 +10,8 @@ using Reactivities.Domain.Users.Queries;
 
 namespace Reactivities.Api.Controllers
 {
-    public class ProfilesController : BaseApiController
+    public class ProfilesController(IMediator mediator) : BaseApiController(mediator)
     {
-        public ProfilesController(IMediator mediator) : base(mediator) { }
-
         [HttpGet("{username}")]
         public async Task<IActionResult> GetProfile(string username)
         {

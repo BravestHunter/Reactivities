@@ -5,7 +5,7 @@ using Reactivities.Domain.Core;
 
 namespace Reactivities.Domain.Comments.Queries.Handlers
 {
-    internal class GetCommentsListHandler : IRequestHandler<GetCommentsListQuery, Result<List<CommentDto>>>
+    internal sealed class GetCommentsListHandler : IRequestHandler<GetCommentsListQuery, Result<List<CommentDto>>>
     {
         private readonly ICommentRepository _commentRepository;
 

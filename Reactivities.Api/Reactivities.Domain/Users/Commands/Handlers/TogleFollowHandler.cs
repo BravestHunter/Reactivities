@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
@@ -7,17 +8,24 @@ using Reactivities.Domain.Users.Models;
 
 namespace Reactivities.Domain.Users.Commands.Handlers
 {
-    internal class TogleFollowHandler : IRequestHandler<TogleFollowCommand, Result>
+    internal sealed class TogleFollowHandler : IRequestHandler<TogleFollowCommand, Result>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserFollowingRepository _followingRepository;
         private readonly IUserAccessor _userAccessor;
+        private readonly ILogger _logger;
 
-        public TogleFollowHandler(IUserRepository userRepository, IUserFollowingRepository followingRepository, IUserAccessor userAccessor)
+        public TogleFollowHandler(
+            IUserRepository userRepository,
+            IUserFollowingRepository followingRepository,
+            IUserAccessor userAccessor,
+            ILogger<TogleFollowHandler> logger
+            )
         {
             _userRepository = userRepository;
             _followingRepository = followingRepository;
             _userAccessor = userAccessor;
+            _logger = logger;
         }
 
         public async Task<Result> Handle(TogleFollowCommand request, CancellationToken cancellationToken)
@@ -52,10 +60,13 @@ namespace Reactivities.Domain.Users.Commands.Handlers
                     await _followingRepository.Delete(following);
                 }
 
+                _logger.LogInformation("Toggled follow for user {CurrentUsername} to user {TargetUsername}", currentUsername, request.TargetUsername);
+
                 return Result.Success();
             }
             catch (Exception ex)
             {
+                _logger.LogError("Failed to toggle follow");
                 return Result.Failure(ex);
             }
         }

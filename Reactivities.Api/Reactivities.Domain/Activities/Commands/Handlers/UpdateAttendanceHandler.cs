@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Reactivities.Domain.Activities.Interfaces;
 using Reactivities.Domain.Activities.Models;
 using Reactivities.Domain.Core;
@@ -9,19 +10,26 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Activities.Commands.Handlers
 {
-    internal class UpdateAttendanceHandler : IRequestHandler<UpdateAttendanceCommand, Result>
+    internal sealed class UpdateAttendanceHandler : IRequestHandler<UpdateAttendanceCommand, Result>
     {
         private readonly IActivityRepository _activityRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public UpdateAttendanceHandler(IActivityRepository activityRepository, IUserRepository userRepository, IUserAccessor userAccessor, IMapper mapper)
+        public UpdateAttendanceHandler(
+            IActivityRepository activityRepository,
+            IUserRepository userRepository,
+            IUserAccessor userAccessor,
+            IMapper mapper,
+            ILogger<UpdateAttendanceHandler> logger)
         {
             _activityRepository = activityRepository;
             _userRepository = userRepository;
             _userAccessor = userAccessor;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Result> Handle(UpdateAttendanceCommand request, CancellationToken cancellationToken)
@@ -69,10 +77,13 @@ namespace Reactivities.Domain.Activities.Commands.Handlers
                 }
                 await _activityRepository.Update(activity);
 
+                _logger.LogInformation("Updated activity {ActivityId} attendace for user {CurrentUsername} to {Attend}", activity.Id, currentUsername, request.Attend);
+
                 return Result.Success();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to update activity attendance");
                 return Result.Failure(ex);
             }
         }

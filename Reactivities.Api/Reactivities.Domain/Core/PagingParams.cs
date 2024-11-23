@@ -10,14 +10,8 @@
 
         public PagingParams(int pageNumber, int pageSize)
         {
-            if (pageNumber < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(pageNumber));
-            }
-            if (pageSize < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(pageSize));
-            }
+            ArgumentOutOfRangeException.ThrowIfLessThan(pageNumber, 1);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(pageSize);
 
             PageNumber = pageNumber;
             PageSize = pageSize;

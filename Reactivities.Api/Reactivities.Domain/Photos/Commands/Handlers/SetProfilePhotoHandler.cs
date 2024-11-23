@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
@@ -6,16 +7,11 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Photos.Commands.Handlers
 {
-    internal class SetProfilePhotoHandler : IRequestHandler<SetProfilePhotoCommand, Result>
+    internal sealed class SetProfilePhotoHandler(IUserRepository userRepository, IUserAccessor userAccessor, ILogger<SetProfilePhotoHandler> logger) : IRequestHandler<SetProfilePhotoCommand, Result>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IUserAccessor _userAccessor;
-
-        public SetProfilePhotoHandler(IUserRepository userRepository, IUserAccessor userAccessor)
-        {
-            _userRepository = userRepository;
-            _userAccessor = userAccessor;
-        }
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IUserAccessor _userAccessor = userAccessor;
+        private readonly ILogger _logger = logger;
 
         public async Task<Result> Handle(SetProfilePhotoCommand request, CancellationToken cancellationToken)
         {
@@ -38,10 +34,13 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
 
                 await _userRepository.Update(currentUser);
 
+                _logger.LogInformation("Set profile photo {PhotoId} for user {CurrentUsername}", photo.Id, currentUsername);
+
                 return Result.Success();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to set profile photo");
                 return Result.Failure(ex);
             }
         }

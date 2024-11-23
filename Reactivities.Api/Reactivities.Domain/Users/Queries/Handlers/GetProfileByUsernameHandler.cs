@@ -8,7 +8,7 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Users.Queries.Handlers
 {
-    internal class GetProfileByUsernameHandler : IRequestHandler<GetProfileByUsernameQuery, Result<ProfileDto>>
+    internal sealed class GetProfileByUsernameHandler : IRequestHandler<GetProfileByUsernameQuery, Result<ProfileDto>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserAccessor _userAccessor;

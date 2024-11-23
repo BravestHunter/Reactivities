@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
 using Reactivities.Domain.Core.Interfaces;
@@ -10,24 +11,27 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Photos.Commands.Handlers
 {
-    internal class AddPhotoHandler : IRequestHandler<AddPhotoCommand, Result<PhotoDto>>
+    internal sealed class AddPhotoHandler : IRequestHandler<AddPhotoCommand, Result<PhotoDto>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IPhotoStorage _photoStorage;
         private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         public AddPhotoHandler(
             IUserRepository userRepository,
             IPhotoStorage photoStorage,
             IUserAccessor userAccessor,
-            IMapper mapper
+            IMapper mapper,
+            ILogger<AddPhotoHandler> logger
             )
         {
             _userRepository = userRepository;
             _photoStorage = photoStorage;
             _userAccessor = userAccessor;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Result<PhotoDto>> Handle(AddPhotoCommand request, CancellationToken cancellationToken)
@@ -51,11 +55,14 @@ namespace Reactivities.Domain.Photos.Commands.Handlers
                 currentUser.Photos.Add(photo);
                 await _userRepository.Update(currentUser);
 
+                _logger.LogInformation("Added photo {Id}", photo.Id);
+
                 var photoDto = _mapper.Map<PhotoDto>(photo);
                 return Result<PhotoDto>.Success(photoDto);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to add photo");
                 return Result<PhotoDto>.Failure(ex);
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Reactivities.Domain.Account.Models;
 using Reactivities.Domain.Core;
 using Reactivities.Domain.Core.Exceptions;
@@ -7,15 +8,17 @@ using Reactivities.Domain.Users.Interfaces;
 
 namespace Reactivities.Domain.Account.Commands.Handlers
 {
-    internal class CreateRefreshTokenHandler : IRequestHandler<CreateRefreshTokenCommand, Result<RefreshToken>>
+    internal sealed class CreateRefreshTokenHandler : IRequestHandler<CreateRefreshTokenCommand, Result<RefreshToken>>
     {
         private readonly IUserRepository _userRepository;
         private readonly RandomNumberGenerator _rng;
+        private readonly ILogger _logger;
 
-        public CreateRefreshTokenHandler(IUserRepository userRepository, RandomNumberGenerator rng)
+        public CreateRefreshTokenHandler(IUserRepository userRepository, RandomNumberGenerator rng, ILogger<CreateRefreshTokenHandler> logger)
         {
             _userRepository = userRepository;
             _rng = rng;
+            _logger = logger;
         }
 
         public async Task<Result<RefreshToken>> Handle(CreateRefreshTokenCommand request, CancellationToken cancellationToken)
@@ -39,10 +42,13 @@ namespace Reactivities.Domain.Account.Commands.Handlers
 
                 await _userRepository.Update(user);
 
+                _logger.LogInformation("Created refreshToken for user {UserName}", user.UserName);
+
                 return Result<RefreshToken>.Success(resfreshToken);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to create refresh token");
                 return Result<RefreshToken>.Failure(ex);
             }
         }
