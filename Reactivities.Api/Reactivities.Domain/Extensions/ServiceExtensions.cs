@@ -1,8 +1,8 @@
 using System.Reflection;
 using System.Security.Cryptography;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using Reactivities.Domain.Core;
 
 namespace Reactivities.Domain.Extensions
 {
@@ -13,11 +13,11 @@ namespace Reactivities.Domain.Extensions
             var thisAssembly = Assembly.GetExecutingAssembly();
 
             services.AddAutoMapper(thisAssembly);
-            services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssembly(thisAssembly);
             services.AddMediatR(config =>
             {
                 config.RegisterServicesFromAssembly(thisAssembly);
+                config.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
 
             services.AddSingleton(serviceProvider => RandomNumberGenerator.Create());

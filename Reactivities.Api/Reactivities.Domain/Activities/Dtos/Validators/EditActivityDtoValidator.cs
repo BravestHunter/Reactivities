@@ -2,7 +2,7 @@
 
 namespace Reactivities.Domain.Activities.Dtos.Validators
 {
-    internal class EditActivityDtoValidator : AbstractValidator<EditActivityDto>
+    public class EditActivityDtoValidator : AbstractValidator<EditActivityDto>
     {
         public EditActivityDtoValidator()
         {

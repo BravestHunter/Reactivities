@@ -3,7 +3,7 @@ using Reactivities.Domain.Comments.Dtos.Validators;
 
 namespace Reactivities.Domain.Comments.Commands.Validators
 {
-    internal class CreateCommentValidator : AbstractValidator<CreateCommentCommand>
+    public class CreateCommentValidator : AbstractValidator<CreateCommentCommand>
     {
         public CreateCommentValidator()
         {
